@@ -11,6 +11,6 @@
 window.FM_CONFIG = {
   contactEndpoint: 'https://formspree.io/f/mgaadkpg',
   bookingEndpoint: 'https://formspree.io/f/mgaadkpg',
-  supabaseUrl: '',   // e.g. https://abcdefgh.supabase.co
-  supabaseKey: ''    // the project's publishable (anon) key, safe to publish
+  supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
+  supabaseKey: 'sb_publishable_K04nYpPk4CcktUmZktxd0A_pw_bAEnM' // publishable key, safe to publish
 };
