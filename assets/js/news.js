@@ -1,8 +1,9 @@
 /* formai — AI news cards for the news carousel.
  * Shared by the browser (main.js) and the build step (tools/prerender.mjs),
  * so the same cards are in the published HTML and on screen.
- * Articles live in assets/data/news.json; covers are drawn here in the brand
- * style from the article's topic, so no third-party images are used.
+ * Articles live in assets/data/news.json. A card shows the publisher's own
+ * preview image (og:image) when there is one; underneath, a cover is drawn in
+ * the brand style from the article's topic, which also shows if the image fails.
  */
 (function (root) {
   'use strict';
@@ -72,7 +73,10 @@
     var meta = esc(item.source) + (item.date ? ' · ' + esc(formatDate(item.date, lang)) : '');
     return '<article class="fm-news-card" role="listitem">' +
       '<a class="fm-news-link" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' +
-      '<div class="fm-news-cover">' + cover(item.topic, i) + '</div>' +
+      // The publisher's preview image over the drawn cover; if it fails, the cover shows.
+      '<div class="fm-news-cover">' + cover(item.topic, i) +
+      (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '') +
+      '</div>' +
       '<div class="fm-news-body">' +
       '<div class="fm-news-meta">' + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') + '<span>' + meta + '</span></div>' +
       '<h3 class="fm-news-title">' + esc(item.title) + '</h3>' +
