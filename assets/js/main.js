@@ -68,7 +68,7 @@
     dialog: '',
     contactOpen: false,
     cf: { sent: false, tried: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
-    bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, doneSummary: '' },
+    bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '' },
     ready: false
   };
   var opener = null;
@@ -254,6 +254,17 @@
     var tr = t();
     return '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(tr.cf.privacy) + ' <button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(tr.ck.privacy) + '</button></p>';
   }
+  function interestPicker(selected, form) {
+    var cf = t().cf;
+    return '<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0;"><legend class="fm-legend" style="padding: 0; margin-bottom: 10px;">' + esc(cf.interest) + ' <span style="color: var(--muted); font-weight: 300;">(' + esc(cf.optional) + ')</span></legend>' +
+      '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + cf.interests.map(function (label, i) {
+        var on = !!selected[i];
+        return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="toggleInterest" data-form="' + form + '" data-i="' + i + '">' + esc(label) + '</button>';
+      }).join('') + '</div></fieldset>';
+  }
+  function selectedInterests(selected) {
+    return t().cf.interests.filter(function (_, i) { return selected[i]; });
+  }
   function renderContact() {
     var host = $('#fm-contact-root');
     if (!state.contactOpen) { host.innerHTML = ''; return; }
@@ -274,11 +285,7 @@
         field('fm-cf-name', cf.name, { key: 'name', required: true, ac: 'name', value: c.data.name, err: e.name }) +
         field('fm-cf-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: c.data.email, err: e.email }) +
         field('fm-cf-company', cf.company, { key: 'company', ac: 'organization', value: c.data.company }) +
-        '<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0;"><legend class="fm-legend" style="padding: 0; margin-bottom: 10px;">' + esc(cf.interest) + ' <span style="color: var(--muted); font-weight: 300;">(' + esc(cf.optional) + ')</span></legend>' +
-        '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + cf.interests.map(function (label, i) {
-          var on = !!c.interests[i];
-          return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="toggleInterest" data-i="' + i + '">' + esc(label) + '</button>';
-        }).join('') + '</div></fieldset>' +
+        interestPicker(c.interests, 'cf') +
         field('fm-cf-message', cf.message, { key: 'message', required: true, textarea: true, hint: cf.messageHint, value: c.data.message, err: e.message }) +
         privacyLine() +
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
@@ -310,10 +317,9 @@
       var first = $('#fm-contact-root [aria-invalid="true"]'); if (first) first.focus();
       return;
     }
-    var cf = t().cf;
     var payload = {
       name: state.cf.data.name, email: state.cf.data.email, company: state.cf.data.company,
-      interests: cf.interests.filter(function (_, i) { return state.cf.interests[i]; }),
+      interests: selectedInterests(state.cf.interests),
       message: state.cf.data.message
     };
     // TODO: send `payload` to the form endpoint (Formspree, Netlify Forms or a Cloudflare Worker).
@@ -439,6 +445,7 @@
         field('fm-bk-name', cf.name, { key: 'name', required: true, ac: 'name', value: f.name, err: eName ? cf.errName : '' }) +
         field('fm-bk-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: f.email, err: eEmail ? cf.errEmail : '' }) +
         field('fm-bk-company', cf.company, { key: 'company', ac: 'organization', value: f.company }) +
+        interestPicker(b.interests, 'bk') +
         field('fm-bk-topic', B.topic, { key: 'topic', textarea: true, rows: 3, value: f.topic, style: 'min-height: 96px;' }) +
         privacyLine() +
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;">' + esc(B.confirm) + ' ' + ICON_ARROW + '</button></form>';
@@ -461,12 +468,13 @@
       var first = $('#fm-bk-panel [aria-invalid="true"]'); if (first) first.focus();
       return;
     }
-    var payload = { date: b.date, time: b.slot, name: f.name, email: f.email, company: f.company, topic: f.topic };
+    var payload = { date: b.date, time: b.slot, name: f.name, email: f.email, company: f.company, interests: selectedInterests(b.interests), topic: f.topic };
     // TODO: send `payload` to the booking backend (Cal.com, Google Calendar or a Cloudflare Worker).
     void payload;
     b.doneSummary = bkSummary(calModel());
     b.step = 'done'; b.tried = false;
     b.data = { name: '', email: '', company: '', topic: '' };
+    b.interests = [];
     renderPanel();
   }
 
@@ -504,10 +512,11 @@
     openContact: openContact,
     closeContact: closeContact,
     toggleInterest: function (el) {
+      var list = el.getAttribute('data-form') === 'bk' ? state.bk.interests : state.cf.interests;
       var i = Number(el.getAttribute('data-i'));
-      state.cf.interests[i] = !state.cf.interests[i];
-      el.classList.toggle('is-on', state.cf.interests[i]);
-      el.setAttribute('aria-pressed', String(state.cf.interests[i]));
+      list[i] = !list[i];
+      el.classList.toggle('is-on', list[i]);
+      el.setAttribute('aria-pressed', String(list[i]));
     },
     calPrev: function () { state.bk.calOff = Math.max(0, state.bk.calOff - 1); renderCalendar(); },
     calNext: function () { state.bk.calOff += 1; renderCalendar(); },
