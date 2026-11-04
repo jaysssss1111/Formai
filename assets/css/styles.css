@@ -355,3 +355,9 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
    in the page's own charcoal. Darker in the dark theme so it still reads. */
 .fm-root h1,.fm-root h2,.fm-root h3,.fm-root h4,.fm-root h5,.fm-film-end-title{text-shadow:0 1px 1px rgba(20,18,16,.10),0 6px 18px rgba(20,18,16,.10)}
 .fm-root[data-theme="dark"] h1,.fm-root[data-theme="dark"] h2,.fm-root[data-theme="dark"] h3,.fm-root[data-theme="dark"] h4,.fm-root[data-theme="dark"] h5,.fm-root[data-theme="dark"] .fm-film-end-title{text-shadow:0 1px 1px rgba(0,0,0,.45),0 8px 22px rgba(0,0,0,.55)}
+
+/* ---------- Bolder section headings ----------
+   The six section titles step up from weight 200 to 400, the heaviest
+   DM Sans cut the site loads. */
+.fm-root h2[data-i18n="methodTitle"],.fm-root h2[data-i18n="servicesTitle"],.fm-root h2[data-i18n="auditTitle"],
+.fm-root h2[data-i18n="segTitle"],.fm-root h2[data-i18n="bk.title"],.fm-root #contact h2{font-weight:400 !important}
