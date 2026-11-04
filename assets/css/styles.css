@@ -316,3 +316,14 @@ mask-composite:intersect}
 .fm-root .fm-film-stage{background-color:var(--art)}
 .fm-root .fm-film-end{background:var(--art)}
 .fm-root .fm-marquee{background-color:var(--art)}
+
+/* ---------- Services: click a card to flip its artwork to the service name on orange ---------- */
+.fm-card{cursor:pointer}
+.fm-art{position:relative}
+.fm-art:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.fm-art svg{transition:opacity .2s linear,transform .2s linear}
+.fm-art-flip{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;background:var(--brand);color:#EDE6D8;opacity:0;pointer-events:none;transition:opacity .2s linear}
+.fm-art-flip span{font-family:'DM Sans',system-ui,sans-serif;font-size:clamp(28px,3vw,40px);line-height:1.05;font-weight:400;letter-spacing:.04em;text-transform:uppercase;text-align:center;transform:translateY(8px);transition:transform .2s linear}
+.fm-card.is-flipped .fm-art-flip{opacity:1}
+.fm-card.is-flipped .fm-art-flip span{transform:none}
+.fm-card.is-flipped .fm-art svg{opacity:0}
