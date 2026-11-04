@@ -29,6 +29,8 @@ const TOPICS = [
   { id: 'regulation', words: ['ai act', 'regulation', 'regulators', 'compliance', 'european commission', 'gdpr', 'copyright'] },
   { id: 'search', words: ['seo', 'ai search', 'search traffic', 'answer engine', 'ai overviews', 'website traffic'] }
 ];
+// Business and gadget news that mentions AI but is not about the studio's work.
+const SKIP = ['earnings', 'stock', 'shares', 'ipo', 'quarter', 'smartphone', 'rides', 'valuation'];
 const MUST = ['ai', 'artificial intelligence', 'machine learning', 'llm', 'model', 'gpt', 'claude', 'gemini', 'agent'];
 
 const decode = (s) => String(s || '')
@@ -63,6 +65,7 @@ const hits = (text, w) => (text.match(new RegExp('\\b' + w.replace(/[.*+?^${}()|
 function classify(item) {
   const title = item.title.toLowerCase(), text = (item.title + ' ' + item.summary).toLowerCase();
   if (!MUST.some((w) => hits(text, w))) return null;
+  if (SKIP.some((w) => hits(text, w))) return null;
   let best = null;
   for (const t of TOPICS) {
     const score = t.words.reduce((n, w) => n + hits(text, w) + hits(title, w), 0);
@@ -106,6 +109,8 @@ const fresh = found
 // second article about the same story (titles sharing two or more longer words).
 const words = (t) => new Set(t.toLowerCase().match(/[a-z0-9]{4,}/g) || []);
 const sameStory = (a, b) => { const w = words(b.title); return [...words(a.title)].filter((x) => w.has(x)).length >= 2; };
+// Log the best candidates so a person can review or hand-pick (see --dry-run).
+fresh.slice(0, 25).forEach((x) => console.log(`  cand ${x.score} ${x.topic.padEnd(10)} ${x.date} ${x.source} | ${x.title} | ${x.url}`));
 const added = [];
 const usedSource = new Set(), usedTopic = new Set();
 for (const x of fresh) {
@@ -121,6 +126,7 @@ const picked = [...added, ...auto]
   .sort((a, b) => String(b.date).localeCompare(String(a.date)))
   .slice(0, Math.max(0, MAX - manual.length));
 const out = [...manual, ...picked];
+if (args.includes('--dry-run')) { console.log('dry run: news.json not changed'); process.exit(0); }
 fs.mkdirSync('assets/data', { recursive: true });
 fs.writeFileSync(FILE, JSON.stringify(out, null, 2) + '\n');
 console.log(`news.json: ${manual.length} hand-picked + ${picked.length} collected (${added.length} new)`);
