@@ -60,13 +60,15 @@
 
   var state = {
     mode: (allowPrefs && LS.get('fm-mode')) || sysMode || 'dark',
-    lang: (allowPrefs && LS.get('fm-lang')) || navLang || 'en',
+    // Prerendered pages (/ and /fi/) carry their language; the template falls back to prefs.
+    lang: document.documentElement.getAttribute('data-page-lang') || (allowPrefs && LS.get('fm-lang')) || navLang || 'en',
     paused: allowPrefs && LS.get('fm-paused') === '1',
     menuOpen: false,
     bannerOpen: !consent,
     draft: { prefs: !!(consent && consent.prefs), analytics: !!(consent && consent.analytics), marketing: !!(consent && consent.marketing) },
     dialog: '',
     contactOpen: false,
+    au: { open: false, sent: false, tried: false, sending: false, sendError: false, kind: -1, data: { url: '', email: '', name: '', company: '', note: '' } },
     cf: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
     bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '', sending: false, sendError: false },
     ready: false
@@ -107,7 +109,7 @@
     $$('.fm-lang button').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('lang') === state.lang));
     });
-    document.title = state.lang === 'fi' ? 'formai — AI-natiivi studio' : 'formai — AI-native studio';
+    if (tr.meta && tr.meta.title) document.title = tr.meta.title;
     document.dispatchEvent(new CustomEvent('fm:lang', { detail: { lang: state.lang } }));
   }
 
@@ -364,6 +366,97 @@
     });
   }
 
+
+  /* ---------- audit request dialog ---------- */
+  function normUrl(v) {
+    v = String(v || '').trim();
+    if (!v) return '';
+    return /^https?:\/\//i.test(v) ? v : 'https://' + v;
+  }
+  function auErrors() {
+    var tr = t(), d = state.au.data;
+    var url = normUrl(d.url);
+    return {
+      url: /^https?:\/\/[^\s/$.?#]+\.[^\s]{2,}$/i.test(url) ? '' : tr.au.urlErr,
+      email: EMAIL_RE.test(String(d.email).trim()) ? '' : tr.cf.errEmail
+    };
+  }
+  function renderAudit() {
+    var host = $('#fm-audit-root');
+    if (!state.au.open) { host.innerHTML = ''; return; }
+    var tr = t(), A = tr.au, cf = tr.cf, a = state.au, body;
+    if (a.sent) {
+      body = '<div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 8px 0 4px;">' + EYE_DRAW +
+        '<h2 id="fm-au-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.thanksTitle) + '</h2>' +
+        '<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.thanksText) + '</p>' +
+        '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="closeAudit" style="flex: none;">' + esc(cf.done) + '</button></div>';
+    } else {
+      var e = a.tried ? auErrors() : { url: '', email: '' };
+      body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-au-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.title) + '</h2>' +
+        '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.intro) + '</p></div>' +
+        ((e.url || e.email) ? errorSummary() : '') + (a.sendError ? sendErrorBox() : '') +
+        '<form id="fm-au-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 20px; margin: 0;">' + HONEYPOT +
+        field('fm-au-url', A.url, { key: 'url', required: true, type: 'url', ac: 'url', hint: A.urlHint, value: a.data.url, err: e.url }) +
+        '<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0;"><legend class="fm-legend" style="padding: 0; margin-bottom: 10px;">' + esc(A.kind) + ' <span style="color: var(--muted); font-weight: 300;">(' + esc(cf.optional) + ')</span></legend>' +
+        '<div style="display: flex; flex-wrap: wrap; gap: 8px;">' + A.kinds.map(function (k, i) {
+          var on = a.kind === i;
+          return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="pickAuditKind" data-i="' + i + '">' + esc(k) + '</button>';
+        }).join('') + '</div></fieldset>' +
+        field('fm-au-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: a.data.email, err: e.email }) +
+        field('fm-au-name', cf.name, { key: 'name', ac: 'name', value: a.data.name }) +
+        field('fm-au-company', cf.company, { key: 'company', ac: 'organization', value: a.data.company }) +
+        field('fm-au-note', A.note, { key: 'note', textarea: true, rows: 3, hint: A.noteHint, value: a.data.note, style: 'min-height: 96px;' }) +
+        privacyLine() +
+        '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
+        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (a.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(A.send, a.sending) + '</button></div></form>';
+    }
+    host.innerHTML = '<div data-overlay="audit" style="' + OVERLAY + ' z-index: 140;">' +
+      '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-au-title" tabindex="-1" style="' + DLG + ' max-width: 600px;">' +
+      '<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--accent);">' + esc(A.label) + '</span>' +
+      '<button type="button" class="fm-mode" data-action="closeAudit" aria-label="' + esc(tr.ck.close) + '" style="' + BTN_SQ + '">' + ICON_CLOSE + '</button></div>' +
+      body + '</div></div>';
+  }
+  function openAudit() {
+    opener = document.activeElement;
+    state.au.open = true; state.au.sent = false; state.au.tried = false; state.au.sendError = false;
+    renderAudit();
+    var u = $('#fm-au-url'); if (u) u.focus(); else { var d = $('#fm-audit-root .fm-dlg'); if (d) d.focus(); }
+  }
+  function closeAudit() {
+    state.au.open = false;
+    renderAudit();
+    restoreFocus();
+  }
+  function submitAudit() {
+    var a = state.au, e = auErrors();
+    if (e.url || e.email) {
+      a.tried = true; renderAudit();
+      var first = $('#fm-audit-root [aria-invalid="true"]'); if (first) first.focus();
+      return;
+    }
+    if (a.sending) return;
+    var done = function () {
+      state.au = { open: true, sent: true, tried: false, sending: false, sendError: false, kind: -1, data: { url: '', email: '', name: '', company: '', note: '' } };
+      renderAudit();
+      var dlg = $('#fm-audit-root .fm-dlg'); if (dlg) dlg.focus();
+    };
+    if (isBot($('#fm-au-form'))) { done(); return; }
+    var url = normUrl(a.data.url);
+    var payload = {
+      _subject: 'formai: audit request ' + url,
+      url: url,
+      kind: a.kind >= 0 ? t().au.kinds[a.kind] : '',
+      email: String(a.data.email).trim(), name: String(a.data.name).trim(), company: String(a.data.company).trim(),
+      note: String(a.data.note).trim(),
+      language: state.lang
+    };
+    a.sending = true; a.sendError = false; renderAudit();
+    var cfg = window.FM_CONFIG || {};
+    postForm(cfg.auditEndpoint || cfg.contactEndpoint, payload).then(done, function () {
+      a.sending = false; a.sendError = true; renderAudit();
+    });
+  }
+
   /* ---------- booking calendar ---------- */
   var DAY = 86400000;
   var SLOT_STARTS = [];
@@ -598,15 +691,30 @@
     applyChrome();
     renderBanner();
     renderContact();
+    renderAudit();
     renderDoc();
     renderBooking();
+  }
+
+  function switchLang(lang) {
+    save('fm-lang', lang);
+    var page = document.documentElement.getAttribute('data-page-lang');
+    if (page && page !== lang) {
+      // Each language has its own address so search engines can index both.
+      var path = location.pathname.replace(/index\.html$/, '');
+      path = lang === 'fi' ? path.replace(/\/?$/, '/') + 'fi/' : path.replace(/fi\/$/, '');
+      location.assign(path + location.hash);
+      return;
+    }
+    state.lang = lang;
+    renderAll();
   }
 
   /* ---------- actions ---------- */
   var actions = {
     toggleMode: function () { state.mode = state.mode === 'light' ? 'dark' : 'light'; save('fm-mode', state.mode); applyChrome(); },
-    setEn: function () { state.lang = 'en'; save('fm-lang', 'en'); renderAll(); },
-    setFi: function () { state.lang = 'fi'; save('fm-lang', 'fi'); renderAll(); },
+    setEn: function () { switchLang('en'); },
+    setFi: function () { switchLang('fi'); },
     togglePause: function () { state.paused = !state.paused; save('fm-paused', state.paused ? '1' : '0'); applyChrome(); },
     toggleMenu: function () { state.menuOpen = !state.menuOpen; applyChrome(); },
     closeMenu: function () { if (state.menuOpen) { state.menuOpen = false; applyChrome(); } },
@@ -624,6 +732,15 @@
     openPrivacy: function () { openDoc('privacy'); },
     closeDoc: closeDoc,
     openContact: openContact,
+    openAudit: function (el, ev) { if (ev) ev.preventDefault(); if (state.menuOpen) { state.menuOpen = false; applyChrome(); } openAudit(); },
+    closeAudit: closeAudit,
+    pickAuditKind: function (el) {
+      var i = Number(el.getAttribute('data-i'));
+      state.au.kind = state.au.kind === i ? -1 : i;
+      Array.prototype.forEach.call(document.querySelectorAll('#fm-audit-root [data-action="pickAuditKind"]'), function (b, j) {
+        var on = j === state.au.kind; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', String(on));
+      });
+    },
     closeContact: closeContact,
     flipCard: function (el) {
       // Show the service name on orange in place of the animation; click again to flip back.
@@ -669,6 +786,7 @@
     var ov = ev.target.getAttribute && ev.target.getAttribute('data-overlay');
     if (ov === 'doc') closeDoc();
     else if (ov === 'contact') closeContact();
+    else if (ov === 'audit') closeAudit();
   });
 
   document.addEventListener('input', function (ev) {
@@ -676,11 +794,13 @@
     if (!key) return;
     if (el.closest('#fm-cf-form')) state.cf.data[key] = el.value;
     else if (el.closest('#fm-bk-form')) state.bk.data[key] = el.value;
+    else if (el.closest('#fm-au-form')) state.au.data[key] = el.value;
   });
 
   document.addEventListener('submit', function (ev) {
     if (ev.target.id === 'fm-cf-form') { ev.preventDefault(); submitContact(); }
     else if (ev.target.id === 'fm-bk-form') { ev.preventDefault(); submitBooking(); }
+    else if (ev.target.id === 'fm-au-form') { ev.preventDefault(); submitAudit(); }
   });
 
   document.addEventListener('keydown', function (ev) {
@@ -691,13 +811,14 @@
     }
     if (ev.key === 'Escape') {
       if (state.dialog) { closeDoc(); return; }
+      if (state.au.open) { closeAudit(); return; }
       if (state.contactOpen) { closeContact(); return; }
       if (state.menuOpen) { state.menuOpen = false; applyChrome(); }
       return;
     }
     if (ev.key === 'Tab') {
       // Keep keyboard focus inside an open modal dialog.
-      var dlg = state.dialog ? $('#fm-doc-root .fm-dlg') : state.contactOpen ? $('#fm-contact-root .fm-dlg') : null;
+      var dlg = state.dialog ? $('#fm-doc-root .fm-dlg') : state.au.open ? $('#fm-audit-root .fm-dlg') : state.contactOpen ? $('#fm-contact-root .fm-dlg') : null;
       if (!dlg) return;
       var f = $$('button:not([disabled]), input, textarea, a[href]', dlg);
       if (!f.length) return;

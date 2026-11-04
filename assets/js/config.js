@@ -11,6 +11,7 @@
 window.FM_CONFIG = {
   contactEndpoint: 'https://formspree.io/f/mgaadkpg',
   bookingEndpoint: 'https://formspree.io/f/mgaadkpg',
+  // auditEndpoint: '',  // optional: a separate Formspree form for audit requests (defaults to contactEndpoint)
   supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
   supabaseKey: 'sb_publishable_K04nYpPk4CcktUmZktxd0A_pw_bAEnM' // publishable key, safe to publish
 };
