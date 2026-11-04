@@ -306,3 +306,9 @@ mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 10
 mask-composite:intersect}
 .fm-hx-cell{position:absolute;width:49px;height:49px;box-sizing:border-box;border:1px solid var(--brand);transform-origin:50% 50%;opacity:0;will-change:transform,opacity}
 .fm-hx-cell::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--brand)}
+
+/* ---------- Services: darker artwork panels so the animations stand out ----------
+   Only the animated top of each card changes; the text area keeps --raised. */
+.fm-root[data-theme="light"]{--art:#E3DAC8}
+:root,.fm-root[data-theme="dark"]{--art:#0D0B0A}
+.fm-root .fm-card .fm-art{background-color:var(--art) !important}
