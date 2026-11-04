@@ -108,6 +108,7 @@
       b.setAttribute('aria-pressed', String(b.getAttribute('lang') === state.lang));
     });
     document.title = state.lang === 'fi' ? 'formai — AI-natiivi studio' : 'formai — AI-native studio';
+    document.dispatchEvent(new CustomEvent('fm:lang', { detail: { lang: state.lang } }));
   }
 
   /* ---------- theme, motion, menu ---------- */
@@ -126,6 +127,7 @@
     $('#fm-pause-label').textContent = state.paused ? t().play : t().pause;
     $('#fm-nav').classList.toggle('is-open', state.menuOpen);
     $('.fm-menu-btn').setAttribute('aria-expanded', String(state.menuOpen));
+    document.dispatchEvent(new CustomEvent('fm:motion', { detail: { paused: state.paused } }));
   }
 
   /* ---------- cookie banner ---------- */
