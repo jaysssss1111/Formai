@@ -3,7 +3,7 @@
 // (design, web, code, agents, automation, regulation, AI search), and
 // merges them with hand-picked entries in assets/data/news.json.
 // Runs in GitHub Actions (see .github/workflows/news.yml). Usage:
-//   node tools/fetch-news.mjs [--max 9] [--new 3]
+//   node tools/fetch-news.mjs [--max 9] [--new 3] [--dry-run] [--pick "url,url"]
 import fs from 'node:fs';
 
 const FILE = 'assets/data/news.json';
@@ -109,6 +109,21 @@ const fresh = found
 // second article about the same story (titles sharing two or more longer words).
 const words = (t) => new Set(t.toLowerCase().match(/[a-z0-9]{4,}/g) || []);
 const sameStory = (a, b) => { const w = words(b.title); return [...words(a.title)].filter((x) => w.has(x)).length >= 2; };
+// Hand-picked from the candidate list: --pick "url1,url2" adds exactly those
+// articles (with the publisher's own feed summary) as manual entries.
+const pickArg = args.includes('--pick') ? String(args[args.indexOf('--pick') + 1] || '') : '';
+if (pickArg.trim()) {
+  const urls = pickArg.split(',').map((u) => u.trim()).filter(Boolean);
+  const all = found.filter((x, i, a) => a.findIndex((y) => y.url === x.url) === i);
+  const add = urls.map((u) => all.find((x) => x.url === u)).filter(Boolean).filter((x) => !seen.has(x.url));
+  urls.filter((u) => !all.some((x) => x.url === u)).forEach((u) => console.log('  not in any feed, skipped: ' + u));
+  add.forEach((x) => { delete x.score; x.manual = true; console.log('  picked: ' + x.title); });
+  const out = [...manual, ...add, ...existing.filter((x) => !x.manual)];
+  if (!args.includes('--dry-run')) fs.writeFileSync(FILE, JSON.stringify(out, null, 2) + '\n');
+  console.log(`news.json: ${add.length} hand-picked articles added`);
+  process.exit(0);
+}
+
 // Log the best candidates so a person can review or hand-pick (see --dry-run).
 fresh.slice(0, 25).forEach((x) => console.log(`  cand ${x.score} ${x.topic.padEnd(10)} ${x.date} ${x.source} | ${x.title} | ${x.url}`));
 const added = [];

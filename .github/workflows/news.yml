@@ -11,6 +11,10 @@ on:
         description: 'Only list candidate articles, do not change the site'
         type: boolean
         default: false
+      pick:
+        description: 'Hand-pick: comma-separated article links from the candidate list'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -25,7 +29,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Collect articles
-        run: node tools/fetch-news.mjs ${{ inputs.dry_run && '--dry-run' || '' }}
+        env:
+          PICK: ${{ inputs.pick }}
+        run: node tools/fetch-news.mjs ${{ inputs.dry_run && '--dry-run' || '' }} ${PICK:+--pick "$PICK"}
       - name: Commit if changed
         run: |
           if git diff --quiet -- assets/data/news.json; then
