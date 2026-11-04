@@ -1,5 +1,32 @@
 [
   {
+    "title": "The EU’s next chapter in AI is agentic",
+    "url": "https://openai.com/index/the-eus-next-chapter-in-ai-is-agentic",
+    "source": "OpenAI",
+    "date": "2026-10-14",
+    "summary": "New analysis shows how agentic AI adoption is growing across EU enterprises and small businesses—and where deeper use could unlock more value.",
+    "topic": "agents",
+    "manual": true
+  },
+  {
+    "title": "Stop counting tokens, start counting what ships",
+    "url": "https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/",
+    "source": "MIT Technology Review",
+    "date": "2026-11-02",
+    "summary": "When a developer gives an AI agent a coding task, the agent does more than answer once. It plans, generates code, runs tests, and repeats the process to correct errors. A single task can use 10 to 50 times more tokens…",
+    "topic": "code",
+    "manual": true
+  },
+  {
+    "title": "Amp puts AI agents to work beyond code with OpenAI models",
+    "url": "https://openai.com/index/amp-beyond-coding",
+    "source": "OpenAI",
+    "date": "2026-10-14",
+    "summary": "See how Amp pushes the frontier of what agents can do with GPT-6 Astra, Ultrafast, GPT-Live-1, and Sign in with ChatGPT.",
+    "topic": "agents",
+    "manual": true
+  },
+  {
     "title": "Securing the agentic enterprise with data lineage",
     "url": "https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/",
     "source": "MIT Technology Review",
