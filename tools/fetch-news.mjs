@@ -16,7 +16,10 @@ const FEEDS = [
   { source: 'The Verge', url: 'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml' },
   { source: 'TechCrunch', url: 'https://techcrunch.com/category/artificial-intelligence/feed/' },
   { source: 'Google', url: 'https://blog.google/technology/ai/rss/' },
-  { source: 'OpenAI', url: 'https://openai.com/news/rss.xml' },
+  // openai.com is left out: it blocks automated requests, so its articles get no preview image.
+  { source: 'UX Collective', url: 'https://uxdesign.cc/feed' },
+  { source: 'Nielsen Norman Group', url: 'https://www.nngroup.com/feed/rss/' },
+  { source: 'VentureBeat', url: 'https://venturebeat.com/category/ai/feed/' },
   { source: 'MIT Technology Review', url: 'https://www.technologyreview.com/topic/artificial-intelligence/feed' }
 ];
 

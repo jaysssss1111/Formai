@@ -1,14 +1,5 @@
 [
   {
-    "title": "The EU’s next chapter in AI is agentic",
-    "url": "https://openai.com/index/the-eus-next-chapter-in-ai-is-agentic",
-    "source": "OpenAI",
-    "date": "2026-10-14",
-    "summary": "New analysis shows how agentic AI adoption is growing across EU enterprises and small businesses—and where deeper use could unlock more value.",
-    "topic": "agents",
-    "manual": true
-  },
-  {
     "title": "Stop counting tokens, start counting what ships",
     "url": "https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/",
     "source": "MIT Technology Review",
@@ -17,15 +8,6 @@
     "topic": "code",
     "manual": true,
     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/iStock-2297734847.jpg?resize=1200,600"
-  },
-  {
-    "title": "Amp puts AI agents to work beyond code with OpenAI models",
-    "url": "https://openai.com/index/amp-beyond-coding",
-    "source": "OpenAI",
-    "date": "2026-10-14",
-    "summary": "See how Amp pushes the frontier of what agents can do with GPT-6 Astra, Ultrafast, GPT-Live-1, and Sign in with ChatGPT.",
-    "topic": "agents",
-    "manual": true
   },
   {
     "title": "Securing the agentic enterprise with data lineage",
@@ -44,21 +26,5 @@
     "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
     "topic": "code",
     "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653"
-  },
-  {
-    "title": "Qodo builds context into AI code review with Codex",
-    "url": "https://openai.com/index/qodo-codex-plugin",
-    "source": "OpenAI",
-    "date": "2026-11-02",
-    "summary": "Qodo brings company knowledge and coding standards into Codex, helping developers catch P0 issues across repositories before opening a pull request.",
-    "topic": "code"
-  },
-  {
-    "title": "GPT-6 and Intelligent UI for everyone",
-    "url": "https://openai.com/index/gpt-6-for-everyone",
-    "source": "OpenAI",
-    "date": "2026-10-07",
-    "summary": "GPT‑6 is rolling out globally in ChatGPT with Intelligent UI, delivering faster responses with visuals and interactive experiences you can explore and use directly.",
-    "topic": "design"
   }
 ]
