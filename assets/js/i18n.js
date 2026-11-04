@@ -94,6 +94,23 @@ const T = {
       q7: 'How long does a project take?',
       a7: 'Most brand, web and automation sprints take from a few days to a few weeks, depending on the scope. You get a fixed timeline in the offer before anything starts.'
     },
+    navWork: 'Work',
+    workLabel: 'Work', workTitle: 'Concept cases',
+    workIntro: 'Concept projects that show how we approach a brief: the problem, the plan and what you would get. Client cases are added here as they launch.',
+    caseTag: 'Concept', caseProblem: 'Problem', caseApproach: 'Approach', caseDeliver: 'You get',
+    cases: [
+      { kind: 'Web shop', title: 'A Finnish outdoor gear shop', problem: 'Mobile visitors drop off between the product page and the checkout.', approach: 'An audit of the product page, a mobile layout with the buy button beside the price, and a checkout that asks only for what it needs.', deliver: ['Audit', 'Mobile UI', 'Checkout flow'], time: 'Planned sprint: 5 days' },
+      { kind: 'Legacy brand', title: 'A 60-year-old family bakery', problem: 'A trusted name with a dated identity and orders taken only by phone.', approach: 'Refresh the mark without losing its shape, build a small design system, and add online pre-orders that go straight to each bakery.', deliver: ['Identity refresh', 'Design system', 'Order automation'], time: 'Planned sprint: 3 weeks' },
+      { kind: 'Startup', title: 'A B2B software company before its seed round', problem: 'A working product without a brand, and a support inbox that takes the founders’ time.', approach: 'Identity and landing page in one sprint, then an AI assistant that answers routine support questions from the product documentation.', deliver: ['Identity', 'Landing page', 'AI assistant'], time: 'Planned sprint: 2 weeks' }
+    ],
+    aboutLabel: 'Who we are', aboutTitle: 'A small studio with a large toolset',
+    aboutP: 'formai is a design and development studio based in Finland. Designers and developers work side by side with AI agents, so one small team can deliver brand, product, software and automation without handing the work between agencies.',
+    aboutFacts: ['Based in Finland', 'English and Finnish', 'People + AI agents'],
+    principles: [
+      { h: 'People decide', p: 'AI drafts, tests and builds. A designer or developer reviews everything before it reaches you.' },
+      { h: 'Files you own', p: 'Everything we make is handed over as working files that you and any other team can keep building on.' },
+      { h: 'Days, not weeks', p: 'Short sprints with working versions from the first days, so you can steer early.' }
+    ],
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
   },
   fi: {
@@ -189,6 +206,23 @@ const T = {
       q7: 'Kauanko projekti kestää?',
       a7: 'Useimmat brändi-, verkko- ja automaatiosprintit kestävät muutamasta päivästä muutamaan viikkoon laajuudesta riippuen. Saatte tarjouksessa kiinteän aikataulun ennen kuin mitään aloitetaan.'
     },
+    navWork: 'Työt',
+    workLabel: 'Työt', workTitle: 'Konseptitapaukset',
+    workIntro: 'Konseptiprojekteja, jotka näyttävät, miten tartumme toimeksiantoon: ongelma, suunnitelma ja mitä saisit. Asiakastapaukset lisätään tänne, kun ne julkaistaan.',
+    caseTag: 'Konsepti', caseProblem: 'Ongelma', caseApproach: 'Ratkaisu', caseDeliver: 'Saat',
+    cases: [
+      { kind: 'Verkkokauppa', title: 'Suomalainen retkeilyvarustekauppa', problem: 'Mobiilikävijät putoavat pois tuotesivun ja kassan välillä.', approach: 'Tuotesivun auditointi, mobiiliasettelu, jossa ostopainike on hinnan vieressä, ja kassa, joka kysyy vain tarpeellisen.', deliver: ['Auditointi', 'Mobiili-UI', 'Kassapolku'], time: 'Suunniteltu sprintti: 5 päivää' },
+      { kind: 'Perinteinen brändi', title: '60-vuotias perheleipomo', problem: 'Luotettu nimi, vanhentunut ilme ja tilaukset vain puhelimitse.', approach: 'Merkin uudistus sen muotoa menettämättä, pieni design-järjestelmä ja verkon ennakkotilaukset suoraan kuhunkin leipomoon.', deliver: ['Ilmeen uudistus', 'Design-järjestelmä', 'Tilausautomaatio'], time: 'Suunniteltu sprintti: 3 viikkoa' },
+      { kind: 'Startup', title: 'B2B-ohjelmistoyritys ennen siemenkierrosta', problem: 'Toimiva tuote ilman brändiä ja tukisähköposti, joka vie perustajien ajan.', approach: 'Identiteetti ja laskeutumissivu yhdessä sprintissä, sitten tekoälyavustaja, joka vastaa tavallisiin tukikysymyksiin tuotedokumentaation pohjalta.', deliver: ['Identiteetti', 'Laskeutumissivu', 'Tekoälyavustaja'], time: 'Suunniteltu sprintti: 2 viikkoa' }
+    ],
+    aboutLabel: 'Keitä olemme', aboutTitle: 'Pieni studio, iso työkalupakki',
+    aboutP: 'formai on suomalainen suunnittelu- ja kehitysstudio. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi pieni tiimi pystyy toimittamaan brändin, tuotteen, ohjelmiston ja automaation ilman, että työ siirtyy toimistolta toiselle.',
+    aboutFacts: ['Suomesta', 'Suomeksi ja englanniksi', 'Ihmiset + tekoälyagentit'],
+    principles: [
+      { h: 'Ihmiset päättävät', p: 'Tekoäly luonnostelee, testaa ja rakentaa. Suunnittelija tai kehittäjä tarkistaa kaiken ennen kuin se päätyy sinulle.' },
+      { h: 'Tiedostot ovat teidän', p: 'Kaikki tekemämme luovutetaan toimivina tiedostoina, joiden päälle te ja kuka tahansa muu tiimi voi jatkaa rakentamista.' },
+      { h: 'Päiviä, ei viikkoja', p: 'Lyhyitä sprinttejä ja toimivia versioita ensimmäisistä päivistä alkaen, jotta voitte ohjata työtä ajoissa.' }
+    ],
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
   }
 };

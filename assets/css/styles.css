@@ -379,3 +379,32 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 /* FAQ title follows the other section titles */
 .fm-root h2[data-i18n="faqTitle"]{font-weight:400 !important}
 .fm-root[data-theme="light"] h2[data-i18n="faqTitle"]{color:#3A342D}
+
+/* ---------- Work: concept cases ---------- */
+.fm-case{display:flex;flex-wrap:wrap;background:var(--raised);border:1px solid var(--line);transition:border-color .2s linear}
+.fm-case:hover{border-color:var(--strong)}
+.fm-case-art{flex:1 1 380px;min-width:0;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--art,var(--surface));border-right:1px solid var(--line);box-sizing:border-box}
+.fm-case-art svg{width:100%;max-width:440px;height:auto;display:block}
+.fm-case-body{flex:1 1 420px;min-width:0;padding:32px;box-sizing:border-box;display:flex;flex-direction:column;gap:20px}
+.fm-case-tag{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;line-height:1;padding:6px 10px;background:var(--brand);color:#EDE6D8}
+.fm-case-title{margin:0;font-size:32px;line-height:1.15;font-weight:300;letter-spacing:-0.02em}
+.fm-case-dl{margin:0;display:flex;flex-direction:column;gap:16px}
+.fm-case-dl > div{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:baseline}
+.fm-case-dl dt{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fm-case-dl dd{margin:0;font-size:16px;line-height:1.6;font-weight:300}
+@media (max-width:780px){.fm-case-art{border-right:0;border-bottom:1px solid var(--line)}}
+@media (max-width:640px){.fm-case-body{padding:20px}.fm-case-dl > div{grid-template-columns:1fr;gap:4px}}
+
+/* New section titles follow the other section titles */
+.fm-root h2[data-i18n="workTitle"],.fm-root h2[data-i18n="aboutTitle"]{font-weight:400 !important}
+.fm-root[data-theme="light"] h2[data-i18n="workTitle"],.fm-root[data-theme="light"] h2[data-i18n="aboutTitle"]{color:#3A342D}
+
+/* ---------- Sample audit: a scan passes, pins appear, findings come in (9 s loop) ---------- */
+.fm-au-scan{opacity:0}
+.fm-audit-sample .fm-au-pin,.fm-audit-sample .fm-au-scan{transform-box:fill-box;transform-origin:center}
+@keyframes fm-au-scan{0%{opacity:0;transform:translateY(0)}4%{opacity:1}26%{opacity:1;transform:translateY(170px)}30%,100%{opacity:0;transform:translateY(170px)}}
+@keyframes fm-au-pin{0%,6%{transform:scale(0) rotate(-90deg)}12%,88%{transform:none}96%,100%{transform:scale(0) rotate(90deg)}}
+@keyframes fm-au-row{0%,6%{opacity:0;transform:translateX(-8px)}13%,88%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
+.fm-motion .fm-au-scan{animation:fm-au-scan 9s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-au-pin{animation:fm-au-pin 9s cubic-bezier(.2,.7,.2,1) infinite both}
+.fm-motion .fm-au-row{animation:fm-au-row 9s cubic-bezier(.2,.7,.2,1) infinite both}
