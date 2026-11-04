@@ -15,7 +15,8 @@
     "date": "2026-11-02",
     "summary": "When a developer gives an AI agent a coding task, the agent does more than answer once. It plans, generates code, runs tests, and repeats the process to correct errors. A single task can use 10 to 50 times more tokens…",
     "topic": "code",
-    "manual": true
+    "manual": true,
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/iStock-2297734847.jpg?resize=1200,600"
   },
   {
     "title": "Amp puts AI agents to work beyond code with OpenAI models",
@@ -32,7 +33,8 @@
     "source": "MIT Technology Review",
     "date": "2026-11-04",
     "summary": "A sales representative asks an AI agent for customer pricing, and the agent pulls data from multiple sources: restricted pricing systems, internal communications, and archived quotes. The output looks accurate to the…",
-    "topic": "agents"
+    "topic": "agents",
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR2026_CyberhavenV1COV1200SocialCards.png?resize=1200,600"
   },
   {
     "title": "Meta acquires AI coding startup Conductor",
@@ -40,7 +42,8 @@
     "source": "TechCrunch",
     "date": "2026-11-04",
     "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
-    "topic": "code"
+    "topic": "code",
+    "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653"
   },
   {
     "title": "Qodo builds context into AI code review with Codex",
