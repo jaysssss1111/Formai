@@ -305,3 +305,12 @@ mask-composite:intersect}
 :root,.fm-root[data-theme="dark"]{--card:#26221E;--card-line:#3A342D}
 .fm-root .fm-card{background:var(--card) !important;border-color:var(--card-line) !important}
 .fm-root .fm-card:hover{border-color:var(--strong) !important}
+
+/* ---------- Hero grid motion: a square turns into a diamond, rolls one cell, lands square ---------- */
+.fm-hero-fx{position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);overflow:hidden;pointer-events:none;
+-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
+-webkit-mask-composite:source-in;
+mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
+mask-composite:intersect}
+.fm-hx-cell{position:absolute;width:49px;height:49px;box-sizing:border-box;border:1px solid var(--brand);transform-origin:50% 50%;opacity:0;will-change:transform,opacity}
+.fm-hx-cell::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--brand)}
