@@ -338,3 +338,6 @@ mask-composite:intersect}
 .fm-gridbg::before{content:'';background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;background-position:center center}
 .fm-gridbg-fx{overflow:hidden}
 .fm-hx-cell.is-ring::after{display:none}
+/* Booking grid: the booked slot fills in orange with a cream diamond. */
+.fm-hx-cell.is-booked{background:var(--brand)}
+.fm-hx-cell.is-booked::after{display:block;width:10px;height:10px;margin:-5px 0 0 -5px;background:var(--surface);transform:rotate(45deg)}

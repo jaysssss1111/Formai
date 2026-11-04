@@ -45,6 +45,19 @@
     };
   }
 
+  // Rectangles of content that would hide a cell (data-grid-avoid selector).
+  function blockers(fx) {
+    var sel = fx.getAttribute('data-grid-avoid');
+    return sel ? Array.prototype.map.call(fx.parentNode.querySelectorAll(sel), function (c) { return c.getBoundingClientRect(); }) : [];
+  }
+  // strict: the whole cell must stay clear; loose: only the cell centre (lets cells sit in narrow gutters).
+  function hiddenAt(fx, rects, p, dc, dr, loose) {
+    var base = fx.getBoundingClientRect();
+    var x = base.left + p.ox + (p.c + dc + 0.5) * CELL, y = base.top + p.oy + (p.r + dr + 0.5) * CELL;
+    var h = loose ? -CELL : CELL / 2;
+    return rects.some(function (r) { return x + h > r.left && x - h < r.right && y + h > r.top && y - h < r.bottom; });
+  }
+
   var MODES = {
     roll: { every: [900, 2000], max: 3, run: function (layer) {
       var p = pick(layer.fx, 1); if (!p) return;
@@ -65,14 +78,11 @@
       cleanup(layer, el, a);
     } },
     ripple: { every: [1200, 2200], max: 2, run: function (layer) {
-      // Prefer spots that are not hidden behind a card, so the ripple can be seen.
-      var p = null, base = layer.fx.getBoundingClientRect();
-      var cards = Array.prototype.map.call(layer.fx.parentNode.querySelectorAll('.fm-card'), function (c) { return c.getBoundingClientRect(); });
+      // Prefer spots that are not hidden behind content, so the ripple can be seen.
+      var p = null, rects = blockers(layer.fx);
       for (var t = 0; t < 12 && !p; t++) {
         var q = pick(layer.fx, 2, 0.1); if (!q) return;
-        var x = base.left + q.ox + (q.c + 0.5) * CELL, y = base.top + q.oy + (q.r + 0.5) * CELL;
-        var hidden = cards.some(function (r) { return x > r.left - CELL && x < r.right + CELL && y > r.top + CELL && y < r.bottom - CELL; });
-        if (!hidden) p = q;
+        if (!hiddenAt(layer.fx, rects, q, 0, 0, true)) p = q;
       }
       if (!p) return;
       layer.live++;
@@ -96,6 +106,34 @@
             cleanup(layer, el, a);
           });
         }
+      }
+    } },
+    // Booking: a row of time slots lights up one after another, the last one gets booked.
+    slots: { every: [1600, 2800], max: 2, run: function (layer) {
+      var rects = blockers(layer.fx), p = null, len = 4 + Math.floor(Math.random() * 3);
+      for (var t = 0; t < 16 && !p; t++) {
+        var q = pick(layer.fx, 2, 0.08); if (!q) return;
+        var ok = true;
+        for (var k = 0; k < len && ok; k++) if (hiddenAt(layer.fx, rects, q, k, 0)) ok = false;
+        if (ok) p = q;
+      }
+      if (!p) return;
+      layer.live++;
+      var left = len, STEP = 200, HOLD = 1300;
+      for (var k = 0; k < len; k++) {
+        var last = k === len - 1;
+        var el = cell(layer.fx, p.ox + (p.c + k) * CELL, p.oy + p.r * CELL, !last);
+        if (last) el.classList.add('is-booked');
+        var total = (len - 1 - k) * STEP + HOLD + 600;
+        var a = el.animate([
+          { opacity: 0, transform: 'scaleX(.2)' },
+          { opacity: last ? 1 : 0.55, transform: 'scaleX(1)', offset: 220 / total },
+          { opacity: last ? 1 : 0.55, transform: 'scaleX(1)', offset: (total - 600) / total },
+          { opacity: 0, transform: 'scaleX(1)' }
+        ], { duration: total, delay: k * STEP, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'both' });
+        var end = function () { if (--left === 0) layer.live--; };
+        a.addEventListener('finish', end); a.addEventListener('cancel', end);
+        cleanup(layer, el, a);
       }
     } }
   };
