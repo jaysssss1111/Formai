@@ -263,3 +263,6 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 .fm-motion .fm-ic-pop{animation:fm-ic-pop 6s cubic-bezier(.6,0,.2,1) .4s infinite both}
 .fm-motion .fm-ic-old{animation:fm-ic-old 6s cubic-bezier(.6,0,.2,1) .8s infinite both}
 .fm-motion .fm-ic-new{animation:fm-ic-new 6s cubic-bezier(.6,0,.2,1) .8s infinite both}
+
+/* Honeypot field for form spam: off-screen, never shown to people */
+.fm-hp{position:absolute !important;left:-10000px !important;width:1px;height:1px;opacity:0;pointer-events:none}

@@ -149,6 +149,7 @@ const LEGAL = {
       errName: 'Please enter your name.',
       errEmail: 'Please enter a valid email address, like name@company.com.',
       errMessage: 'Tell us briefly what you need (at least 10 characters).',
+      sending: 'Sending…', errSend: 'Sending failed. Check your connection and try again, or email us directly.',
       thanksTitle: 'thanks, message received', thanksText: 'We will get back to you by email.', done: 'Close'
     },
     rowLabels: { purpose: 'Purpose', type: 'Type', duration: 'Duration', category: 'Category' },
@@ -227,6 +228,7 @@ const LEGAL = {
       errName: 'Kirjoita nimesi.',
       errEmail: 'Kirjoita toimiva sähköpostiosoite, esim. nimi@yritys.fi.',
       errMessage: 'Kerro lyhyesti, mitä tarvitset (vähintään 10 merkkiä).',
+      sending: 'Lähetetään…', errSend: 'Lähetys epäonnistui. Tarkista yhteys ja yritä uudelleen, tai lähetä meille sähköpostia.',
       thanksTitle: 'kiitos, viesti vastaanotettu', thanksText: 'Palaamme asiaan sähköpostilla.', done: 'Sulje'
     },
     rowLabels: { purpose: 'Tarkoitus', type: 'Tyyppi', duration: 'Säilytysaika', category: 'Luokka' },
