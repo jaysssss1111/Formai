@@ -286,3 +286,14 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 .fm-motion .fm-hx-gaze{animation:fm-hx-gaze 12s cubic-bezier(.6,0,.2,1) .4s infinite both}
 .fm-motion .fm-hx-eye{animation:fm-hx-blink 12s linear .4s infinite}
 .fm-motion .fm-hx-ph{animation:fm-hx-ph 3s linear infinite}
+
+/* ---------- Hero background grid: full width, fades out at the sides ---------- */
+.fm-root{overflow-x:clip}
+.fm-hero{position:relative;isolation:isolate}
+.fm-hero::before{content:'';position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);pointer-events:none;
+background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+background-size:48px 48px;background-position:center center;
+-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
+-webkit-mask-composite:source-in;
+mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
+mask-composite:intersect}
