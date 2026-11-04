@@ -1,5 +1,13 @@
 [
   {
+    "title": "Uber only fulfilled 4 rides from AI agents last quarter",
+    "url": "https://www.theverge.com/transportation/1026306/uber-ai-agents-q3-earnings-disintermediation",
+    "source": "The Verge",
+    "date": "2026-11-04",
+    "summary": "AI agents won't be stealing Uber's lunch any time soon. Only four rides were arranged by third-party AI agents during the third quarter of 2026, Uber executives disclosed during an earnings call this morning. The volume…",
+    "topic": "agents"
+  },
+  {
     "title": "Securing the agentic enterprise with data lineage",
     "url": "https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/",
     "source": "MIT Technology Review",
@@ -13,6 +21,14 @@
     "source": "TechCrunch",
     "date": "2026-11-04",
     "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
+    "topic": "code"
+  },
+  {
+    "title": "Qodo builds context into AI code review with Codex",
+    "url": "https://openai.com/index/qodo-codex-plugin",
+    "source": "OpenAI",
+    "date": "2026-11-02",
+    "summary": "Qodo brings company knowledge and coding standards into Codex, helping developers catch P0 issues across repositories before opening a pull request.",
     "topic": "code"
   },
   {
