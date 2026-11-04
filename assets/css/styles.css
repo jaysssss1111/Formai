@@ -312,3 +312,7 @@ mask-composite:intersect}
 .fm-root[data-theme="light"]{--art:#E3DAC8}
 :root,.fm-root[data-theme="dark"]{--art:#0D0B0A}
 .fm-root .fm-card .fm-art{background-color:var(--art) !important}
+/* Same darker artwork tone on the method film stage and the services ticker. */
+.fm-root .fm-film-stage{background-color:var(--art)}
+.fm-root .fm-film-end{background:var(--art)}
+.fm-root .fm-marquee{background-color:var(--art)}
