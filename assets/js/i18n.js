@@ -58,6 +58,42 @@ const T = {
         [24.8, 'Your turn. Send us the screen that slows you down.']
       ]
     },
+    meta: {
+      title: 'formai — AI-native design studio for brand, web, software and automation',
+      description: 'formai is an AI-native studio in Finland. Brand identity, websites, software and AI automation for startups, studios and legacy brands, delivered in days. Get a free audit of one screen.'
+    },
+    auditPoints: ['3 fixes', '48 h', 'Free'],
+    au: {
+      label: 'Free audit', title: 'Get three fixes for one screen',
+      intro: 'Paste the address of one page, app screen or workflow. Within 48 hours you get the three changes that matter most, with the reason and the fix for each. Free, no call needed.',
+      url: 'Address to audit', urlHint: 'A website, landing page, web shop or app link.',
+      urlErr: 'Please enter a web address, like yoursite.com.',
+      kind: 'What should we look at?', kinds: ['Website or landing page', 'Web shop', 'App screen', 'Workflow'],
+      note: 'Anything we should know?', noteHint: 'For example the goal of the page or what feels wrong today.',
+      send: 'Request my audit',
+      thanksTitle: 'Audit requested', thanksText: 'We will send your three fixes to your email within 48 hours.',
+      sample: 'SAMPLE AUDIT', sampleSite: 'yourshop.com / product page',
+      f1: 'Buy button sits below the fold', f1x: 'Move it next to the price',
+      f2: 'Nine fields before checkout', f2x: 'Ask for email and card only',
+      f3: 'Hero image loads in 4.2 s', f3x: 'Compress + lazy-load: 0.9 s'
+    },
+    faqLabel: 'Questions', faqTitle: 'Before you ask',
+    faq: {
+      q1: 'Who owns the files and the code?',
+      a1: 'You do. Once the work is paid for, all design files, source code and other deliverables are yours to use, change and move to any supplier. We may show the work in our portfolio unless you ask us not to.',
+      q2: 'How do you use AI in the work?',
+      a2: 'AI runs through every step: research, layout options, code, copy drafts and testing. People decide what ships. A designer or developer reviews every design, line of code and text before you see it.',
+      q3: 'Does our data go into AI tools?',
+      a3: 'Only what the work needs, and only with your approval. We use business AI services that do not train their models on your data, and we never put personal data or confidential material into an AI tool without your written permission.',
+      q4: 'How do revisions work?',
+      a4: 'Revisions are built into every sprint. You see working versions from the first days and can steer before anything is final. The number of rounds is agreed in the offer.',
+      q5: 'What happens after launch?',
+      a5: 'You get the files and a short handover, so your own team or any other developer can continue. If you want, we stay on for maintenance, updates and new features on a monthly basis.',
+      q6: 'Is the audit really free?',
+      a6: 'Yes. One screen or workflow, three fixes, no obligation. If it helps and you want us to make the changes, we send you an offer.',
+      q7: 'How long does a project take?',
+      a7: 'Most brand, web and automation sprints take from a few days to a few weeks, depending on the scope. You get a fixed timeline in the offer before anything starts.'
+    },
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
   },
   fi: {
@@ -116,6 +152,42 @@ const T = {
         [22.6, 'Brändi, tuote ja niiden taustalla toimivat automaatiot yhtenä kokonaisuutena.'],
         [24.8, 'Sinun vuorosi. Lähetä meille näkymä, joka hidastaa teitä.']
       ]
+    },
+    meta: {
+      title: 'formai — AI-natiivi design-studio: brändi, verkkosivut, ohjelmistot ja automaatio',
+      description: 'formai on suomalainen AI-natiivi studio. Brändi-identiteetti, verkkosivut, ohjelmistot ja tekoälyautomaatio startupeille, studioille ja perinteisille brändeille päivissä. Pyydä maksuton auditointi yhdestä näkymästä.'
+    },
+    auditPoints: ['3 korjausta', '48 h', 'Maksuton'],
+    au: {
+      label: 'Maksuton auditointi', title: 'Saat kolme korjausta yhteen näkymään',
+      intro: 'Liitä yhden sivun, sovellusnäkymän tai työnkulun osoite. Saat 48 tunnin kuluessa kolme tärkeintä muutosta, ja jokaiseen perustelun ja korjauksen. Maksuton, ei puhelua.',
+      url: 'Auditoitava osoite', urlHint: 'Verkkosivu, laskeutumissivu, verkkokauppa tai sovelluksen linkki.',
+      urlErr: 'Kirjoita verkko-osoite, esim. sivustosi.fi.',
+      kind: 'Mitä katsomme?', kinds: ['Verkkosivu tai laskeutumissivu', 'Verkkokauppa', 'Sovellusnäkymä', 'Työnkulku'],
+      note: 'Onko jotain, mitä meidän pitäisi tietää?', noteHint: 'Esimerkiksi sivun tavoite tai se, mikä tuntuu nyt väärältä.',
+      send: 'Pyydä auditointi',
+      thanksTitle: 'Auditointi pyydetty', thanksText: 'Lähetämme kolme korjausta sähköpostiisi 48 tunnin kuluessa.',
+      sample: 'ESIMERKKIAUDITOINTI', sampleSite: 'kauppasi.fi / tuotesivu',
+      f1: 'Ostopainike on taitteen alla', f1x: 'Siirrä se hinnan viereen',
+      f2: 'Kassalla yhdeksän kenttää', f2x: 'Kysy vain sähköposti ja kortti',
+      f3: 'Pääkuva latautuu 4,2 s', f3x: 'Pakkaa ja viivästä: 0,9 s'
+    },
+    faqLabel: 'Kysymykset', faqTitle: 'Ennen kuin kysyt',
+    faq: {
+      q1: 'Kuka omistaa tiedostot ja koodin?',
+      a1: 'Te. Kun työ on maksettu, kaikki suunnittelutiedostot, lähdekoodi ja muut toimitukset ovat teidän, ja voitte käyttää, muokata ja siirtää niitä mille tahansa toimittajalle. Voimme esitellä työtä portfoliossamme, ellette pyydä toisin.',
+      q2: 'Miten käytätte tekoälyä työssä?',
+      a2: 'Tekoäly kulkee mukana jokaisessa vaiheessa: tutkimuksessa, taittovaihtoehdoissa, koodissa, tekstiluonnoksissa ja testauksessa. Ihmiset päättävät, mitä julkaistaan. Suunnittelija tai kehittäjä tarkistaa jokaisen suunnitelman, koodirivin ja tekstin ennen kuin näette sen.',
+      q3: 'Meneekö tietomme tekoälytyökaluihin?',
+      a3: 'Vain se, mitä työ vaatii, ja vain luvallanne. Käytämme yrityskäyttöön tarkoitettuja tekoälypalveluita, jotka eivät kouluta mallejaan teidän tiedoillanne, emmekä koskaan vie henkilötietoja tai luottamuksellista materiaalia tekoälytyökaluun ilman kirjallista lupaanne.',
+      q4: 'Miten muutoskierrokset toimivat?',
+      a4: 'Muutokset kuuluvat jokaiseen sprinttiin. Näette toimivia versioita ensimmäisistä päivistä alkaen ja voitte ohjata työtä ennen kuin mikään on lopullista. Kierrosten määrä sovitaan tarjouksessa.',
+      q5: 'Mitä tapahtuu julkaisun jälkeen?',
+      a5: 'Saatte tiedostot ja lyhyen luovutuksen, joten oma tiiminne tai kuka tahansa muu kehittäjä voi jatkaa. Halutessanne jatkamme ylläpitoa, päivityksiä ja uusia ominaisuuksia kuukausittain.',
+      q6: 'Onko auditointi todella maksuton?',
+      a6: 'On. Yksi näkymä tai työnkulku, kolme korjausta, ei sitoumuksia. Jos siitä on apua ja haluatte meidän tekevän muutokset, lähetämme tarjouksen.',
+      q7: 'Kauanko projekti kestää?',
+      a7: 'Useimmat brändi-, verkko- ja automaatiosprintit kestävät muutamasta päivästä muutamaan viikkoon laajuudesta riippuen. Saatte tarjouksessa kiinteän aikataulun ennen kuin mitään aloitetaan.'
     },
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
   }

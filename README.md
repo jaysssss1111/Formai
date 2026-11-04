@@ -28,6 +28,8 @@ python3 -m http.server 8000
 
 ## Julkaisu
 
+Julkaisuajo kirjoittaa sivun tekstit valmiiksi HTML:ään skriptillä `tools/prerender.mjs`. Hakukoneet saavat näin englanninkielisen sivun osoitteesta `/` ja suomenkielisen osoitteesta `/fi/`. Mukana ovat myös hreflang-linkit, FAQ:n strukturoitu data ja `sitemap.xml`. Paikallinen esikatselu toimii kuten ennenkin; tekstit tulevat silloin JavaScriptillä.
+
 `.github/workflows/pages.yml` julkaisee sivuston GitHub Pagesiin aina, kun `main`-haaraan pusketaan. Ota käyttöön kerran: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 ## Täydennettävää ennen julkaisua
