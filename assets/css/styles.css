@@ -269,3 +269,20 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 
 /* Booked times: blurred and unavailable for every visitor */
 .fm-slot.is-taken,.fm-slot.is-taken:hover{filter:blur(1.5px);opacity:.4;text-decoration:line-through;cursor:not-allowed;border-color:var(--line)}
+
+/* ---------- Hero: the eye forms six services (12 s loop) ---------- */
+.fm-hero-art .fm-hx-tile,.fm-hero-art .fm-hx-gaze,.fm-hero-art .fm-hx-eye{transform-box:fill-box;transform-origin:center}
+.fm-hx-link{opacity:0}
+@keyframes fm-hx-tile{0%{opacity:0;transform:scale(.9)}5%,86%{opacity:1;transform:none}94%,100%{opacity:0;transform:scale(.96)}}
+@keyframes fm-hx-link{0%{opacity:1;stroke-dashoffset:1}4%{opacity:1;stroke-dashoffset:0}9%,100%{opacity:0;stroke-dashoffset:0}}
+@keyframes fm-hx-gaze{0%,2%{transform:none}5%{transform:translate(0,-9px)}11%{transform:translate(8px,-7px)}17%{transform:translate(10px,0)}23%{transform:translate(0,9px)}29%{transform:translate(-8px,7px)}35%{transform:translate(-10px,0)}42%,100%{transform:none}}
+@keyframes fm-hx-blink{0%,62%,66%,100%{transform:scaleY(1)}64%{transform:scaleY(.1)}}
+@keyframes fm-hx-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes fm-hx-ph{0%{transform:translateX(0)}100%{transform:translateX(104px)}}
+.fm-hx-lid{stroke-dasharray:1 1}
+.fm-motion .fm-hx-lid{animation:fm-hx-draw 1s cubic-bezier(.6,0,.2,1) .1s both}
+.fm-motion .fm-hx-tile{animation:fm-hx-tile 12s cubic-bezier(.2,.7,.2,1) infinite both}
+.fm-motion .fm-hx-link{animation:fm-hx-link 12s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-hx-gaze{animation:fm-hx-gaze 12s cubic-bezier(.6,0,.2,1) .4s infinite both}
+.fm-motion .fm-hx-eye{animation:fm-hx-blink 12s linear .4s infinite}
+.fm-motion .fm-hx-ph{animation:fm-hx-ph 3s linear infinite}
