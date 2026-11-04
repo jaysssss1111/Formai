@@ -7,6 +7,7 @@ formai on AI-natiivi design-studio. Tämä repositorio sisältää studion verkk
 ```
 index.html              Sivun rakenne (hero, menetelmä, palvelut, auditointi, asiakkaat, ajanvaraus, yhteydenotto)
 assets/css/styles.css   Tyylit, teemat (tumma/vaalea) ja animaatiot
+assets/js/config.js     Lomakkeiden Formspree-osoitteet
 assets/js/i18n.js       Kaikki tekstit englanniksi ja suomeksi
 assets/js/main.js       Toiminnallisuus: latausanimaatio, teema, kieli, mobiilivalikko,
                         evästesuostumus, tietosuoja- ja evästeseloste, yhteydenottolomake, ajanvarauskalenteri
@@ -31,5 +32,5 @@ python3 -m http.server 8000
 
 ## Täydennettävää ennen julkaisua
 
-- **Lomakkeiden lähetys:** yhteydenotto- ja ajanvarauslomake vahvistavat lähetyksen käyttäjälle, mutta eivät vielä lähetä tietoja minnekään. Kytke ne palveluun kohdissa `// TODO` tiedostossa `assets/js/main.js` (esim. Formspree, Netlify Forms, Cal.com tai Cloudflare Worker).
+- **Lomakkeiden lähetys:** yhteydenotto- ja ajanvarauslomake lähettävät tiedot Formspreehen (https://formspree.io). Liitä lomakkeen osoite (`https://formspree.io/f/…`) tiedostoon `assets/js/config.js`. Kun osoite puuttuu, lomake näyttää vahvistuksen mutta ei lähetä mitään. Ajanvaraus tulee sähköpostiin varauspyyntönä, joka vahvistetaan käsin.
 - **Oikeudelliset tiedot:** tietosuojaselosteessa ja evästekäytännössä on paikkamerkkejä, kuten `[COMPANY NAME]`, `[YOUR EMAIL]` ja `[DATE]` (tiedosto `assets/js/i18n.js`).

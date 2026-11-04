@@ -67,8 +67,8 @@
     draft: { prefs: !!(consent && consent.prefs), analytics: !!(consent && consent.analytics), marketing: !!(consent && consent.marketing) },
     dialog: '',
     contactOpen: false,
-    cf: { sent: false, tried: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
-    bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '' },
+    cf: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
+    bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '', sending: false, sendError: false },
     ready: false
   };
   var opener = null;
@@ -252,6 +252,27 @@
   function errorSummary() {
     return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSummary) + '</div>';
   }
+  function sendErrorBox() {
+    return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSend) + '</div>';
+  }
+  // Hidden field that people never see; bots that fill it in are ignored.
+  var HONEYPOT = '<input type="text" name="_gotcha" class="fm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">';
+  function isBot(form) { var h = form && form.querySelector('[name="_gotcha"]'); return !!(h && h.value); }
+  var warned = false;
+  function postForm(endpoint, data) {
+    if (!endpoint) {
+      if (!warned) { warned = true; console.warn('formai: form endpoint not set in assets/js/config.js, submission was not sent.'); }
+      return Promise.resolve();
+    }
+    return fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r; });
+  }
+  function submitLabel(text, sending) {
+    return sending ? esc(t().cf.sending) : esc(text) + ' ' + ICON_ARROW;
+  }
   function privacyLine() {
     var tr = t();
     return '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(tr.cf.privacy) + ' <button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(tr.ck.privacy) + '</button></p>';
@@ -282,8 +303,8 @@
       var hasErr = !!(e.name || e.email || e.message);
       body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-cf-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.title) + '</h2>' +
         '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.intro) + '</p></div>' +
-        (hasErr ? errorSummary() : '') +
-        '<form id="fm-cf-form" novalidate style="display: flex; flex-direction: column; gap: 20px; margin: 0;">' +
+        (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox() : '') +
+        '<form id="fm-cf-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 20px; margin: 0;">' + HONEYPOT +
         field('fm-cf-name', cf.name, { key: 'name', required: true, ac: 'name', value: c.data.name, err: e.name }) +
         field('fm-cf-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: c.data.email, err: e.email }) +
         field('fm-cf-company', cf.company, { key: 'company', ac: 'organization', value: c.data.company }) +
@@ -291,7 +312,7 @@
         field('fm-cf-message', cf.message, { key: 'message', required: true, textarea: true, hint: cf.messageHint, value: c.data.message, err: e.message }) +
         privacyLine() +
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
-        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;">' + esc(cf.send) + ' ' + ICON_ARROW + '</button></div></form>';
+        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
     }
     host.innerHTML = '<div data-overlay="contact" style="' + OVERLAY + ' z-index: 140;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-cf-title" tabindex="-1" style="' + DLG + ' max-width: 600px;">' +
@@ -319,16 +340,28 @@
       var first = $('#fm-contact-root [aria-invalid="true"]'); if (first) first.focus();
       return;
     }
-    var payload = {
-      name: state.cf.data.name, email: state.cf.data.email, company: state.cf.data.company,
-      interests: selectedInterests(state.cf.interests),
-      message: state.cf.data.message
+    if (state.cf.sending) return;
+    var d = state.cf.data;
+    var done = function () {
+      state.cf = { sent: true, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] };
+      renderContact();
+      var dlg = $('#fm-contact-root .fm-dlg'); if (dlg) dlg.focus();
     };
-    // TODO: send `payload` to the form endpoint (Formspree, Netlify Forms or a Cloudflare Worker).
-    void payload;
-    state.cf = { sent: true, tried: false, data: { name: '', email: '', company: '', message: '' }, interests: [] };
+    if (isBot($('#fm-cf-form'))) { done(); return; }
+    var payload = {
+      _subject: 'formai: message from ' + String(d.name).trim(),
+      name: String(d.name).trim(), email: String(d.email).trim(), company: String(d.company).trim(),
+      interests: selectedInterests(state.cf.interests).join(', '),
+      message: String(d.message).trim(),
+      language: state.lang
+    };
+    state.cf.sending = true; state.cf.sendError = false;
     renderContact();
-    var d = $('#fm-contact-root .fm-dlg'); if (d) d.focus();
+    postForm((window.FM_CONFIG || {}).contactEndpoint, payload).then(done, function () {
+      state.cf.sending = false; state.cf.sendError = true;
+      renderContact();
+      var a = $('#fm-contact-root [role="alert"]'); if (a) a.scrollIntoView({ block: 'nearest' });
+    });
   }
 
   /* ---------- booking calendar ---------- */
@@ -442,15 +475,15 @@
       html = '<button type="button" class="fm-link fm-textbtn" data-action="bkBack" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="margin-right: 8px;"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' + esc(B.back) + '</button>' +
         '<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface);"><span style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">' + esc(B.selected) + '</span>' +
         '<span style="font-size: 16px; line-height: 1.4; font-weight: 400;">' + esc(bkSummary(M)) + '</span></div>' +
-        (eName || eEmail ? errorSummary() : '') +
-        '<form id="fm-bk-form" novalidate style="display: flex; flex-direction: column; gap: 18px; margin: 0;">' +
+        (eName || eEmail ? errorSummary() : '') + (b.sendError ? sendErrorBox() : '') +
+        '<form id="fm-bk-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
         field('fm-bk-name', cf.name, { key: 'name', required: true, ac: 'name', value: f.name, err: eName ? cf.errName : '' }) +
         field('fm-bk-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: f.email, err: eEmail ? cf.errEmail : '' }) +
         field('fm-bk-company', cf.company, { key: 'company', ac: 'organization', value: f.company }) +
         interestPicker(b.interests, 'bk') +
         field('fm-bk-topic', B.topic, { key: 'topic', textarea: true, rows: 3, value: f.topic, style: 'min-height: 96px;' }) +
         privacyLine() +
-        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;">' + esc(B.confirm) + ' ' + ICON_ARROW + '</button></form>';
+        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;"' + (b.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(B.confirm, b.sending) + '</button></form>';
     } else {
       html = '<div role="status" style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">' + EYE_DRAW +
         '<h3 style="margin: 0; font-size: clamp(32px, 4vw, 44px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(B.doneTitle) + '</h3>' +
@@ -470,14 +503,32 @@
       var first = $('#fm-bk-panel [aria-invalid="true"]'); if (first) first.focus();
       return;
     }
-    var payload = { date: b.date, time: b.slot, name: f.name, email: f.email, company: f.company, interests: selectedInterests(b.interests), topic: f.topic };
-    // TODO: send `payload` to the booking backend (Cal.com, Google Calendar or a Cloudflare Worker).
-    void payload;
-    b.doneSummary = bkSummary(calModel());
-    b.step = 'done'; b.tried = false;
-    b.data = { name: '', email: '', company: '', topic: '' };
-    b.interests = [];
+    if (b.sending) return;
+    var M = calModel();
+    var summary = bkSummary(M);
+    var done = function () {
+      b.doneSummary = summary;
+      b.step = 'done'; b.tried = false; b.sending = false; b.sendError = false;
+      b.data = { name: '', email: '', company: '', topic: '' };
+      b.interests = [];
+      renderPanel();
+    };
+    if (isBot($('#fm-bk-form'))) { done(); return; }
+    var payload = {
+      _subject: 'formai: booking request ' + b.date + ' ' + b.slot + ' (Europe/Helsinki)',
+      booking: summary,
+      date: b.date, time: b.slot, duration: '30 min', timezone: 'Europe/Helsinki',
+      name: String(f.name).trim(), email: String(f.email).trim(), company: String(f.company).trim(),
+      interests: selectedInterests(b.interests).join(', '),
+      topic: String(f.topic).trim(),
+      language: state.lang
+    };
+    b.sending = true; b.sendError = false;
     renderPanel();
+    postForm((window.FM_CONFIG || {}).bookingEndpoint, payload).then(done, function () {
+      b.sending = false; b.sendError = true;
+      renderPanel();
+    });
   }
 
   /* ---------- full re-render (language / theme change) ---------- */
