@@ -30,6 +30,31 @@ const T = {
     g2: 'studios', g2p: 'Add design, development and AI capacity for a project or a season, without adding headcount.',
     g3: 'legacy brands', g3p: 'Modernize the identity, the interfaces and the processes behind them, without losing what people already trust.',
     contactTitle: 'send us the screen or task that slows you down', email: '[YOUR EMAIL]',
+    film: {
+      label: 'Method / film', play: 'Play film', pause: 'Pause film', replay: 'Replay film', script: 'Read the script',
+      ann: ['CTA BELOW THE FOLD', 'NINE FORM FIELDS', '4.2 S TO LOAD'], fold: 'FOLD',
+      cardLabel: 'AUDIT / 3 CHANGES', cardText: 'before any contract',
+      day: 'DAY', people: 'PEOPLE', agents: 'AI AGENTS',
+      agency: 'agency quote · 6 weeks', us: 'formai · 5 days',
+      files: ['brand.svg', 'app.ts', 'flow.yml'],
+      fix: ['CTA ABOVE THE FOLD', 'THREE FIELDS', '0.9 S TO LOAD'], live: 'LIVE',
+      deliver: ['BRAND', 'PRODUCT', 'AUTOMATIONS'],
+      endTitle: 'your turn',
+      lines: [
+        [0.3, 'It starts with one screen of yours.'],
+        [2.2, 'We look at it the way your users do.'],
+        [4.6, 'And name the three changes that matter most.'],
+        [6.4, 'You get the audit before any contract.'],
+        [9.2, 'Say go, and the sprint begins.'],
+        [11.0, 'People and AI agents work in the same loop.'],
+        [13.4, 'Designs, code and automations arrive as working files.'],
+        [15.6, 'Agencies quote weeks. You get it in days.'],
+        [18.2, 'Then it ships.'],
+        [19.8, 'Every fix from the audit, live in your product.'],
+        [22.6, 'A brand, a product and the automations behind it, working as one.'],
+        [24.8, 'Your turn. Send us the screen that slows you down.']
+      ]
+    },
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
   },
   fi: {
@@ -61,6 +86,31 @@ const T = {
     g2: 'studiot', g2p: 'Lisää suunnittelu-, kehitys- ja tekoälykapasiteettia projektiin tai sesonkiin ilman uusia rekrytointeja.',
     g3: 'perinteiset brändit', g3p: 'Uudista identiteetti, käyttöliittymät ja niiden taustalla olevat prosessit menettämättä sitä, mihin ihmiset jo luottavat.',
     contactTitle: 'lähetä meille näkymä tai tehtävä, joka hidastaa teitä', email: '[SÄHKÖPOSTIOSOITTEESI]',
+    film: {
+      label: 'Menetelmä / video', play: 'Toista video', pause: 'Pysäytä video', replay: 'Toista video uudelleen', script: 'Lue käsikirjoitus',
+      ann: ['CTA TAITTEEN ALLA', 'YHDEKSÄN KENTTÄÄ', 'LATAUS 4,2 S'], fold: 'TAITE',
+      cardLabel: 'AUDITOINTI / 3 MUUTOSTA', cardText: 'ennen sopimusta',
+      day: 'PÄIVÄ', people: 'IHMISET', agents: 'TEKOÄLYAGENTIT',
+      agency: 'toimiston arvio · 6 viikkoa', us: 'formai · 5 päivää',
+      files: ['brand.svg', 'app.ts', 'flow.yml'],
+      fix: ['CTA TAITTEEN YLLÄ', 'KOLME KENTTÄÄ', 'LATAUS 0,9 S'], live: 'KÄYTÖSSÄ',
+      deliver: ['BRÄNDI', 'TUOTE', 'AUTOMAATIOT'],
+      endTitle: 'sinun vuorosi',
+      lines: [
+        [0.3, 'Kaikki alkaa yhdestä näkymästäsi.'],
+        [2.2, 'Katsomme sitä niin kuin käyttäjäsi.'],
+        [4.6, 'Ja nimeämme kolme tärkeintä muutosta.'],
+        [6.4, 'Saat auditoinnin jo ennen sopimusta.'],
+        [9.2, 'Kun sanot kyllä, sprintti alkaa.'],
+        [11.0, 'Ihmiset ja tekoälyagentit työskentelevät samassa silmukassa.'],
+        [13.4, 'Suunnitelmat, koodi ja automaatiot tulevat toimivina tiedostoina.'],
+        [15.6, 'Toimistot arvioivat viikkoja. Sinä saat sen päivissä.'],
+        [18.2, 'Sitten se julkaistaan.'],
+        [19.8, 'Jokainen auditoinnin korjaus käytössä tuotteessasi.'],
+        [22.6, 'Brändi, tuote ja niiden taustalla toimivat automaatiot yhtenä kokonaisuutena.'],
+        [24.8, 'Sinun vuorosi. Lähetä meille näkymä, joka hidastaa teitä.']
+      ]
+    },
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
   }
 };
