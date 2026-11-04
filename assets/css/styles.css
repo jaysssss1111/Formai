@@ -297,3 +297,11 @@ background-size:48px 48px;background-position:center center;
 -webkit-mask-composite:source-in;
 mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
 mask-composite:intersect}
+
+/* ---------- Service cards: a tone that stands off the page ground ----------
+   Light: a slightly darker cream. Dark: a slightly lighter charcoal.
+   Muted text stays at 5:1 or better on both. */
+.fm-root[data-theme="light"]{--card:#E0D6C3;--card-line:#CBBFA9}
+:root,.fm-root[data-theme="dark"]{--card:#26221E;--card-line:#3A342D}
+.fm-root .fm-card{background:var(--card) !important;border-color:var(--card-line) !important}
+.fm-root .fm-card:hover{border-color:var(--strong) !important}
