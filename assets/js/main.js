@@ -623,6 +623,11 @@
     closeDoc: closeDoc,
     openContact: openContact,
     closeContact: closeContact,
+    flipCard: function (el) {
+      // Show the service name on orange in place of the animation; click again to flip back.
+      var on = el.classList.toggle('is-flipped');
+      var art = el.querySelector('.fm-art'); if (art) art.setAttribute('aria-pressed', String(on));
+    },
     toggleInterest: function (el) {
       var list = el.getAttribute('data-form') === 'bk' ? state.bk.interests : state.cf.interests;
       var i = Number(el.getAttribute('data-i'));
@@ -677,6 +682,11 @@
   });
 
   document.addEventListener('keydown', function (ev) {
+    if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('fm-art')) {
+      ev.preventDefault();
+      var card = ev.target.closest('.fm-card'); if (card) actions.flipCard(card);
+      return;
+    }
     if (ev.key === 'Escape') {
       if (state.dialog) { closeDoc(); return; }
       if (state.contactOpen) { closeContact(); return; }
