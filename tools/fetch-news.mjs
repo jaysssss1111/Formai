@@ -102,12 +102,17 @@ const since = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
 const fresh = found
   .filter((x, i, a) => !seen.has(x.url) && a.findIndex((y) => y.url === x.url) === i && x.date && x.date >= since)
   .sort((a, b) => (b.score - a.score) || String(b.date).localeCompare(String(a.date)));
+// A mix: at most one article per publisher and per topic in a run, and no
+// second article about the same story (titles sharing two or more longer words).
+const words = (t) => new Set(t.toLowerCase().match(/[a-z0-9]{4,}/g) || []);
+const sameStory = (a, b) => { const w = words(b.title); return [...words(a.title)].filter((x) => w.has(x)).length >= 2; };
 const added = [];
-const usedSource = new Set();
+const usedSource = new Set(), usedTopic = new Set();
 for (const x of fresh) {
   if (added.length >= NEW_PER_RUN) break;
-  if (usedSource.has(x.source)) continue;
-  usedSource.add(x.source);
+  if (usedSource.has(x.source) || usedTopic.has(x.topic)) continue;
+  if ([...added, ...existing].some((y) => sameStory(x, y))) continue;
+  usedSource.add(x.source); usedTopic.add(x.topic);
   added.push(x);
 }
 const auto = existing.filter((x) => !x.manual);
