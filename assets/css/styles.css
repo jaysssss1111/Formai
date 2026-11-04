@@ -228,3 +228,15 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 .fm-film-time{display:none}
 .fm-film-ch{font-size:11px;letter-spacing:.08em}
 }
+
+/* ---------- AI products card ---------- */
+.fm-type{transform-box:fill-box;transform-origin:100% 50%;transform:scaleX(0)}
+.fm-think{opacity:0}
+@keyframes fm-type-loop{0%{transform:scaleX(1)}22%,86%{transform:scaleX(0)}92%,100%{transform:scaleX(1)}}
+@keyframes fm-think-loop{0%,21%{opacity:0}24%,34%{opacity:1}37%,100%{opacity:0}}
+@keyframes fm-think-dot{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes fm-ai-turn{0%,22%{transform:rotate(0deg)}34%,100%{transform:rotate(180deg)}}
+.fm-motion .fm-type{animation:fm-type-loop 7s steps(26,end) infinite both}
+.fm-motion .fm-think{animation:fm-think-loop 7s linear infinite both}
+.fm-motion .fm-think-dot{animation:fm-think-dot .6s linear infinite both}
+.fm-motion .fm-ai-pupil{animation:fm-ai-turn 7s cubic-bezier(.6,0,.2,1) infinite both}
