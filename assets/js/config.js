@@ -4,6 +4,6 @@
  * While a value is empty the form shows its confirmation but sends nothing.
  */
 window.FM_CONFIG = {
-  contactEndpoint: '',
-  bookingEndpoint: ''
+  contactEndpoint: 'https://formspree.io/f/mgaadkpg',
+  bookingEndpoint: 'https://formspree.io/f/mgaadkpg'
 };
