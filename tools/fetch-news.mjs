@@ -56,7 +56,13 @@ function parse(xml, source) {
     const url = link(b).trim();
     const date = new Date(decode(tag(b, 'pubDate') || tag(b, 'published') || tag(b, 'updated') || tag(b, 'dc:date')));
     const summary = clip(decode(tag(b, 'description') || tag(b, 'summary') || tag(b, 'content')), 220);
-    return { title, url, source, date: isNaN(date) ? null : date.toISOString().slice(0, 10), summary };
+    // Image the feed itself gives for the item (media:content, media:thumbnail, enclosure, or an <img>).
+    const fm = b.match(/<media:(?:content|thumbnail)\b[^>]*url=["']([^"']+)["']/i) ||
+      b.match(/<enclosure\b[^>]*type=["']image\/[^"']*["'][^>]*url=["']([^"']+)["']/i) ||
+      b.match(/<enclosure\b[^>]*url=["']([^"']+\.(?:jpe?g|png|webp)[^"']*)["']/i) ||
+      b.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').match(/<img\b[^>]*src=["']([^"']+)["']/i);
+    const feedImage = fm ? decode(fm[1]) : '';
+    return { title, url, source, date: isNaN(date) ? null : date.toISOString().slice(0, 10), summary, feedImage };
   }).filter((x) => x.title && /^https?:\/\//.test(x.url));
 }
 
@@ -87,9 +93,14 @@ const metaContent = (html, key) => {
   }
   return '';
 };
+const feedImages = new Map();   // article url -> image the feed provides
 async function addImages(list) {
   for (const x of list) {
-    if (x.image || x.image === false) continue;
+    if (!x.image && feedImages.get(x.url)) x.feedImage = feedImages.get(x.url);
+    const fallback = () => {
+      if (x.feedImage && /^https:\/\//.test(x.feedImage)) { x.image = x.feedImage; console.log('  image from feed: ' + x.title); }
+    };
+    if (x.image || x.image === false) { delete x.feedImage; continue; }
     try {
       const res = await fetch(x.url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; formai-news-bot; +https://github.com/jaysssss1111/Formai)', Accept: 'text/html' }, redirect: 'follow', signal: AbortSignal.timeout(20000) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -97,20 +108,14 @@ async function addImages(list) {
       let img = metaContent(html, 'og:image:secure_url') || metaContent(html, 'og:image') || metaContent(html, 'twitter:image') || metaContent(html, 'twitter:image:src');
       if (img) img = new URL(img, res.url || x.url).href;
       if (img && /^https:\/\//.test(img)) { x.image = img; console.log('  image: ' + x.title); }
-      else console.log('  no image found: ' + x.title);
+      else { console.log('  no image on page: ' + x.title); fallback(); }
     } catch (e) {
-      console.log(`  image skipped (${e.message}): ${x.title}`);
+      console.log(`  page not readable (${e.message}): ${x.title}`);
+      fallback();
     }
+    delete x.feedImage;
   }
   return list;
-}
-
-// --images-only: look up preview images for the listed articles, add nothing new.
-if (args.includes('--images-only')) {
-  const list = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : [];
-  fs.writeFileSync(FILE, JSON.stringify(await addImages(list), null, 2) + '\n');
-  console.log('news.json: images checked for ' + list.length + ' articles');
-  process.exit(0);
 }
 
 const existing = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : [];
@@ -134,6 +139,16 @@ for (const f of FEEDS) {
   } catch (e) {
     console.log(`${f.source}: skipped (${e.message})`);
   }
+}
+
+found.forEach((x) => { if (x.feedImage) feedImages.set(x.url, x.feedImage); });
+
+// --images-only: look up preview images for the listed articles, add nothing new.
+if (args.includes('--images-only')) {
+  const list = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : [];
+  fs.writeFileSync(FILE, JSON.stringify(await addImages(list), null, 2) + '\n');
+  console.log('news.json: images checked for ' + list.length + ' articles');
+  process.exit(0);
 }
 
 // Each run adds up to three new articles (newest first, at most one per
