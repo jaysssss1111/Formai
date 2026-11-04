@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>formai — AI-native studio</title>
+<meta name="description" content="formai is an AI-native design studio. Brand, product, software and automation for startups, studios and legacy brands, delivered in days.">
+<meta name="theme-color" content="#141210">
+<link rel="icon" type="image/svg+xml" href="assets/logos/formai-eye-mark-cream.svg">
+<link rel="preload" href="assets/fonts/DMSans-200.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/DMSans-300.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/DMMono-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>
+/* Apply saved theme before first paint to avoid a flash. */
+(function () {
+  try {
+    var rec = JSON.parse(localStorage.getItem('fm-consent') || 'null');
+    var m = rec && rec.prefs ? localStorage.getItem('fm-mode') : '';
+    if (!m && window.matchMedia) m = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', m === 'light' ? 'light' : 'dark');
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<div id="top" class="fm-root fm-motion" data-theme="dark">
+
+<!-- LOADER -->
+<div class="fm-loader" id="fm-loader" role="status" aria-live="polite" style="position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--ink);">
+<div class="fm-ld-inner" style="display: flex; flex-direction: column; align-items: center; gap: 32px;">
+<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true" style="display: block; overflow: visible;">
+<path class="fm-ld-lid" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: miter; stroke-miterlimit: 10;"></path>
+<path class="fm-ld-pupil" d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path>
+</svg>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+<div style="position: relative; width: 160px; height: 1px; background: var(--line); overflow: hidden;"><div class="fm-ld-bar" style="position: absolute; left: 0; top: 0; width: 40%; height: 1px; background: var(--brand);"></div></div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">formai / <span data-i18n="loading"></span></span>
+</div>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--brand);"></div>
+</div>
+
+<a class="fm-skip" href="#content" data-i18n="skip"></a>
+
+<!-- Rendered by assets/js/main.js: cookie banner, contact dialog, policy dialog -->
+<div id="fm-banner-root"></div>
+<div id="fm-contact-root"></div>
+<div id="fm-doc-root"></div>
+
+<!-- NAV -->
+<header class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+<a href="#top" data-i18n-aria-label="home" style="display: flex; align-items: center; min-height: 44px;">
+<img class="fm-only-dark" src="assets/logos/formai-wordmark-cream.svg" alt="formai" width="98" height="28" style="height: 28px; width: auto; display: block;">
+<img class="fm-only-light" src="assets/logos/formai-wordmark-charcoal.svg" alt="formai" width="98" height="28" style="height: 28px; width: auto; display: block;">
+</a>
+<nav id="fm-nav" class="fm-navlinks" data-i18n-aria-label="navLabel" style="display: flex; align-items: center; gap: 32px;">
+<a class="fm-link fm-navlink" href="#services" data-action="closeMenu" data-i18n="navServices" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);"></a>
+<a class="fm-link fm-navlink" href="#method" data-action="closeMenu" data-i18n="navMethod" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);"></a>
+<a class="fm-link fm-navlink" href="#audit" data-action="closeMenu" data-i18n="navAudit" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);"></a>
+<a class="fm-link fm-navlink" href="#book" data-action="closeMenu" data-i18n="navBook" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);"></a>
+<a class="fm-link fm-navlink fm-navlink-cta" href="#contact" data-action="closeMenu" data-i18n="cta" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);"></a>
+</nav>
+<div style="display: flex; align-items: center; gap: 12px;">
+<button type="button" class="fm-mode" id="fm-mode-btn" data-action="toggleMode" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;">
+<svg class="fm-only-dark" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 6 L14 10 L10 14 L6 10 Z M10 1 V3.5 M10 16.5 V19 M1 10 H3.5 M16.5 10 H19 M3.6 3.6 L5.4 5.4 M14.6 14.6 L16.4 16.4 M3.6 16.4 L5.4 14.6 M14.6 5.4 L16.4 3.6" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square; stroke-linejoin: miter;"></path></svg>
+<svg class="fm-only-light" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 2.5 A7.5 7.5 0 1 0 17.5 13.5 A6 6 0 0 1 12.5 2.5 Z" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: miter;"></path></svg>
+</button>
+<div role="group" class="fm-lang" data-i18n-aria-label="langLabel" style="display: flex; border: 1px solid var(--strong);">
+<button type="button" data-action="setEn" aria-pressed="true" lang="en" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; line-height: 1; min-width: 44px; min-height: 42px; padding: 0 12px; border: 0; border-radius: 0; cursor: pointer; transition: background-color .18s linear, color .18s linear;">EN</button>
+<button type="button" data-action="setFi" aria-pressed="false" lang="fi" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; line-height: 1; min-width: 44px; min-height: 42px; padding: 0 12px; border: 0; border-radius: 0; cursor: pointer; transition: background-color .18s linear, color .18s linear;">FI</button>
+</div>
+<a class="fm-btn fm-btn-primary fm-navcta" href="#contact" data-i18n="cta" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 12px 24px; background: var(--accent); color: var(--on-accent);"></a>
+<button type="button" class="fm-menu-btn" data-action="toggleMenu" aria-expanded="false" aria-controls="fm-nav" data-i18n-aria-label="menu" style="display: none; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;">
+<svg class="fm-ico-menu" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 6 H18 M2 14 H18" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>
+<svg class="fm-ico-close" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4 L16 16 M16 4 L4 16" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>
+</button>
+</div>
+</header>
+
+<main id="content" tabindex="-1" style="display: flex; flex-direction: column;">
+
+<!-- HERO -->
+<section class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px 120px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 64px;">
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 32px;">
+<span class="fm-in fm-d1" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);" data-i18n="eyebrow"></span>
+<h1 style="margin: 0; font-size: clamp(52px, 7vw, 96px); line-height: 0.95; font-weight: 200; letter-spacing: -0.04em; color: var(--ink);"><span class="fm-word fm-d2" data-i18n="h1"></span> <span class="fm-word fm-d3" data-i18n="h2"></span> <span class="fm-word fm-d4" data-i18n="h3"></span> <span class="fm-word fm-d5" style="color: var(--brand);" data-i18n="h4"></span></h1>
+<p class="fm-in fm-d6" style="margin: 0; max-width: 520px; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em; color: var(--ink);" data-i18n="heroP"></p>
+<div class="fm-in fm-d7" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<a class="fm-btn fm-btn-primary" href="#contact" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 14px 28px; background: var(--accent); color: var(--on-accent);"><span data-i18n="cta"></span> <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+<a class="fm-btn fm-btn-ghost" href="#services" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 13px 27px; border: 1px solid var(--strong); color: var(--ink);"><span data-i18n="cta2"></span> <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+</div>
+</div>
+<div style="flex: 1 1 340px; min-width: 0; display: flex; justify-content: center;">
+<svg class="fm-svg" viewBox="0 0 480 480" aria-hidden="true" style="width: 100%; max-width: 440px; height: auto; display: block; overflow: hidden;">
+<rect class="fm-blk-a" x="0" y="240" width="120" height="240" style="fill: var(--strong)"></rect>
+<rect class="fm-blk-b" x="120" y="0" width="240" height="288" style="fill: var(--brand)"></rect>
+<path class="fm-pupil" d="M240 72 L312 144 L240 216 L168 144 Z" style="fill: var(--surface)"></path>
+<rect class="fm-blk-c" x="240" y="192" width="240" height="288" style="fill: var(--ink)"></rect>
+<g class="fm-lattice" style="fill: var(--surface)">
+<path style="animation-delay: 1.0s" d="M288 232 L296 240 L288 248 L280 240 Z"></path><path style="animation-delay: 1.15s" d="M336 232 L344 240 L336 248 L328 240 Z"></path><path style="animation-delay: 1.3s" d="M384 232 L392 240 L384 248 L376 240 Z"></path><path style="animation-delay: 1.45s" d="M432 232 L440 240 L432 248 L424 240 Z"></path>
+<path style="animation-delay: 1.15s" d="M288 280 L296 288 L288 296 L280 288 Z"></path><path style="animation-delay: 1.3s" d="M336 280 L344 288 L336 296 L328 288 Z"></path><path style="animation-delay: 1.45s" d="M384 280 L392 288 L384 296 L376 288 Z"></path><path style="animation-delay: 1.6s" d="M432 280 L440 288 L432 296 L424 288 Z"></path>
+<path style="animation-delay: 1.3s" d="M288 328 L296 336 L288 344 L280 336 Z"></path><path style="animation-delay: 1.45s" d="M336 328 L344 336 L336 344 L328 336 Z"></path><path style="animation-delay: 1.6s" d="M384 328 L392 336 L384 344 L376 336 Z"></path><path style="animation-delay: 1.75s" d="M432 328 L440 336 L432 344 L424 336 Z"></path>
+<path style="animation-delay: 1.45s" d="M288 376 L296 384 L288 392 L280 384 Z"></path><path style="animation-delay: 1.6s" d="M336 376 L344 384 L336 392 L328 384 Z"></path><path style="animation-delay: 1.75s" d="M384 376 L392 384 L384 392 L376 384 Z"></path><path style="animation-delay: 1.9s" d="M432 376 L440 384 L432 392 L424 384 Z"></path>
+<path style="animation-delay: 1.6s" d="M288 424 L296 432 L288 440 L280 432 Z"></path><path style="animation-delay: 1.75s" d="M336 424 L344 432 L336 440 L328 432 Z"></path><path style="animation-delay: 1.9s" d="M384 424 L392 432 L384 440 L376 432 Z"></path><path style="animation-delay: 2.05s" d="M432 424 L440 432 L432 440 L424 432 Z"></path>
+</g>
+</svg>
+</div>
+</section>
+
+<!-- TICKER -->
+<div class="fm-marquee" aria-hidden="true" style="width: 100%; border-top: 1px solid var(--line); padding: 28px 0; overflow: hidden;">
+<div class="fm-track" id="fm-ticker" style="display: flex; width: max-content;">
+
+</div>
+</div>
+
+<!-- METHOD -->
+<section id="method" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="methodLabel"></span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="methodTitle"></h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 48px;">
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--accent);">01</span>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="m1"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="m1p"></p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--accent);">02</span>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="m2"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="m2p"></p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--accent);">03</span>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="m3"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="m3p"></p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="servicesLabel"></span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="servicesTitle"></h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px;">
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g style="fill: none; stroke: var(--line); stroke-width: 1;">
+<path d="M40 0 V240 M80 0 V240 M120 0 V240 M160 0 V240 M200 0 V240 M240 0 V240 M280 0 V240 M320 0 V240 M360 0 V240 M0 40 H400 M0 80 H400 M0 120 H400 M0 160 H400 M0 200 H400"></path>
+</g>
+<g style="fill: none; stroke: var(--strong); stroke-width: 1;">
+<circle class="fm-draw" cx="200" cy="120" r="80" pathLength="1"></circle>
+<circle class="fm-draw" cx="200" cy="120" r="44" pathLength="1" style="animation-delay: .2s"></circle>
+<path class="fm-draw" d="M70 120 H330" pathLength="1" style="animation-delay: .1s"></path>
+<path class="fm-draw" d="M200 24 V216" pathLength="1" style="animation-delay: .3s"></path>
+<path class="fm-draw" d="M120 120 L200 40 L280 120 L200 200 Z" pathLength="1" style="animation-delay: .4s"></path>
+</g>
+<path class="fm-draw" d="M120 120 Q200 52 280 120 Q200 188 120 120 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: miter; animation-delay: .7s"></path>
+<path class="fm-pop fb" d="M200 98 L222 120 L200 142 L178 120 Z" style="fill: var(--brand);"></path>
+<text x="24" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);" data-i18n="artMark"></text>
+<text x="376" y="22" text-anchor="end" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">Ø 160</text>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s1Label"></span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s1"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s1p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags1">
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<rect x="60" y="28" width="280" height="196" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
+<path d="M60 48 H340" style="stroke: var(--strong); stroke-width: 1;"></path>
+<rect x="70" y="35" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="80" y="35" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="90" y="35" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect class="fm-grow fl" x="80" y="66" width="150" height="10" style="fill: var(--ink);"></rect>
+<rect class="fm-grow fl" x="80" y="84" width="110" height="10" style="fill: var(--ink); animation-delay: .12s"></rect>
+<rect class="fm-grow fl" x="80" y="104" width="96" height="4" style="fill: var(--muted); animation-delay: .24s"></rect>
+<rect class="fm-grow fl" x="80" y="113" width="72" height="4" style="fill: var(--muted); animation-delay: .32s"></rect>
+<g class="fm-fade" style="animation-delay: .4s"><rect class="fm-press" x="80" y="130" width="60" height="18" style="fill: var(--brand);"></rect></g>
+<g class="fm-fade" style="animation-delay: .3s">
+<rect x="250" y="62" width="72" height="86" style="fill: none; stroke: var(--strong); stroke-width: 1;"></rect>
+<path class="fm-pop fb" d="M286 89 L302 105 L286 121 L270 105 Z" style="fill: var(--brand);"></path>
+</g>
+<rect class="fm-fade" x="80" y="164" width="56" height="44" style="fill: var(--line); animation-delay: .5s"></rect>
+<rect class="fm-fade" x="146" y="164" width="56" height="44" style="fill: var(--line); animation-delay: .6s"></rect>
+<rect class="fm-fade" x="212" y="164" width="56" height="44" style="fill: var(--line); animation-delay: .7s"></rect>
+<rect class="fm-fade" x="278" y="164" width="44" height="44" style="fill: var(--line); animation-delay: .8s"></rect>
+<g class="fm-cur">
+<path d="M0 0 L0 17 L4.5 13 L7.5 20 L10.5 18.8 L7.5 12 L13 12 Z" style="fill: var(--ink); stroke: var(--surface); stroke-width: 1.2; stroke-linejoin: miter;"></path>
+</g>
+<text x="24" y="20" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);" data-i18n="artScreen"></text>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s2Label"></span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s2"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s2p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags2">
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g class="fm-strip">
+<g style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;">
+<rect x="-8" y="34" width="72" height="60"></rect><rect x="76" y="34" width="72" height="60"></rect><rect x="160" y="34" width="72" height="60"></rect><rect x="244" y="34" width="72" height="60"></rect><rect x="328" y="34" width="72" height="60"></rect><rect x="412" y="34" width="72" height="60"></rect><rect x="496" y="34" width="72" height="60"></rect><rect x="580" y="34" width="72" height="60"></rect><rect x="664" y="34" width="72" height="60"></rect><rect x="748" y="34" width="72" height="60"></rect>
+</g>
+<g style="fill: var(--line);">
+<rect x="-2" y="22" width="6" height="6"></rect><rect x="22" y="22" width="6" height="6"></rect><rect x="46" y="22" width="6" height="6"></rect><rect x="70" y="22" width="6" height="6"></rect><rect x="94" y="22" width="6" height="6"></rect><rect x="118" y="22" width="6" height="6"></rect><rect x="142" y="22" width="6" height="6"></rect><rect x="166" y="22" width="6" height="6"></rect><rect x="190" y="22" width="6" height="6"></rect><rect x="214" y="22" width="6" height="6"></rect><rect x="238" y="22" width="6" height="6"></rect><rect x="262" y="22" width="6" height="6"></rect><rect x="286" y="22" width="6" height="6"></rect><rect x="310" y="22" width="6" height="6"></rect><rect x="334" y="22" width="6" height="6"></rect><rect x="358" y="22" width="6" height="6"></rect><rect x="382" y="22" width="6" height="6"></rect><rect x="406" y="22" width="6" height="6"></rect><rect x="430" y="22" width="6" height="6"></rect><rect x="454" y="22" width="6" height="6"></rect><rect x="478" y="22" width="6" height="6"></rect><rect x="502" y="22" width="6" height="6"></rect><rect x="526" y="22" width="6" height="6"></rect><rect x="550" y="22" width="6" height="6"></rect><rect x="574" y="22" width="6" height="6"></rect><rect x="598" y="22" width="6" height="6"></rect><rect x="622" y="22" width="6" height="6"></rect><rect x="646" y="22" width="6" height="6"></rect><rect x="670" y="22" width="6" height="6"></rect><rect x="694" y="22" width="6" height="6"></rect><rect x="718" y="22" width="6" height="6"></rect><rect x="742" y="22" width="6" height="6"></rect>
+<rect x="-2" y="100" width="6" height="6"></rect><rect x="22" y="100" width="6" height="6"></rect><rect x="46" y="100" width="6" height="6"></rect><rect x="70" y="100" width="6" height="6"></rect><rect x="94" y="100" width="6" height="6"></rect><rect x="118" y="100" width="6" height="6"></rect><rect x="142" y="100" width="6" height="6"></rect><rect x="166" y="100" width="6" height="6"></rect><rect x="190" y="100" width="6" height="6"></rect><rect x="214" y="100" width="6" height="6"></rect><rect x="238" y="100" width="6" height="6"></rect><rect x="262" y="100" width="6" height="6"></rect><rect x="286" y="100" width="6" height="6"></rect><rect x="310" y="100" width="6" height="6"></rect><rect x="334" y="100" width="6" height="6"></rect><rect x="358" y="100" width="6" height="6"></rect><rect x="382" y="100" width="6" height="6"></rect><rect x="406" y="100" width="6" height="6"></rect><rect x="430" y="100" width="6" height="6"></rect><rect x="454" y="100" width="6" height="6"></rect><rect x="478" y="100" width="6" height="6"></rect><rect x="502" y="100" width="6" height="6"></rect><rect x="526" y="100" width="6" height="6"></rect><rect x="550" y="100" width="6" height="6"></rect><rect x="574" y="100" width="6" height="6"></rect><rect x="598" y="100" width="6" height="6"></rect><rect x="622" y="100" width="6" height="6"></rect><rect x="646" y="100" width="6" height="6"></rect><rect x="670" y="100" width="6" height="6"></rect><rect x="694" y="100" width="6" height="6"></rect><rect x="718" y="100" width="6" height="6"></rect><rect x="742" y="100" width="6" height="6"></rect>
+</g>
+<g style="fill: var(--brand);">
+<path d="M28 58 L34 64 L28 70 L22 64 Z"></path><path d="M112 54 L122 64 L112 74 L102 64 Z"></path><path d="M196 49 L211 64 L196 79 L181 64 Z"></path><path d="M280 54 L290 64 L280 74 L270 64 Z"></path>
+<path d="M364 58 L370 64 L364 70 L358 64 Z"></path><path d="M448 54 L458 64 L448 74 L438 64 Z"></path><path d="M532 49 L547 64 L532 79 L517 64 Z"></path><path d="M616 54 L626 64 L616 74 L606 64 Z"></path>
+<path d="M700 58 L706 64 L700 70 L694 64 Z"></path><path d="M784 54 L794 64 L784 74 L774 64 Z"></path>
+</g>
+</g>
+<path d="M40 168 H360" style="stroke: var(--strong); stroke-width: 1;"></path>
+<rect x="40" y="184" width="104" height="10" style="fill: var(--line);"></rect>
+<rect x="150" y="184" width="96" height="10" style="fill: var(--brand); opacity: .55;"></rect>
+<rect x="252" y="184" width="108" height="10" style="fill: var(--line);"></rect>
+<g style="fill: var(--brand);">
+<path class="fm-key fb" d="M80 162 L86 168 L80 174 L74 168 Z" style="animation-delay: .5s"></path>
+<path class="fm-key fb" d="M160 162 L166 168 L160 174 L154 168 Z" style="animation-delay: 1.5s"></path>
+<path class="fm-key fb" d="M250 162 L256 168 L250 174 L244 168 Z" style="animation-delay: 2.625s"></path>
+<path class="fm-key fb" d="M320 162 L326 168 L320 174 L314 168 Z" style="animation-delay: 3.5s"></path>
+</g>
+<g class="fm-ph">
+<path d="M40 150 V204" style="stroke: var(--ink); stroke-width: 1.5;"></path>
+<path d="M35 146 H45 V152 L40 156 L35 152 Z" style="fill: var(--ink);"></path>
+</g>
+<text x="40" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">00:00:12:04</text>
+<text x="360" y="226" text-anchor="end" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">24 FPS</text>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s3Label"></span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s3"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s3p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags3">
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<rect x="40" y="24" width="320" height="200" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
+<path d="M40 44 H360 M76 44 V196 M40 196 H360" style="fill: none; stroke: var(--line); stroke-width: 1;"></path>
+<rect x="50" y="31" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="60" y="31" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="70" y="31" width="6" height="6" style="fill: var(--strong);"></rect>
+<text x="96" y="38" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.08em; fill: var(--muted);">app.ts</text>
+<g style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; fill: var(--muted);">
+<text x="56" y="64">1</text><text x="56" y="80">2</text><text x="56" y="96">3</text><text x="56" y="112">4</text><text x="56" y="128">5</text><text x="56" y="144">6</text><text x="56" y="160">7</text><text x="56" y="176">8</text>
+</g>
+<rect class="fm-grow fl" x="88" y="57" width="44" height="8" style="fill: var(--brand);"></rect>
+<rect class="fm-grow fl" x="138" y="57" width="96" height="8" style="fill: var(--ink); animation-delay: .1s"></rect>
+<rect class="fm-grow fl" x="104" y="73" width="70" height="8" style="fill: var(--muted); animation-delay: .2s"></rect>
+<rect class="fm-grow fl" x="180" y="73" width="110" height="8" style="fill: var(--ink); animation-delay: .3s"></rect>
+<rect class="fm-grow fl" x="104" y="89" width="56" height="8" style="fill: var(--brand); animation-delay: .4s"></rect>
+<rect class="fm-grow fl" x="166" y="89" width="80" height="8" style="fill: var(--ink); animation-delay: .5s"></rect>
+<rect class="fm-grow fl" x="120" y="105" width="150" height="8" style="fill: var(--muted); animation-delay: .6s"></rect>
+<rect class="fm-grow fl" x="120" y="121" width="96" height="8" style="fill: var(--ink); animation-delay: .7s"></rect>
+<rect class="fm-grow fl" x="104" y="137" width="30" height="8" style="fill: var(--brand); animation-delay: .8s"></rect>
+<rect class="fm-grow fl" x="88" y="153" width="20" height="8" style="fill: var(--ink); animation-delay: .9s"></rect>
+<rect class="fm-grow fl" x="88" y="169" width="64" height="8" style="fill: var(--muted); animation-delay: 1s"></rect>
+<rect class="fm-caret" x="158" y="166" width="2" height="13" style="fill: var(--brand);"></rect>
+<g class="fm-fade" style="animation-delay: 1.3s">
+<path d="M56 204 L61 209 L56 214 L51 209 Z" style="fill: var(--brand);"></path>
+<text x="70" y="212" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; fill: var(--ink);" data-i18n="artBuild"></text>
+</g>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s4Label"></span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s4"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s4p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags4">
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art fm-art-auto" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+<path d="M80 80 H180 M200 100 V160 M220 180 H320" style="fill: none; stroke: var(--strong); stroke-width: 1.5;"></path>
+<path class="fm-ants" d="M80 80 H180 M200 100 V160 M220 180 H320" style="fill: none; stroke: var(--brand); stroke-width: 1.5; stroke-dasharray: 2 6;"></path>
+<g style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;">
+<rect x="40" y="60" width="40" height="40"></rect>
+<rect x="180" y="60" width="40" height="40"></rect>
+<rect x="180" y="160" width="40" height="40"></rect>
+<rect x="320" y="160" width="40" height="40"></rect>
+</g>
+<rect x="54" y="74" width="12" height="12" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect>
+<path d="M200 72 L208 80 L200 88 L192 80 Z" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></path>
+<rect x="194" y="174" width="12" height="12" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect>
+<path d="M340 172 L348 180 L340 188 L332 180 Z" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></path>
+<g style="fill: none; stroke: var(--brand); stroke-width: 2;">
+<rect class="fm-flash" x="39" y="59" width="42" height="42" style="animation-delay: .2s"></rect>
+<rect class="fm-flash" x="179" y="59" width="42" height="42" style="animation-delay: 1s"></rect>
+<rect class="fm-flash" x="179" y="159" width="42" height="42" style="animation-delay: 2.2s"></rect>
+<rect class="fm-flash" x="319" y="159" width="42" height="42" style="animation-delay: 3.4s"></rect>
+</g>
+<g class="fm-glow" style="fill: none; stroke: var(--brand); stroke-width: 2;">
+<path d="M80 80 H180 M200 100 V160 M220 180 H320"></path>
+<rect x="40" y="60" width="40" height="40"></rect>
+<rect x="180" y="60" width="40" height="40"></rect>
+<rect x="180" y="160" width="40" height="40"></rect>
+<rect x="320" y="160" width="40" height="40"></rect>
+</g>
+<g class="fm-pkt"><path d="M-5.5 -5.5 H5.5 V5.5 H-5.5 Z" style="fill: var(--brand);"></path></g>
+<g style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; fill: var(--muted);">
+<text x="60" y="118" text-anchor="middle" data-i18n="artN1"></text>
+<text x="200" y="52" text-anchor="middle" data-i18n="artN2"></text>
+<text x="170" y="184" text-anchor="end" data-i18n="artN3"></text>
+<text x="340" y="152" text-anchor="middle" data-i18n="artN4"></text>
+<text x="24" y="226" data-i18n="artFlow"></text>
+</g>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s5Label"></span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s5"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s5p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags5">
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit" style="width: 100%; background: var(--raised); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 48px;">
+<div class="fm-reveal" style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);" data-i18n="auditLabel"></span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="auditTitle"></h2>
+<p style="margin: 0; max-width: 560px; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em;" data-i18n="auditP"></p>
+</div>
+<a class="fm-btn fm-btn-primary" href="#contact" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 14px 28px; background: var(--accent); color: var(--on-accent);"><span data-i18n="auditCta"></span> <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+</div>
+</section>
+
+<!-- SEGMENTS -->
+<section style="width: 100%;">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="segLabel"></span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="segTitle"></h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 48px;">
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="g1"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="g1p"></p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="g2"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="g2p"></p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="g3"></h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="g3p"></p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- BOOKING -->
+<section id="book" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 48px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px; max-width: 680px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);" data-i18n="bk.label"></span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="bk.title"></h2>
+<p style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em; color: var(--muted);" data-i18n="bk.intro"></p>
+</div>
+<div class="fm-booker fm-reveal" style="display: flex; flex-wrap: wrap; background: var(--raised); border: 1px solid var(--strong); border-top: 2px solid var(--brand);">
+<div id="fm-cal" style="flex: 1 1 380px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;"></div>
+<div id="fm-bk-panel" class="fm-bk-panel" style="flex: 1 1 340px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;"></div>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 120px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 32px;">
+<h2 class="fm-reveal" style="margin: 0; max-width: 900px; font-size: clamp(48px, 7vw, 96px); line-height: 0.95; font-weight: 200; letter-spacing: -0.04em;"><span data-i18n="contactTitle"></span><span class="fm-cursor" aria-hidden="true"></span></h2>
+<button type="button" class="fm-btn" data-action="openContact" aria-haspopup="dialog" style="font-family: inherit; font-size: 20px; font-weight: 300; line-height: 1.4; color: var(--accent); background: none; border: 0; border-bottom: 1px solid var(--accent); border-radius: 0; padding: 0 0 2px; cursor: pointer;"><span data-i18n="cf.open"></span> <svg class="fm-arrow" width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;">
+<div style="display: flex; align-items: center; gap: 16px;">
+<img class="fm-blink fm-only-dark" src="assets/logos/formai-eye-mark-cream.svg" alt="" width="28" height="28" style="height: 28px; width: auto; display: block;">
+<img class="fm-blink fm-only-light" src="assets/logos/formai-eye-mark-charcoal.svg" alt="" width="28" height="28" style="height: 28px; width: auto; display: block;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">formai, <span id="fm-year">2026</span></span>
+</div>
+<nav data-i18n-aria-label="legalNav" style="display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px;">
+<button type="button" class="fm-link fm-textbtn" data-action="openPrivacy" data-i18n="ck.privacy"></button>
+<button type="button" class="fm-link fm-textbtn" data-action="openCookies" data-i18n="ck.cookiePolicy"></button>
+<button type="button" class="fm-link fm-textbtn" data-action="openSettings" data-i18n="ck.settings"></button>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px;">
+<span data-i18n="eyebrow" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);"></span>
+<button type="button" class="fm-mode fm-pause" data-action="togglePause" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;">
+<svg class="fm-ico-pause" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1 V11 M9 1 V11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>
+<svg class="fm-ico-play" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 L11 6 L2 11 Z" style="fill: currentColor;"></path></svg>
+<span id="fm-pause-label"></span>
+</button>
+</div>
+</div>
+</footer>
+
+</div>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

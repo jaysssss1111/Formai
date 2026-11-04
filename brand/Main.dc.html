@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>formai — AI-native studio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=DM+Sans:wght@200;300;400&display=swap">
+<style>
+body{margin:0}
+a{text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main:focus{outline:none}
+html{scroll-behavior:smooth}
+.fm-root section[id]{scroll-margin-top:24px}
+.fm-root h1,.fm-root h2,.fm-root h3{overflow-wrap:break-word;hyphens:auto}
+.fm-skip{position:absolute;left:16px;top:-80px;z-index:200;padding:12px 16px;background:var(--ink);color:var(--surface);font-size:15px;font-weight:400}
+.fm-skip:focus{top:16px}
+.fm-switch{position:relative;flex:none;width:52px;height:30px;padding:0;border:1px solid var(--strong);border-radius:0;background:transparent;cursor:pointer;transition:background-color .18s linear,border-color .18s linear}
+.fm-switch .fm-knob{position:absolute;top:4px;left:4px;width:20px;height:20px;background:var(--muted);transition:transform .18s linear,background-color .18s linear}
+.fm-switch.is-on{background:var(--accent);border-color:var(--accent)}
+.fm-switch.is-on .fm-knob{transform:translateX(22px);background:var(--on-accent)}
+.fm-switch[disabled]{cursor:not-allowed}
+.fm-ck-btn{background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:0;cursor:pointer;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;font-weight:400;line-height:1;padding:12px 20px;flex:1 1 auto;justify-content:center}
+.fm-ck-btn:hover{background:var(--ink);color:var(--surface)}
+.fm-ck-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.fm-ck-primary:hover{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.fm-textbtn{background:none;border:0;border-radius:0;padding:0;min-height:44px;display:inline-flex;align-items:center;cursor:pointer;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background-position:0 calc(50% + 11px) !important}
+.fm-inline-link{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:var(--accent);border-bottom:1px solid var(--accent)}
+.fm-motion .fm-cookie{animation:fm-rise .5s cubic-bezier(.2,.7,.2,1) .45s both}
+.fm-motion .fm-dlg{animation:fm-rise .3s cubic-bezier(.2,.7,.2,1) both}
+.fm-dlg:focus{outline:none}
+.fm-field{display:flex;flex-direction:column;gap:8px}
+.fm-field label,.fm-legend{font-size:15px;font-weight:400;color:var(--ink)}
+.fm-hint{font-size:13px;line-height:1.5;color:var(--muted);margin-top:-4px}
+.fm-input{width:100%;box-sizing:border-box;font-family:'DM Sans',system-ui,sans-serif;font-size:16px;font-weight:300;line-height:1.4;color:var(--ink);background:var(--raised);border:1px solid var(--strong);border-radius:0;padding:12px 14px;min-height:48px;transition:border-color .18s linear}
+.fm-input:hover{border-color:var(--ink)}
+.fm-input:focus{outline:2px solid var(--accent);outline-offset:2px;border-color:var(--ink)}
+.fm-input[aria-invalid="true"]{border-color:var(--accent)}
+textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
+.fm-err{font-size:14px;line-height:1.5;color:var(--accent)}
+.fm-chip{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;line-height:1;min-height:44px;padding:0 14px;border:1px solid var(--strong);border-radius:0;background:transparent;color:var(--muted);cursor:pointer;transition:background-color .18s linear,color .18s linear,border-color .18s linear}
+.fm-chip:hover{border-color:var(--ink);color:var(--ink)}
+.fm-chip.is-on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.fm-day{position:relative;height:44px;width:100%;padding:0;border:1px solid transparent;border-radius:0;background:transparent;color:var(--ink);font-family:'DM Mono',ui-monospace,monospace;font-size:14px;font-weight:400;cursor:pointer;transition:background-color .18s linear,color .18s linear,border-color .18s linear}
+.fm-day.is-open::after{content:'';position:absolute;left:50%;bottom:5px;width:4px;height:4px;background:var(--brand);transform:translateX(-50%) rotate(45deg)}
+.fm-day:hover:not([disabled]){border-color:var(--ink)}
+.fm-day.is-today{border-color:var(--strong)}
+.fm-day.is-sel{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.fm-day[disabled]{color:var(--muted);opacity:.4;cursor:not-allowed}
+.fm-slot{height:44px;padding:0;border:1px solid var(--strong);border-radius:0;background:transparent;color:var(--ink);font-family:'DM Mono',ui-monospace,monospace;font-size:14px;font-weight:400;letter-spacing:.04em;cursor:pointer;transition:background-color .18s linear,color .18s linear,border-color .18s linear}
+.fm-slot:hover{border-color:var(--ink)}
+.fm-slot.is-sel{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.fm-bk-panel{border-left:1px solid var(--line)}
+.fm-ck-btn[disabled],.fm-mode[disabled]{opacity:.4;cursor:not-allowed;background:transparent !important;color:var(--ink) !important;border-color:var(--strong) !important}
+@media (max-width:780px){.fm-bk-panel{border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:640px){.fm-booker > div{padding:20px !important}}
+@media (min-width:700px){.fm-cookie{left:24px !important;right:auto !important;bottom:24px !important}}
+@media (max-width:640px){.fm-dlg{padding:24px !important}.fm-cookie{padding:20px !important}}
+.fm-navlink{display:inline-flex;align-items:center;min-height:44px;background-position:0 calc(50% + 11px) !important}
+.fm-navlink-cta{display:none !important}
+@media (max-width:760px){
+.fm-navlinks{display:none !important;order:3;width:100%;flex-direction:column;align-items:stretch !important;gap:0 !important;border-top:1px solid var(--line)}
+.fm-navlinks.is-open{display:flex !important}
+.fm-navlinks .fm-navlink{min-height:52px;border-bottom:1px solid var(--line);background:none !important}
+.fm-navlinks .fm-navlink-cta{display:inline-flex !important}
+.fm-navcta{display:none !important}
+.fm-menu-btn{display:flex !important}
+}
+@media (max-width:640px){
+.fm-pad{padding-left:20px !important;padding-right:20px !important}
+.fm-root main .fm-pad{padding-top:64px !important;padding-bottom:64px !important}
+}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+@keyframes fm-rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes fm-word{from{opacity:0;transform:translateY(.45em)}to{opacity:1;transform:none}}
+@keyframes fm-drop{from{transform:translateY(-110%)}to{transform:none}}
+@keyframes fm-raise{from{transform:translateY(110%)}to{transform:none}}
+@keyframes fm-turn{0%,35%{transform:rotate(0deg)}50%,85%{transform:rotate(90deg)}100%{transform:rotate(180deg)}}
+@keyframes fm-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(.35)}}
+@keyframes fm-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes fm-blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes fm-eye{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.fm-word{display:inline-block}
+.fm-motion.fm-ready .fm-in{animation:fm-rise .7s cubic-bezier(.2,.7,.2,1) both}
+.fm-motion.fm-ready .fm-word{animation:fm-word .8s cubic-bezier(.2,.7,.2,1) both}
+.fm-motion.fm-ready .fm-d1{animation-delay:.08s}
+.fm-motion.fm-ready .fm-d2{animation-delay:.18s}
+.fm-motion.fm-ready .fm-d3{animation-delay:.28s}
+.fm-motion.fm-ready .fm-d4{animation-delay:.38s}
+.fm-motion.fm-ready .fm-d5{animation-delay:.48s}
+.fm-motion.fm-ready .fm-d6{animation-delay:.64s}
+.fm-motion.fm-ready .fm-d7{animation-delay:.78s}
+@keyframes fm-ld-draw{0%{stroke-dashoffset:1}100%{stroke-dashoffset:0}}
+@keyframes fm-ld-pop{from{transform:scale(0) rotate(-90deg)}to{transform:scale(1) rotate(0deg)}}
+@keyframes fm-ld-turn{0%,50%{transform:rotate(0deg)}100%{transform:rotate(90deg)}}
+@keyframes fm-ld-bar{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+.fm-ld-lid{stroke-dasharray:1 1;animation:fm-ld-draw .9s cubic-bezier(.6,0,.2,1) both}
+.fm-ld-pupil{transform-box:fill-box;transform-origin:center;animation:fm-ld-pop .45s cubic-bezier(.2,.7,.2,1) .55s both,fm-ld-turn 1.2s cubic-bezier(.6,0,.2,1) 1s infinite}
+.fm-ld-bar{animation:fm-ld-bar 1.1s cubic-bezier(.6,0,.2,1) infinite}
+.fm-loader{transition:transform .7s cubic-bezier(.7,0,.2,1),visibility 0s linear .7s}
+.fm-loader.is-done{transform:translateY(-100%);visibility:hidden}
+.fm-loader .fm-ld-inner{transition:opacity .2s linear}
+.fm-loader.is-done .fm-ld-inner{opacity:0}
+.fm-loader.is-off{display:none !important}
+@media (prefers-reduced-motion: reduce){.fm-loader{display:none !important}}
+.fm-svg rect,.fm-svg path{transform-box:fill-box;transform-origin:center}
+.fm-motion.fm-ready .fm-blk-a{animation:fm-raise .9s cubic-bezier(.2,.7,.2,1) .2s both}
+.fm-motion.fm-ready .fm-blk-b{animation:fm-drop .9s cubic-bezier(.2,.7,.2,1) .35s both}
+.fm-motion.fm-ready .fm-blk-c{animation:fm-raise .9s cubic-bezier(.2,.7,.2,1) .5s both}
+.fm-motion .fm-pupil{animation:fm-turn 6s cubic-bezier(.6,0,.2,1) 1.4s infinite}
+.fm-motion .fm-lattice path{animation:fm-pulse 3.2s ease-in-out infinite both}
+.fm-motion .fm-track{animation:fm-marquee 36s linear infinite}
+.fm-marquee:hover .fm-track{animation-play-state:paused}
+@supports (animation-timeline: view()){
+.fm-motion .fm-reveal{animation:fm-rise linear both;animation-timeline:view();animation-range:entry 5% entry 55%}
+}
+.fm-link{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;padding-bottom:4px;transition:background-size .18s linear,color .18s linear}
+.fm-link:hover{background-size:100% 1px;color:var(--ink) !important}
+.fm-btn{display:inline-flex;align-items:center;gap:10px;min-height:44px;box-sizing:border-box;transition:background-color .18s linear,color .18s linear,border-color .18s linear}
+.fm-arrow{display:inline-block;transition:transform .18s linear}
+.fm-btn:hover .fm-arrow{transform:translateX(4px)}
+.fm-btn-primary:hover{background:var(--ink) !important;color:var(--surface) !important}
+.fm-btn-ghost:hover{border-color:var(--ink) !important}
+.fm-card{transition:transform .2s linear,border-color .2s linear}
+.fm-card:hover{transform:translateY(-4px);border-color:var(--strong) !important}
+.fm-rule{transition:width .2s linear}
+.fm-card:hover .fm-rule{width:72px !important}
+.fm-col{transition:border-color .2s linear}
+.fm-col:hover{border-top-color:var(--brand) !important}
+.fm-cursor{display:inline-block;width:.42em;height:.72em;background:var(--brand);margin-left:.1em;vertical-align:baseline}
+.fm-motion .fm-cursor{animation:fm-blink 1.1s steps(1) infinite}
+.fm-motion .fm-blink{animation:fm-eye 5s linear infinite;transform-origin:center}
+.fm-art svg{width:100%;height:100%;display:block;transition:transform .2s linear}
+.fm-card:hover .fm-art svg{transform:scale(1.04)}
+.fm-cur{transform:translate(118px,141px)}
+.fm-art .fb{transform-box:fill-box;transform-origin:center}
+.fm-art .fl{transform-box:fill-box;transform-origin:0 50%}
+@keyframes fm-draw-loop{0%{stroke-dashoffset:1}35%,80%{stroke-dashoffset:0}100%{stroke-dashoffset:-1}}
+@keyframes fm-pop-loop{0%,30%{transform:scale(0) rotate(-90deg)}42%,82%{transform:scale(1) rotate(0deg)}94%,100%{transform:scale(0) rotate(90deg)}}
+@keyframes fm-grow-loop{0%{transform:scaleX(0)}12%,86%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+@keyframes fm-fade-loop{0%{opacity:0;transform:translateY(8px)}12%,86%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+@keyframes fm-cursor-loop{0%{opacity:0;transform:translate(320px,214px)}10%{opacity:1;transform:translate(320px,214px)}50%{transform:translate(118px,141px)}54%{transform:translate(118px,141px) scale(.8)}58%,86%{opacity:1;transform:translate(118px,141px) scale(1)}96%,100%{opacity:0;transform:translate(118px,141px)}}
+@keyframes fm-press-loop{0%,52%{opacity:1}55%{opacity:.45}60%,100%{opacity:1}}
+@keyframes fm-strip{from{transform:translateX(0)}to{transform:translateX(-336px)}}
+@keyframes fm-playhead{from{transform:translateX(0)}to{transform:translateX(320px)}}
+@keyframes fm-key{0%{transform:scale(2.2)}25%,100%{transform:scale(1)}}
+.fm-motion .fm-draw{stroke-dasharray:1 1;animation:fm-draw-loop 7s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-pop{animation:fm-pop-loop 7s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-grow{animation:fm-grow-loop 7s cubic-bezier(.2,.7,.2,1) infinite both}
+.fm-motion .fm-fade{animation:fm-fade-loop 7s cubic-bezier(.2,.7,.2,1) infinite both}
+.fm-motion .fm-cur{animation:fm-cursor-loop 7s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-press{animation:fm-press-loop 7s linear infinite}
+.fm-motion .fm-strip{animation:fm-strip 8s linear infinite}
+.fm-motion .fm-ph{animation:fm-playhead 4s linear infinite}
+.fm-motion .fm-key{animation:fm-key 4s cubic-bezier(.2,.7,.2,1) infinite}
+@keyframes fm-pkt{0%{opacity:0;transform:translate(60px,80px) rotate(0deg)}5%{opacity:1;transform:translate(60px,80px) rotate(0deg)}25%,32%{transform:translate(200px,80px) rotate(45deg)}55%,62%{transform:translate(200px,180px) rotate(90deg)}85%,92%{opacity:1;transform:translate(340px,180px) rotate(135deg)}100%{opacity:0;transform:translate(340px,180px) rotate(135deg)}}
+@keyframes fm-glow{0%,84%{opacity:0}87%,96%{opacity:1}100%{opacity:0}}
+.fm-glow{opacity:0}
+.fm-motion .fm-glow{animation:fm-glow 4s linear infinite}
+.fm-art-auto{background-color:var(--surface);background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:20px 20px;background-position:center center}
+@keyframes fm-ants{to{stroke-dashoffset:-16}}
+.fm-motion .fm-ants{animation:fm-ants .8s linear infinite}
+
+@keyframes fm-flash{0%{opacity:1}20%,100%{opacity:0}}
+.fm-pkt{transform:translate(200px,80px) rotate(45deg)}
+.fm-flash{opacity:0}
+.fm-motion .fm-pkt{animation:fm-pkt 4s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-flash{animation:fm-flash 4s linear infinite both}
+.fm-motion .fm-caret{animation:fm-blink 1s steps(1) infinite}
+@keyframes fm-spin{from{opacity:0;transform:rotate(-90deg) scale(.6)}to{opacity:1;transform:none}}
+.fm-mode{transition:border-color .18s linear}
+.fm-mode:hover{border-color:var(--ink) !important}
+.fm-motion .fm-mode svg{animation:fm-spin .3s cubic-bezier(.2,.7,.2,1) both}
+.fm-root{transition:background-color .2s linear,color .2s linear}
+@media (prefers-reduced-motion: reduce){.fm-root *,.fm-root *::before,.fm-root *::after{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+<div id="top" class="fm-root {{motionClass}} {{readyClass}}" lang="{{lang}}" style="color-scheme: {{scheme}}; --surface: {{c.surface}}; --raised: {{c.raised}}; --ink: {{c.ink}}; --muted: {{c.muted}}; --line: {{c.line}}; --strong: {{c.strong}}; --accent: {{c.accent}}; --on-accent: {{c.onAccent}}; --brand: #C85A20; min-height: 100vh; display: flex; flex-direction: column; background: var(--surface); color: var(--ink); font-family: 'DM Sans', system-ui, sans-serif; font-weight: 300;">
+
+<!-- LOADER -->
+<div class="fm-loader {{loaderClass}}" role="status" aria-live="polite" style="position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--ink);">
+<div class="fm-ld-inner" style="display: flex; flex-direction: column; align-items: center; gap: 32px;">
+<svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true" style="display: block; overflow: visible;">
+<path class="fm-ld-lid" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: miter; stroke-miterlimit: 10;"></path>
+<path class="fm-ld-pupil" d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path>
+</svg>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
+<div style="position: relative; width: 160px; height: 1px; background: var(--line); overflow: hidden;"><div class="fm-ld-bar" style="position: absolute; left: 0; top: 0; width: 40%; height: 1px; background: var(--brand);"></div></div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">formai / {{t.loading}}</span>
+</div>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--brand);"></div>
+</div>
+
+<a class="fm-skip" href="#content">{{t.skip}}</a>
+
+<!-- COOKIE BANNER -->
+<sc-if value="{{showBanner}}" hint-placeholder-val="{{false}}">
+<section class="fm-cookie" role="region" aria-labelledby="fm-ck-title" style="position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 90; width: auto; max-width: 600px; max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; background: var(--raised); border: 1px solid var(--strong); border-top: 2px solid var(--brand); color: var(--ink); padding: 28px; display: flex; flex-direction: column; gap: 20px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">{{t.ck.label}}</span>
+<h2 id="fm-ck-title" style="margin: -8px 0 0; font-size: 28px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.ck.title}}</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.ck.intro}}</p>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<span style="font-size: 15px; font-weight: 400;">{{t.ck.howTitle}}</span>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+<sc-for list="{{howItems}}" as="h" hint-placeholder-count="3">
+<li style="display: flex; gap: 12px; font-size: 14px; line-height: 1.5; color: var(--muted);"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; color: var(--accent); flex: none; padding-top: 2px;">{{h.n}}</span><span>{{h.x}}</span></li>
+</sc-for>
+</ol>
+</div>
+<div style="display: flex; flex-direction: column; border-top: 1px solid var(--line);">
+<sc-for list="{{cats}}" as="cat" hint-placeholder-count="4">
+<div style="display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--line);">
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+<span id="{{cat.labelId}}" style="font-size: 16px; font-weight: 400;">{{cat.name}}</span>
+<span style="font-size: 14px; line-height: 1.5; font-weight: 300; color: var(--muted);">{{cat.desc}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; flex: none;">
+<span aria-hidden="true" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: right;">{{cat.stateText}}</span>
+<button type="button" role="switch" class="fm-switch {{cat.cls}}" aria-checked="{{cat.on}}" aria-labelledby="{{cat.labelId}}" disabled="{{cat.locked}}" onClick="{{cat.toggle}}"><span class="fm-knob"></span></button>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px;">
+<button type="button" class="fm-btn fm-ck-btn" onClick="{{rejectAll}}">{{t.ck.reject}}</button>
+<button type="button" class="fm-btn fm-ck-btn" onClick="{{acceptAll}}">{{t.ck.accept}}</button>
+<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" onClick="{{confirmChoices}}">{{t.ck.confirm}}</button>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.ck.more}} <button type="button" class="fm-inline-link" onClick="{{openCookies}}">{{t.ck.cookiePolicy}}</button>, <button type="button" class="fm-inline-link" onClick="{{openPrivacy}}">{{t.ck.privacy}}</button></p>
+</section>
+</sc-if>
+
+<!-- CONTACT FORM -->
+<sc-if value="{{contactOpen}}" hint-placeholder-val="{{false}}">
+<div onClick="{{closeContact}}" style="position: fixed; inset: 0; z-index: 140; background: rgba(20, 18, 16, 0.72); display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;">
+<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-cf-title" tabindex="-1" ref="{{cfRef}}" onClick="{{stop}}" onKeyDown="{{cfKey}}" style="width: 100%; max-width: 600px; max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; background: var(--surface); border: 1px solid var(--strong); border-top: 2px solid var(--brand); color: var(--ink); padding: 40px; display: flex; flex-direction: column; gap: 24px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">{{t.cf.label}}</span>
+<button type="button" class="fm-mode" onClick="{{closeContact}}" aria-label="{{t.ck.close}}" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4 L16 16 M16 4 L4 16" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+<sc-if value="{{cfSent}}" hint-placeholder-val="{{false}}">
+<div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 8px 0 4px;">
+<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true" style="display: block;"><path class="fm-ld-lid" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: miter; stroke-miterlimit: 10;"></path><path d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path></svg>
+<h2 id="fm-cf-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.cf.thanksTitle}}</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.cf.thanksText}}</p>
+<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" onClick="{{closeContact}}" style="flex: none;">{{t.cf.done}}</button>
+</div>
+</sc-if>
+<sc-if value="{{cfForm}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 12px;">
+<h2 id="fm-cf-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.cf.title}}</h2>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.cf.intro}}</p>
+</div>
+<sc-if value="{{cfHasErrors}}" hint-placeholder-val="{{false}}">
+<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex: none;"><path d="M5 0 L10 5 L5 10 L0 5 Z" style="fill: var(--accent);"></path></svg>{{t.cf.errSummary}}</div>
+</sc-if>
+<form onSubmit="{{cfSubmit}}" style="display: flex; flex-direction: column; gap: 20px; margin: 0;">
+<div class="fm-field">
+<label for="fm-cf-name">{{t.cf.name}} <span aria-hidden="true" style="color: var(--accent);">*</span></label>
+<input id="fm-cf-name" class="fm-input" type="text" autocomplete="name" aria-required="true" aria-invalid="{{e.nameInvalid}}" aria-describedby="fm-cf-name-err" value="{{f.name}}" onChange="{{setName}}">
+<sc-if value="{{e.nameShow}}" hint-placeholder-val="{{false}}"><span id="fm-cf-name-err" class="fm-err">{{e.name}}</span></sc-if>
+</div>
+<div class="fm-field">
+<label for="fm-cf-email">{{t.cf.email}} <span aria-hidden="true" style="color: var(--accent);">*</span></label>
+<input id="fm-cf-email" class="fm-input" type="email" inputmode="email" autocomplete="email" aria-required="true" aria-invalid="{{e.emailInvalid}}" aria-describedby="fm-cf-email-err" value="{{f.email}}" onChange="{{setEmail}}">
+<sc-if value="{{e.emailShow}}" hint-placeholder-val="{{false}}"><span id="fm-cf-email-err" class="fm-err">{{e.email}}</span></sc-if>
+</div>
+<div class="fm-field">
+<label for="fm-cf-company">{{t.cf.company}} <span style="color: var(--muted); font-weight: 300;">({{t.cf.optional}})</span></label>
+<input id="fm-cf-company" class="fm-input" type="text" autocomplete="organization" value="{{f.company}}" onChange="{{setCompany}}">
+</div>
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0;">
+<legend class="fm-legend" style="padding: 0; margin-bottom: 10px;">{{t.cf.interest}} <span style="color: var(--muted); font-weight: 300;">({{t.cf.optional}})</span></legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+<sc-for list="{{interests}}" as="it" hint-placeholder-count="6"><button type="button" class="fm-chip {{it.cls}}" aria-pressed="{{it.on}}" onClick="{{it.toggle}}">{{it.label}}</button></sc-for>
+</div>
+</fieldset>
+<div class="fm-field">
+<label for="fm-cf-message">{{t.cf.message}} <span aria-hidden="true" style="color: var(--accent);">*</span></label>
+<span id="fm-cf-message-hint" class="fm-hint">{{t.cf.messageHint}}</span>
+<textarea id="fm-cf-message" class="fm-input" rows="5" aria-required="true" aria-invalid="{{e.messageInvalid}}" aria-describedby="fm-cf-message-hint fm-cf-message-err" value="{{f.message}}" onChange="{{setMessage}}"></textarea>
+<sc-if value="{{e.messageShow}}" hint-placeholder-val="{{false}}"><span id="fm-cf-message-err" class="fm-err">{{e.message}}</span></sc-if>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.cf.privacy}} <button type="button" class="fm-inline-link" onClick="{{openPrivacy}}">{{t.ck.privacy}}</button></p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.cf.required}}</span>
+<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;">{{t.cf.send}} <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</form>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- POLICY DIALOG -->
+<sc-if value="{{dialogOpen}}" hint-placeholder-val="{{false}}">
+<div onClick="{{closeDoc}}" style="position: fixed; inset: 0; z-index: 150; background: rgba(20, 18, 16, 0.72); display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;">
+<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-dlg-title" tabindex="-1" ref="{{dlgRef}}" onClick="{{stop}}" onKeyDown="{{dlgKey}}" style="width: 100%; max-width: 760px; max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; background: var(--surface); border: 1px solid var(--strong); border-top: 2px solid var(--brand); color: var(--ink); padding: 40px; display: flex; flex-direction: column; gap: 24px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{doc.updated}}</span>
+<button type="button" class="fm-mode" onClick="{{closeDoc}}" aria-label="{{t.ck.close}}" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4 L16 16 M16 4 L4 16" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+<h2 id="fm-dlg-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{doc.title}}</h2>
+<sc-for list="{{doc.a}}" as="s" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 10px;">
+<h3 style="margin: 0; font-size: 20px; line-height: 1.3; font-weight: 400;">{{s.h}}</h3>
+<sc-for list="{{s.ps}}" as="para" hint-placeholder-count="1"><p style="margin: 0; font-size: 15px; line-height: 1.65; font-weight: 300; color: var(--muted);">{{para}}</p></sc-for>
+</div>
+</sc-for>
+<sc-if value="{{hasRows}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; border-top: 1px solid var(--line);">
+<sc-for list="{{docRows}}" as="r" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 0; border-bottom: 1px solid var(--line);">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--ink);">{{r.name}}</span>
+<span style="font-size: 14px; line-height: 1.5; font-weight: 300; color: var(--muted);">{{t.rowLabels.purpose}}: {{r.purpose}}</span>
+<span style="font-size: 14px; line-height: 1.5; font-weight: 300; color: var(--muted);">{{t.rowLabels.type}}: {{r.type}} · {{t.rowLabels.duration}}: {{r.duration}} · {{t.rowLabels.category}}: {{r.category}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-for list="{{doc.b}}" as="s" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 10px;">
+<h3 style="margin: 0; font-size: 20px; line-height: 1.3; font-weight: 400;">{{s.h}}</h3>
+<sc-for list="{{s.ps}}" as="para" hint-placeholder-count="1"><p style="margin: 0; font-size: 15px; line-height: 1.65; font-weight: 300; color: var(--muted);">{{para}}</p></sc-for>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- NAV -->
+<header class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+<a href="#top" aria-label="{{t.home}}" style="display: flex; align-items: center; min-height: 44px;">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{true}}"><img src="/_blob/56b77e51e2eaad522abe90cf26464bce" alt="formai" style="height: 28px; width: auto; display: block;"></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{false}}"><img src="/_blob/4d4e42ad382bcfaac5a427cabd1e681f" alt="formai" style="height: 28px; width: auto; display: block;"></sc-if>
+</a>
+<nav id="fm-nav" class="fm-navlinks {{menuClass}}" aria-label="{{t.navLabel}}" style="display: flex; align-items: center; gap: 32px;">
+<a class="fm-link fm-navlink" href="#services" onClick="{{closeMenu}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.navServices}}</a>
+<a class="fm-link fm-navlink" href="#method" onClick="{{closeMenu}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.navMethod}}</a>
+<a class="fm-link fm-navlink" href="#audit" onClick="{{closeMenu}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.navAudit}}</a>
+<a class="fm-link fm-navlink" href="#book" onClick="{{closeMenu}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.navBook}}</a>
+<a class="fm-link fm-navlink fm-navlink-cta" href="#contact" onClick="{{closeMenu}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">{{t.cta}}</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 12px;">
+<button type="button" class="fm-mode" onClick="{{toggleMode}}" aria-label="{{modeLabel}}" title="{{modeLabel}}" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{true}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 6 L14 10 L10 14 L6 10 Z M10 1 V3.5 M10 16.5 V19 M1 10 H3.5 M16.5 10 H19 M3.6 3.6 L5.4 5.4 M14.6 14.6 L16.4 16.4 M3.6 16.4 L5.4 14.6 M14.6 5.4 L16.4 3.6" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square; stroke-linejoin: miter;"></path></svg></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 2.5 A7.5 7.5 0 1 0 17.5 13.5 A6 6 0 0 1 12.5 2.5 Z" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: miter;"></path></svg></sc-if>
+</button>
+<div role="group" aria-label="{{t.langLabel}}" style="display: flex; border: 1px solid var(--strong);">
+<button type="button" onClick="{{setEn}}" aria-pressed="{{isEn}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; line-height: 1; min-width: 44px; min-height: 42px; padding: 0 12px; border: 0; border-radius: 0; cursor: pointer; background: {{enBg}}; color: {{enFg}}; transition: background-color .18s linear, color .18s linear;">EN</button>
+<button type="button" onClick="{{setFi}}" aria-pressed="{{isFi}}" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; line-height: 1; min-width: 44px; min-height: 42px; padding: 0 12px; border: 0; border-radius: 0; cursor: pointer; background: {{fiBg}}; color: {{fiFg}}; transition: background-color .18s linear, color .18s linear;">FI</button>
+</div>
+<a class="fm-btn fm-btn-primary fm-navcta" href="#contact" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 12px 24px; background: var(--accent); color: var(--on-accent);">{{t.cta}}</a>
+<button type="button" class="fm-menu-btn" onClick="{{toggleMenu}}" aria-expanded="{{menuOpen}}" aria-controls="fm-nav" aria-label="{{t.menu}}" style="display: none; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;">
+<sc-if value="{{menuClosed}}" hint-placeholder-val="{{true}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 6 H18 M2 14 H18" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></sc-if>
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4 L16 16 M16 4 L4 16" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></sc-if>
+</button>
+</div>
+</header>
+
+<main id="content" tabindex="-1" style="display: flex; flex-direction: column;">
+
+<!-- HERO -->
+<section class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px 120px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; gap: 64px;">
+<div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 32px;">
+<span class="fm-in fm-d1" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">{{t.eyebrow}}</span>
+<h1 style="margin: 0; font-size: clamp(52px, 7vw, 96px); line-height: 0.95; font-weight: 200; letter-spacing: -0.04em; color: var(--ink);"><span class="fm-word fm-d2">{{t.h1}}</span> <span class="fm-word fm-d3">{{t.h2}}</span> <span class="fm-word fm-d4">{{t.h3}}</span> <span class="fm-word fm-d5" style="color: var(--brand);">{{t.h4}}</span></h1>
+<p class="fm-in fm-d6" style="margin: 0; max-width: 520px; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em; color: var(--ink);">{{t.heroP}}</p>
+<div class="fm-in fm-d7" style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px;">
+<a class="fm-btn fm-btn-primary" href="#contact" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 14px 28px; background: var(--accent); color: var(--on-accent);">{{t.cta}} <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+<a class="fm-btn fm-btn-ghost" href="#services" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 13px 27px; border: 1px solid var(--strong); color: var(--ink);">{{t.cta2}} <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+</div>
+</div>
+<div style="flex: 1 1 340px; min-width: 0; display: flex; justify-content: center;">
+<svg class="fm-svg" viewBox="0 0 480 480" aria-hidden="true" style="width: 100%; max-width: 440px; height: auto; display: block; overflow: hidden;">
+<rect class="fm-blk-a" x="0" y="240" width="120" height="240" style="fill: var(--strong)"></rect>
+<rect class="fm-blk-b" x="120" y="0" width="240" height="288" style="fill: var(--brand)"></rect>
+<path class="fm-pupil" d="M240 72 L312 144 L240 216 L168 144 Z" style="fill: var(--surface)"></path>
+<rect class="fm-blk-c" x="240" y="192" width="240" height="288" style="fill: var(--ink)"></rect>
+<g class="fm-lattice" style="fill: var(--surface)">
+<path style="animation-delay: 1.0s" d="M288 232 L296 240 L288 248 L280 240 Z"></path><path style="animation-delay: 1.15s" d="M336 232 L344 240 L336 248 L328 240 Z"></path><path style="animation-delay: 1.3s" d="M384 232 L392 240 L384 248 L376 240 Z"></path><path style="animation-delay: 1.45s" d="M432 232 L440 240 L432 248 L424 240 Z"></path>
+<path style="animation-delay: 1.15s" d="M288 280 L296 288 L288 296 L280 288 Z"></path><path style="animation-delay: 1.3s" d="M336 280 L344 288 L336 296 L328 288 Z"></path><path style="animation-delay: 1.45s" d="M384 280 L392 288 L384 296 L376 288 Z"></path><path style="animation-delay: 1.6s" d="M432 280 L440 288 L432 296 L424 288 Z"></path>
+<path style="animation-delay: 1.3s" d="M288 328 L296 336 L288 344 L280 336 Z"></path><path style="animation-delay: 1.45s" d="M336 328 L344 336 L336 344 L328 336 Z"></path><path style="animation-delay: 1.6s" d="M384 328 L392 336 L384 344 L376 336 Z"></path><path style="animation-delay: 1.75s" d="M432 328 L440 336 L432 344 L424 336 Z"></path>
+<path style="animation-delay: 1.45s" d="M288 376 L296 384 L288 392 L280 384 Z"></path><path style="animation-delay: 1.6s" d="M336 376 L344 384 L336 392 L328 384 Z"></path><path style="animation-delay: 1.75s" d="M384 376 L392 384 L384 392 L376 384 Z"></path><path style="animation-delay: 1.9s" d="M432 376 L440 384 L432 392 L424 384 Z"></path>
+<path style="animation-delay: 1.6s" d="M288 424 L296 432 L288 440 L280 432 Z"></path><path style="animation-delay: 1.75s" d="M336 424 L344 432 L336 440 L328 432 Z"></path><path style="animation-delay: 1.9s" d="M384 424 L392 432 L384 440 L376 432 Z"></path><path style="animation-delay: 2.05s" d="M432 424 L440 432 L432 440 L424 432 Z"></path>
+</g>
+</svg>
+</div>
+</section>
+
+<!-- TICKER -->
+<div class="fm-marquee" aria-hidden="true" style="width: 100%; border-top: 1px solid var(--line); padding: 28px 0; overflow: hidden;">
+<div class="fm-track" style="display: flex; width: max-content;">
+<sc-for list="{{ticker}}" as="t" hint-placeholder-count="14">
+<span style="display: inline-flex; align-items: center; gap: 40px; padding-right: 40px; font-size: 36px; line-height: 1; font-weight: 200; letter-spacing: -0.02em; color: var(--ink); white-space: nowrap;">{{t.w}}<svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"><path d="M5 0 L10 5 L5 10 L0 5 Z" style="fill: var(--brand)"></path></svg></span>
+</sc-for>
+</div>
+</div>
+
+<!-- METHOD -->
+<section id="method" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.methodLabel}}</span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.methodTitle}}</h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 48px;">
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--accent);">01</span>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.m1}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.m1p}}</p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--accent);">02</span>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.m2}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.m2p}}</p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; font-weight: 400; color: var(--accent);">03</span>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.m3}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.m3p}}</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.servicesLabel}}</span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.servicesTitle}}</h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px;">
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g style="fill: none; stroke: var(--line); stroke-width: 1;">
+<path d="M40 0 V240 M80 0 V240 M120 0 V240 M160 0 V240 M200 0 V240 M240 0 V240 M280 0 V240 M320 0 V240 M360 0 V240 M0 40 H400 M0 80 H400 M0 120 H400 M0 160 H400 M0 200 H400"></path>
+</g>
+<g style="fill: none; stroke: var(--strong); stroke-width: 1;">
+<circle class="fm-draw" cx="200" cy="120" r="80" pathLength="1"></circle>
+<circle class="fm-draw" cx="200" cy="120" r="44" pathLength="1" style="animation-delay: .2s"></circle>
+<path class="fm-draw" d="M70 120 H330" pathLength="1" style="animation-delay: .1s"></path>
+<path class="fm-draw" d="M200 24 V216" pathLength="1" style="animation-delay: .3s"></path>
+<path class="fm-draw" d="M120 120 L200 40 L280 120 L200 200 Z" pathLength="1" style="animation-delay: .4s"></path>
+</g>
+<path class="fm-draw" d="M120 120 Q200 52 280 120 Q200 188 120 120 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: miter; animation-delay: .7s"></path>
+<path class="fm-pop fb" d="M200 98 L222 120 L200 142 L178 120 Z" style="fill: var(--brand);"></path>
+<text x="24" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">{{t.artMark}}</text>
+<text x="376" y="22" text-anchor="end" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">Ø 160</text>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.s1Label}}</span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.s1}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.s1p}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;">
+<sc-for list="{{t.tags1}}" as="tag" hint-placeholder-count="6"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);">{{tag}}</span></sc-for>
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<rect x="60" y="28" width="280" height="196" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
+<path d="M60 48 H340" style="stroke: var(--strong); stroke-width: 1;"></path>
+<rect x="70" y="35" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="80" y="35" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="90" y="35" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect class="fm-grow fl" x="80" y="66" width="150" height="10" style="fill: var(--ink);"></rect>
+<rect class="fm-grow fl" x="80" y="84" width="110" height="10" style="fill: var(--ink); animation-delay: .12s"></rect>
+<rect class="fm-grow fl" x="80" y="104" width="96" height="4" style="fill: var(--muted); animation-delay: .24s"></rect>
+<rect class="fm-grow fl" x="80" y="113" width="72" height="4" style="fill: var(--muted); animation-delay: .32s"></rect>
+<g class="fm-fade" style="animation-delay: .4s"><rect class="fm-press" x="80" y="130" width="60" height="18" style="fill: var(--brand);"></rect></g>
+<g class="fm-fade" style="animation-delay: .3s">
+<rect x="250" y="62" width="72" height="86" style="fill: none; stroke: var(--strong); stroke-width: 1;"></rect>
+<path class="fm-pop fb" d="M286 89 L302 105 L286 121 L270 105 Z" style="fill: var(--brand);"></path>
+</g>
+<rect class="fm-fade" x="80" y="164" width="56" height="44" style="fill: var(--line); animation-delay: .5s"></rect>
+<rect class="fm-fade" x="146" y="164" width="56" height="44" style="fill: var(--line); animation-delay: .6s"></rect>
+<rect class="fm-fade" x="212" y="164" width="56" height="44" style="fill: var(--line); animation-delay: .7s"></rect>
+<rect class="fm-fade" x="278" y="164" width="44" height="44" style="fill: var(--line); animation-delay: .8s"></rect>
+<g class="fm-cur">
+<path d="M0 0 L0 17 L4.5 13 L7.5 20 L10.5 18.8 L7.5 12 L13 12 Z" style="fill: var(--ink); stroke: var(--surface); stroke-width: 1.2; stroke-linejoin: miter;"></path>
+</g>
+<text x="24" y="20" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">{{t.artScreen}}</text>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.s2Label}}</span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.s2}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.s2p}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;">
+<sc-for list="{{t.tags2}}" as="tag" hint-placeholder-count="6"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);">{{tag}}</span></sc-for>
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<g class="fm-strip">
+<g style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;">
+<rect x="-8" y="34" width="72" height="60"></rect><rect x="76" y="34" width="72" height="60"></rect><rect x="160" y="34" width="72" height="60"></rect><rect x="244" y="34" width="72" height="60"></rect><rect x="328" y="34" width="72" height="60"></rect><rect x="412" y="34" width="72" height="60"></rect><rect x="496" y="34" width="72" height="60"></rect><rect x="580" y="34" width="72" height="60"></rect><rect x="664" y="34" width="72" height="60"></rect><rect x="748" y="34" width="72" height="60"></rect>
+</g>
+<g style="fill: var(--line);">
+<rect x="-2" y="22" width="6" height="6"></rect><rect x="22" y="22" width="6" height="6"></rect><rect x="46" y="22" width="6" height="6"></rect><rect x="70" y="22" width="6" height="6"></rect><rect x="94" y="22" width="6" height="6"></rect><rect x="118" y="22" width="6" height="6"></rect><rect x="142" y="22" width="6" height="6"></rect><rect x="166" y="22" width="6" height="6"></rect><rect x="190" y="22" width="6" height="6"></rect><rect x="214" y="22" width="6" height="6"></rect><rect x="238" y="22" width="6" height="6"></rect><rect x="262" y="22" width="6" height="6"></rect><rect x="286" y="22" width="6" height="6"></rect><rect x="310" y="22" width="6" height="6"></rect><rect x="334" y="22" width="6" height="6"></rect><rect x="358" y="22" width="6" height="6"></rect><rect x="382" y="22" width="6" height="6"></rect><rect x="406" y="22" width="6" height="6"></rect><rect x="430" y="22" width="6" height="6"></rect><rect x="454" y="22" width="6" height="6"></rect><rect x="478" y="22" width="6" height="6"></rect><rect x="502" y="22" width="6" height="6"></rect><rect x="526" y="22" width="6" height="6"></rect><rect x="550" y="22" width="6" height="6"></rect><rect x="574" y="22" width="6" height="6"></rect><rect x="598" y="22" width="6" height="6"></rect><rect x="622" y="22" width="6" height="6"></rect><rect x="646" y="22" width="6" height="6"></rect><rect x="670" y="22" width="6" height="6"></rect><rect x="694" y="22" width="6" height="6"></rect><rect x="718" y="22" width="6" height="6"></rect><rect x="742" y="22" width="6" height="6"></rect>
+<rect x="-2" y="100" width="6" height="6"></rect><rect x="22" y="100" width="6" height="6"></rect><rect x="46" y="100" width="6" height="6"></rect><rect x="70" y="100" width="6" height="6"></rect><rect x="94" y="100" width="6" height="6"></rect><rect x="118" y="100" width="6" height="6"></rect><rect x="142" y="100" width="6" height="6"></rect><rect x="166" y="100" width="6" height="6"></rect><rect x="190" y="100" width="6" height="6"></rect><rect x="214" y="100" width="6" height="6"></rect><rect x="238" y="100" width="6" height="6"></rect><rect x="262" y="100" width="6" height="6"></rect><rect x="286" y="100" width="6" height="6"></rect><rect x="310" y="100" width="6" height="6"></rect><rect x="334" y="100" width="6" height="6"></rect><rect x="358" y="100" width="6" height="6"></rect><rect x="382" y="100" width="6" height="6"></rect><rect x="406" y="100" width="6" height="6"></rect><rect x="430" y="100" width="6" height="6"></rect><rect x="454" y="100" width="6" height="6"></rect><rect x="478" y="100" width="6" height="6"></rect><rect x="502" y="100" width="6" height="6"></rect><rect x="526" y="100" width="6" height="6"></rect><rect x="550" y="100" width="6" height="6"></rect><rect x="574" y="100" width="6" height="6"></rect><rect x="598" y="100" width="6" height="6"></rect><rect x="622" y="100" width="6" height="6"></rect><rect x="646" y="100" width="6" height="6"></rect><rect x="670" y="100" width="6" height="6"></rect><rect x="694" y="100" width="6" height="6"></rect><rect x="718" y="100" width="6" height="6"></rect><rect x="742" y="100" width="6" height="6"></rect>
+</g>
+<g style="fill: var(--brand);">
+<path d="M28 58 L34 64 L28 70 L22 64 Z"></path><path d="M112 54 L122 64 L112 74 L102 64 Z"></path><path d="M196 49 L211 64 L196 79 L181 64 Z"></path><path d="M280 54 L290 64 L280 74 L270 64 Z"></path>
+<path d="M364 58 L370 64 L364 70 L358 64 Z"></path><path d="M448 54 L458 64 L448 74 L438 64 Z"></path><path d="M532 49 L547 64 L532 79 L517 64 Z"></path><path d="M616 54 L626 64 L616 74 L606 64 Z"></path>
+<path d="M700 58 L706 64 L700 70 L694 64 Z"></path><path d="M784 54 L794 64 L784 74 L774 64 Z"></path>
+</g>
+</g>
+<path d="M40 168 H360" style="stroke: var(--strong); stroke-width: 1;"></path>
+<rect x="40" y="184" width="104" height="10" style="fill: var(--line);"></rect>
+<rect x="150" y="184" width="96" height="10" style="fill: var(--brand); opacity: .55;"></rect>
+<rect x="252" y="184" width="108" height="10" style="fill: var(--line);"></rect>
+<g style="fill: var(--brand);">
+<path class="fm-key fb" d="M80 162 L86 168 L80 174 L74 168 Z" style="animation-delay: .5s"></path>
+<path class="fm-key fb" d="M160 162 L166 168 L160 174 L154 168 Z" style="animation-delay: 1.5s"></path>
+<path class="fm-key fb" d="M250 162 L256 168 L250 174 L244 168 Z" style="animation-delay: 2.625s"></path>
+<path class="fm-key fb" d="M320 162 L326 168 L320 174 L314 168 Z" style="animation-delay: 3.5s"></path>
+</g>
+<g class="fm-ph">
+<path d="M40 150 V204" style="stroke: var(--ink); stroke-width: 1.5;"></path>
+<path d="M35 146 H45 V152 L40 156 L35 152 Z" style="fill: var(--ink);"></path>
+</g>
+<text x="40" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">00:00:12:04</text>
+<text x="360" y="226" text-anchor="end" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">24 FPS</text>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.s3Label}}</span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.s3}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.s3p}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;">
+<sc-for list="{{t.tags3}}" as="tag" hint-placeholder-count="6"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);">{{tag}}</span></sc-for>
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<rect x="40" y="24" width="320" height="200" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
+<path d="M40 44 H360 M76 44 V196 M40 196 H360" style="fill: none; stroke: var(--line); stroke-width: 1;"></path>
+<rect x="50" y="31" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="60" y="31" width="6" height="6" style="fill: var(--strong);"></rect>
+<rect x="70" y="31" width="6" height="6" style="fill: var(--strong);"></rect>
+<text x="96" y="38" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.08em; fill: var(--muted);">app.ts</text>
+<g style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; fill: var(--muted);">
+<text x="56" y="64">1</text><text x="56" y="80">2</text><text x="56" y="96">3</text><text x="56" y="112">4</text><text x="56" y="128">5</text><text x="56" y="144">6</text><text x="56" y="160">7</text><text x="56" y="176">8</text>
+</g>
+<rect class="fm-grow fl" x="88" y="57" width="44" height="8" style="fill: var(--brand);"></rect>
+<rect class="fm-grow fl" x="138" y="57" width="96" height="8" style="fill: var(--ink); animation-delay: .1s"></rect>
+<rect class="fm-grow fl" x="104" y="73" width="70" height="8" style="fill: var(--muted); animation-delay: .2s"></rect>
+<rect class="fm-grow fl" x="180" y="73" width="110" height="8" style="fill: var(--ink); animation-delay: .3s"></rect>
+<rect class="fm-grow fl" x="104" y="89" width="56" height="8" style="fill: var(--brand); animation-delay: .4s"></rect>
+<rect class="fm-grow fl" x="166" y="89" width="80" height="8" style="fill: var(--ink); animation-delay: .5s"></rect>
+<rect class="fm-grow fl" x="120" y="105" width="150" height="8" style="fill: var(--muted); animation-delay: .6s"></rect>
+<rect class="fm-grow fl" x="120" y="121" width="96" height="8" style="fill: var(--ink); animation-delay: .7s"></rect>
+<rect class="fm-grow fl" x="104" y="137" width="30" height="8" style="fill: var(--brand); animation-delay: .8s"></rect>
+<rect class="fm-grow fl" x="88" y="153" width="20" height="8" style="fill: var(--ink); animation-delay: .9s"></rect>
+<rect class="fm-grow fl" x="88" y="169" width="64" height="8" style="fill: var(--muted); animation-delay: 1s"></rect>
+<rect class="fm-caret" x="158" y="166" width="2" height="13" style="fill: var(--brand);"></rect>
+<g class="fm-fade" style="animation-delay: 1.3s">
+<path d="M56 204 L61 209 L56 214 L51 209 Z" style="fill: var(--brand);"></path>
+<text x="70" y="212" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; fill: var(--ink);">{{t.artBuild}}</text>
+</g>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.s4Label}}</span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.s4}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.s4p}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;">
+<sc-for list="{{t.tags4}}" as="tag" hint-placeholder-count="6"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);">{{tag}}</span></sc-for>
+</div>
+</article>
+<article class="fm-card fm-reveal" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
+<div class="fm-art fm-art-auto" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; border-bottom: 1px solid var(--line);">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+<path d="M80 80 H180 M200 100 V160 M220 180 H320" style="fill: none; stroke: var(--strong); stroke-width: 1.5;"></path>
+<path class="fm-ants" d="M80 80 H180 M200 100 V160 M220 180 H320" style="fill: none; stroke: var(--brand); stroke-width: 1.5; stroke-dasharray: 2 6;"></path>
+<g style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;">
+<rect x="40" y="60" width="40" height="40"></rect>
+<rect x="180" y="60" width="40" height="40"></rect>
+<rect x="180" y="160" width="40" height="40"></rect>
+<rect x="320" y="160" width="40" height="40"></rect>
+</g>
+<rect x="54" y="74" width="12" height="12" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect>
+<path d="M200 72 L208 80 L200 88 L192 80 Z" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></path>
+<rect x="194" y="174" width="12" height="12" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect>
+<path d="M340 172 L348 180 L340 188 L332 180 Z" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></path>
+<g style="fill: none; stroke: var(--brand); stroke-width: 2;">
+<rect class="fm-flash" x="39" y="59" width="42" height="42" style="animation-delay: .2s"></rect>
+<rect class="fm-flash" x="179" y="59" width="42" height="42" style="animation-delay: 1s"></rect>
+<rect class="fm-flash" x="179" y="159" width="42" height="42" style="animation-delay: 2.2s"></rect>
+<rect class="fm-flash" x="319" y="159" width="42" height="42" style="animation-delay: 3.4s"></rect>
+</g>
+<g class="fm-glow" style="fill: none; stroke: var(--brand); stroke-width: 2;">
+<path d="M80 80 H180 M200 100 V160 M220 180 H320"></path>
+<rect x="40" y="60" width="40" height="40"></rect>
+<rect x="180" y="60" width="40" height="40"></rect>
+<rect x="180" y="160" width="40" height="40"></rect>
+<rect x="320" y="160" width="40" height="40"></rect>
+</g>
+<g class="fm-pkt"><path d="M-5.5 -5.5 H5.5 V5.5 H-5.5 Z" style="fill: var(--brand);"></path></g>
+<g style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; fill: var(--muted);">
+<text x="60" y="118" text-anchor="middle">{{t.artN1}}</text>
+<text x="200" y="52" text-anchor="middle">{{t.artN2}}</text>
+<text x="170" y="184" text-anchor="end">{{t.artN3}}</text>
+<text x="340" y="152" text-anchor="middle">{{t.artN4}}</text>
+<text x="24" y="226">{{t.artFlow}}</text>
+</g>
+</svg>
+</div>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.s5Label}}</span>
+<div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.s5}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.s5p}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;">
+<sc-for list="{{t.tags5}}" as="tag" hint-placeholder-count="6"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; line-height: 1; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);">{{tag}}</span></sc-for>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit" style="width: 100%; background: var(--raised); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 48px;">
+<div class="fm-reveal" style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">{{t.auditLabel}}</span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.auditTitle}}</h2>
+<p style="margin: 0; max-width: 560px; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em;">{{t.auditP}}</p>
+</div>
+<a class="fm-btn fm-btn-primary" href="#contact" style="font-size: 15px; font-weight: 400; line-height: 1; padding: 14px 28px; background: var(--accent); color: var(--on-accent);">{{t.auditCta}} <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+</div>
+</section>
+
+<!-- SEGMENTS -->
+<section style="width: 100%;">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.segLabel}}</span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.segTitle}}</h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 48px;">
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.g1}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.g1p}}</p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.g2}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.g2p}}</p>
+</div>
+<div class="fm-col fm-reveal" style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--strong); padding-top: 24px;">
+<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">{{t.g3}}</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.g3p}}</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- BOOKING -->
+<section id="book" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 48px;">
+<div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px; max-width: 680px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);">{{t.bk.label}}</span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.bk.title}}</h2>
+<p style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em; color: var(--muted);">{{t.bk.intro}}</p>
+</div>
+<div class="fm-booker fm-reveal" style="display: flex; flex-wrap: wrap; background: var(--raised); border: 1px solid var(--strong); border-top: 2px solid var(--brand);">
+
+<div style="flex: 1 1 380px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+<h3 aria-live="polite" style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">{{cal.month}}</h3>
+<div style="display: flex; gap: 8px;">
+<button type="button" class="fm-mode" onClick="{{cal.prev}}" disabled="{{cal.prevDisabled}}" aria-label="{{t.bk.prev}}" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+<button type="button" class="fm-mode" onClick="{{cal.next}}" disabled="{{cal.nextDisabled}}" aria-label="{{t.bk.next}}" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px;">
+<sc-for list="{{cal.weekdays}}" as="w" hint-placeholder-count="7"><span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 4px 0;">{{w}}</span></sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px;">
+<sc-for list="{{cal.days}}" as="d" hint-placeholder-count="35">
+<sc-if value="{{d.blank}}" hint-placeholder-val="{{false}}"><span aria-hidden="true"></span></sc-if>
+<sc-if value="{{d.real}}" hint-placeholder-val="{{true}}"><button type="button" class="{{d.cls}}" disabled="{{d.disabled}}" aria-pressed="{{d.sel}}" aria-label="{{d.label}}" onClick="{{d.pick}}">{{d.n}}</button></sc-if>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 20px; padding-top: 4px;">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);"><svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><path d="M4 0 L8 4 L4 8 L0 4 Z" style="fill: var(--brand);"></path></svg>{{t.bk.legendOpen}}</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);"><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; background: var(--ink);"></span>{{t.bk.legendSel}}</span>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">{{t.bk.tzNote}}</span>
+</div>
+</div>
+
+<div class="fm-bk-panel" style="flex: 1 1 340px; min-width: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;">
+
+<sc-if value="{{bk.stepNone}}" hint-placeholder-val="{{true}}">
+<div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">
+<svg width="56" height="56" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" style="fill: none; stroke: var(--strong); stroke-width: 2.5; stroke-linejoin: miter;"></path><path d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path></svg>
+<p style="margin: 0; max-width: 300px; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.bk.pickDay}}</p>
+</div>
+</sc-if>
+
+<sc-if value="{{bk.stepSlots}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.bk.slotsFor}}</span>
+<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">{{bk.dateLabel}}</h3>
+</div>
+<div role="group" aria-label="{{t.bk.slotsFor}}" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">
+<sc-for list="{{bk.slots}}" as="s" hint-placeholder-count="18"><button type="button" class="{{s.cls}}" aria-pressed="{{s.sel}}" aria-label="{{s.label}}" onClick="{{s.pick}}">{{s.t}}</button></sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: auto;">
+<span aria-live="polite" style="font-size: 15px; line-height: 1.4; font-weight: 400;">{{bk.slotSummary}}</span>
+<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" onClick="{{bk.toDetails}}" disabled="{{bk.noSlot}}" style="flex: none;">{{t.bk.cont}} <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</sc-if>
+
+<sc-if value="{{bk.stepDetails}}" hint-placeholder-val="{{false}}">
+<button type="button" class="fm-link fm-textbtn" onClick="{{bk.back}}" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="margin-right: 8px;"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>{{t.bk.back}}</button>
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface);">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.bk.selected}}</span>
+<span style="font-size: 16px; line-height: 1.4; font-weight: 400;">{{bk.fullSummary}}</span>
+</div>
+<sc-if value="{{bk.hasErrors}}" hint-placeholder-val="{{false}}">
+<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex: none;"><path d="M5 0 L10 5 L5 10 L0 5 Z" style="fill: var(--accent);"></path></svg>{{t.cf.errSummary}}</div>
+</sc-if>
+<form onSubmit="{{bk.submit}}" style="display: flex; flex-direction: column; gap: 18px; margin: 0;">
+<div class="fm-field">
+<label for="fm-bk-name">{{t.cf.name}} <span aria-hidden="true" style="color: var(--accent);">*</span></label>
+<input id="fm-bk-name" class="fm-input" type="text" autocomplete="name" aria-required="true" aria-invalid="{{bk.e.nameInvalid}}" aria-describedby="fm-bk-name-err" value="{{bk.f.name}}" onChange="{{bk.setName}}">
+<sc-if value="{{bk.e.nameShow}}" hint-placeholder-val="{{false}}"><span id="fm-bk-name-err" class="fm-err">{{t.cf.errName}}</span></sc-if>
+</div>
+<div class="fm-field">
+<label for="fm-bk-email">{{t.cf.email}} <span aria-hidden="true" style="color: var(--accent);">*</span></label>
+<input id="fm-bk-email" class="fm-input" type="email" inputmode="email" autocomplete="email" aria-required="true" aria-invalid="{{bk.e.emailInvalid}}" aria-describedby="fm-bk-email-err" value="{{bk.f.email}}" onChange="{{bk.setEmail}}">
+<sc-if value="{{bk.e.emailShow}}" hint-placeholder-val="{{false}}"><span id="fm-bk-email-err" class="fm-err">{{t.cf.errEmail}}</span></sc-if>
+</div>
+<div class="fm-field">
+<label for="fm-bk-company">{{t.cf.company}} <span style="color: var(--muted); font-weight: 300;">({{t.cf.optional}})</span></label>
+<input id="fm-bk-company" class="fm-input" type="text" autocomplete="organization" value="{{bk.f.company}}" onChange="{{bk.setCompany}}">
+</div>
+<div class="fm-field">
+<label for="fm-bk-topic">{{t.bk.topic}} <span style="color: var(--muted); font-weight: 300;">({{t.cf.optional}})</span></label>
+<textarea id="fm-bk-topic" class="fm-input" rows="3" value="{{bk.f.topic}}" onChange="{{bk.setTopic}}" style="min-height: 96px;"></textarea>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.cf.privacy}} <button type="button" class="fm-inline-link" onClick="{{openPrivacy}}">{{t.ck.privacy}}</button></p>
+<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;">{{t.bk.confirm}} <svg class="fm-arrow" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</form>
+</sc-if>
+
+<sc-if value="{{bk.stepDone}}" hint-placeholder-val="{{false}}">
+<div role="status" style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">
+<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><path class="fm-ld-lid" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: miter; stroke-miterlimit: 10;"></path><path d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path></svg>
+<h3 style="margin: 0; font-size: clamp(32px, 4vw, 44px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">{{t.bk.doneTitle}}</h3>
+<span style="font-size: 18px; line-height: 1.4; font-weight: 400;">{{bk.doneSummary}}</span>
+<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">{{t.bk.doneText}}</p>
+<button type="button" class="fm-btn fm-ck-btn" onClick="{{bk.again}}" style="flex: none;">{{t.bk.again}}</button>
+</div>
+</sc-if>
+
+</div>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 120px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 32px;">
+<h2 class="fm-reveal" style="margin: 0; max-width: 900px; font-size: clamp(48px, 7vw, 96px); line-height: 0.95; font-weight: 200; letter-spacing: -0.04em;">{{t.contactTitle}}<span class="fm-cursor" aria-hidden="true"></span></h2>
+<button type="button" class="fm-btn" onClick="{{openContact}}" aria-haspopup="dialog" style="font-family: inherit; font-size: 20px; font-weight: 300; line-height: 1.4; color: var(--accent); background: none; border: 0; border-bottom: 1px solid var(--accent); border-radius: 0; padding: 0 0 2px; cursor: pointer;">{{t.cf.open}} <svg class="fm-arrow" width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;">
+<div style="display: flex; align-items: center; gap: 16px;">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{true}}"><img src="/_blob/628dd33539bd5e8100c8ad3ee91dd89a" alt="" class="fm-blink" style="height: 28px; width: auto; display: block;"></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{false}}"><img src="/_blob/904f5edff0b9e1bf0ed2ffe2b5c5ef01" alt="" class="fm-blink" style="height: 28px; width: auto; display: block;"></sc-if>
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">formai, 2026</span>
+</div>
+<nav aria-label="{{t.legalNav}}" style="display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px;">
+<button type="button" class="fm-link fm-textbtn" onClick="{{openPrivacy}}">{{t.ck.privacy}}</button>
+<button type="button" class="fm-link fm-textbtn" onClick="{{openCookies}}">{{t.ck.cookiePolicy}}</button>
+<button type="button" class="fm-link fm-textbtn" onClick="{{openSettings}}">{{t.ck.settings}}</button>
+</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">{{t.eyebrow}}</span>
+<button type="button" class="fm-mode" onClick="{{togglePause}}" aria-pressed="{{paused}}" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer; font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;">
+<sc-if value="{{playing}}" hint-placeholder-val="{{true}}"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1 V11 M9 1 V11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></sc-if>
+<sc-if value="{{paused}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1 L11 6 L2 11 Z" style="fill: currentColor;"></path></svg></sc-if>
+{{pauseLabel}}
+</button>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"mode":{"editor":"enum","options":["dark","light"],"default":"dark","section":"Theme"},"motion":{"editor":"boolean","default":true,"section":"Theme"},"loader":{"editor":"boolean","default":true,"section":"Theme"},"language":{"editor":"enum","options":["en","fi"],"default":"en","section":"Theme"},"$preview":{"width":1440,"height":4950}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    const start = Date.now();
+    const finish = () => {
+      const wait = Math.max(0, 1000 - (Date.now() - start));
+      this._ldT = setTimeout(() => { try { sessionStorage.setItem('fm-seen', '1'); } catch (e) {} this.setState({ loaded: true }); }, wait);
+    };
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(finish, finish); } else { finish(); }
+    this._ldFallback = setTimeout(() => this.setState({ loaded: true }), 4000);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._ldT);
+    clearTimeout(this._ldFallback);
+  }
+  readPrefs() {
+    if (this._prefs) return this._prefs;
+    const p = {};
+    try { p.mode = localStorage.getItem('fm-mode') || ''; p.lang = localStorage.getItem('fm-lang') || ''; p.paused = localStorage.getItem('fm-paused') === '1'; } catch (e) {}
+    try { p.seen = sessionStorage.getItem('fm-seen') === '1'; } catch (e) {}
+    try {
+      const raw = localStorage.getItem('fm-consent');
+      const rec = raw ? JSON.parse(raw) : null;
+      const fresh = rec && rec.v === 1 && rec.at && (Date.now() - Date.parse(rec.at)) < 365 * 24 * 3600 * 1000;
+      p.consent = fresh ? rec : null;
+    } catch (e) { p.consent = null; }
+    try { if (window.matchMedia) p.sys = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; } catch (e) {}
+    try { p.nav = String(navigator.language || '').toLowerCase().indexOf('fi') === 0 ? 'fi' : ''; } catch (e) {}
+    this._prefs = p;
+    return p;
+  }
+  save(k, v) {
+    if (!this._allowPrefs) return;
+    try { localStorage.setItem(k, v); } catch (e) {}
+  }
+  renderVals() {
+    const p = this.readPrefs();
+    const st = this.state || {};
+    const mode = st.mode || p.mode || this.props.mode || p.sys || 'dark';
+    const dark = mode !== 'light';
+    const c = dark
+      ? { surface: '#141210', raised: '#1E1B18', ink: '#EDE6D8', muted: '#A39A8B', line: '#2B2722', strong: '#6E665A', accent: '#E2692B', onAccent: '#141210' }
+      : { surface: '#EDE6D8', raised: '#F5F0E6', ink: '#141210', muted: '#5E564B', line: '#D2C9B7', strong: '#8A8173', accent: '#A8461A', onAccent: '#EDE6D8' };
+    const motion = this.props.motion ?? true;
+    const lang = st.lang || p.lang || this.props.language || p.nav || 'en';
+    const paused = st.paused !== undefined ? st.paused : !!p.paused;
+    const menuOpen = !!st.menuOpen;
+    const T = {
+      en: {
+        langLabel: 'Language', loading: 'Loading', home: 'formai, home', navLabel: 'Main', menu: 'Menu', skip: 'Skip to content', pause: 'Pause animations', play: 'Play animations',navServices: 'Services', navMethod: 'Method', navAudit: 'Audit', cta: 'Book an audit', cta2: 'See what we make',
+        eyebrow: 'AI-native studio', h1: 'built', h2: 'at', h3: 'machine', h4: 'pace.',
+        heroP: 'Brand, product, software and automation for startups, studios and legacy brands. AI runs through every step of how we work, so you get in days what agencies quote in weeks.',
+        methodLabel: 'Method', methodTitle: 'ai in every step',
+        m1: 'audit', m1p: 'We study your product, brand and workflows, then send the three changes that matter most. Before any contract.',
+        m2: 'sprint', m2p: 'People and AI agents work in the same loop. Designs, code and automations arrive as working files, not decks.',
+        m3: 'ship', m3p: 'You get a working whole: a brand, a product and the automations your team and tools can build on.',
+        servicesLabel: 'Services', servicesTitle: 'from brand to automation',
+        s1Label: 'Brand', s1: 'identity', s1p: 'Logo, type, color and a living design system, delivered as files that people and AI agents can build on.',
+        s2Label: 'Web and product', s2: 'interfaces', s2p: 'Landing pages, app screens and UI systems, designed and handed over as clickable prototypes ready to build.',
+        s3Label: 'Motion', s3: 'film', s3p: 'Launch films, social cuts and product explainers that carry the identity from the first frame.',
+        s4Label: 'Software', s4: 'development', s4p: 'Web apps, internal tools and integrations, built on the same design system, so what we design is what ships.',
+        s5Label: 'Automation', s5: 'automation', s5p: 'AI agents and automated workflows that take repetitive work off your team and connect to the tools you already use.',
+        tags1: ['Logo', 'Visual identity', 'Brand guidelines', 'Design system', 'Packaging', 'Print and signage'],
+        tags2: ['Websites', 'Landing pages', 'Web shops', 'App UI', 'UX research', 'Prototypes'],
+        tags3: ['Brand films', 'Product videos', 'Social content', 'Ads', 'Motion graphics', 'Editing'],
+        tags4: ['Web apps', 'Mobile apps', 'Internal tools', 'Integrations', 'APIs', 'Maintenance'],
+        tags5: ['AI agents', 'Chatbots', 'Workflow automation', 'Document processing', 'Reporting', 'AI training'],
+        artBuild: 'BUILD PASSED', artN1: 'TRIGGER', artN2: 'AGENT', artN3: 'CHECK', artN4: 'ACTION', artFlow: 'FLOW / 24/7',
+        tagSystem: 'System', tagWeb: 'Web', tagSocial: 'Social', artMark: 'MARK / CONSTRUCTION', artScreen: 'SCREEN / 01',
+        auditLabel: 'The unsolicited audit', auditTitle: 'we find the problem before you ask',
+        auditP: 'We pick one screen or one workflow of your business, find what costs you users or hours, and send the fix. No pitch deck, no call. If it helps, we talk.',
+        auditCta: 'Request your audit',
+        segLabel: 'Who we work with', segTitle: 'three kinds of team',
+        g1: 'startups', g1p: 'Launch with a brand and a product that look funded before they are.',
+        g2: 'studios', g2p: 'Add design, development and AI capacity for a project or a season, without adding headcount.',
+        g3: 'legacy brands', g3p: 'Modernize the identity, the interfaces and the processes behind them, without losing what people already trust.',
+        contactTitle: 'send us the screen or task that slows you down', email: '[YOUR EMAIL]',
+        ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
+      },
+      fi: {
+        langLabel: 'Kieli', loading: 'Ladataan', home: 'formai, etusivu', navLabel: 'Päävalikko', menu: 'Valikko', skip: 'Siirry sisältöön', pause: 'Pysäytä animaatiot', play: 'Käynnistä animaatiot',navServices: 'Palvelut', navMethod: 'Menetelmä', navAudit: 'Auditointi', cta: 'Varaa auditointi', cta2: 'Katso mitä teemme',
+        eyebrow: 'AI-natiivi studio', h1: 'ideasta', h2: 'tuotteeksi', h3: 'koneen', h4: 'tahdissa.',
+        heroP: 'Brändi, tuotteet, ohjelmistot ja automaatio startupeille, studioille ja perinteisille brändeille. Tekoäly kulkee mukana jokaisessa työvaiheessa, joten saat päivissä sen, mihin toimistot arvioivat viikkoja.',
+        methodLabel: 'Menetelmä', methodTitle: 'tekoäly joka vaiheessa',
+        m1: 'auditointi', m1p: 'Tutkimme tuotteesi, brändisi ja työnkulkusi ja lähetämme kolme tärkeintä muutosta. Jo ennen sopimusta.',
+        m2: 'sprintti', m2p: 'Ihmiset ja tekoälyagentit työskentelevät samassa silmukassa. Suunnitelmat, koodi ja automaatiot tulevat toimivina tiedostoina, eivät esityksinä.',
+        m3: 'julkaisu', m3p: 'Saat toimivan kokonaisuuden: brändin, tuotteen ja automaatiot, joiden päälle tiimisi ja työkalusi voivat rakentaa.',
+        servicesLabel: 'Palvelut', servicesTitle: 'brändistä automaatioon',
+        s1Label: 'Brändi', s1: 'identiteetti', s1p: 'Logo, typografia, värit ja elävä design-järjestelmä tiedostoina, joiden päälle ihmiset ja tekoälyagentit voivat rakentaa.',
+        s2Label: 'Verkko ja tuote', s2: 'käyttöliittymät', s2p: 'Laskeutumissivut, sovellusnäkymät ja UI-järjestelmät, suunniteltuina ja luovutettuina klikattavina prototyyppeinä.',
+        s3Label: 'Liike', s3: 'video', s3p: 'Lanseerausvideot, somemateriaalit ja tuote-esittelyt, joissa identiteetti näkyy ensimmäisestä ruudusta lähtien.',
+        s4Label: 'Ohjelmisto', s4: 'ohjelmistokehitys', s4p: 'Verkkosovellukset, sisäiset työkalut ja integraatiot samalle design-järjestelmälle rakennettuina, joten se mikä suunnitellaan, myös julkaistaan.',
+        s5Label: 'Automaatio', s5: 'automaatio', s5p: 'Tekoälyagentit ja automatisoidut työnkulut, jotka vievät toistuvan työn tiimiltäsi ja toimivat jo käyttämiesi työkalujen kanssa.',
+        tags1: ['Logo', 'Visuaalinen identiteetti', 'Brändiohjeisto', 'Design-järjestelmä', 'Pakkaukset', 'Painotuotteet'],
+        tags2: ['Verkkosivut', 'Laskeutumissivut', 'Verkkokaupat', 'Sovellusten UI', 'UX-tutkimus', 'Prototyypit'],
+        tags3: ['Brändivideot', 'Tuotevideot', 'Somesisällöt', 'Mainokset', 'Liikegrafiikka', 'Editointi'],
+        tags4: ['Verkkosovellukset', 'Mobiilisovellukset', 'Sisäiset työkalut', 'Integraatiot', 'Rajapinnat', 'Ylläpito'],
+        tags5: ['Tekoälyagentit', 'Chatbotit', 'Työnkulkujen automaatio', 'Dokumenttien käsittely', 'Raportointi', 'Tekoälykoulutus'],
+        artBuild: 'KÄÄNNÖS ONNISTUI', artN1: 'LAUKAISU', artN2: 'AGENTTI', artN3: 'TARKISTUS', artN4: 'TOIMINTO', artFlow: 'TYÖNKULKU / 24/7',
+        tagSystem: 'Järjestelmä', tagWeb: 'Verkko', tagSocial: 'Some', artMark: 'MERKKI / RAKENNE', artScreen: 'NÄKYMÄ / 01',
+        auditLabel: 'Pyytämätön auditointi', auditTitle: 'löydämme ongelman ennen kuin kysyt',
+        auditP: 'Valitsemme yrityksestäsi yhden näkymän tai työnkulun, etsimme sen, mikä maksaa sinulle käyttäjiä tai työtunteja, ja lähetämme korjauksen. Ei myyntiesitystä, ei puhelua. Jos siitä on apua, jutellaan.',
+        auditCta: 'Pyydä auditointi',
+        segLabel: 'Kenen kanssa teemme töitä', segTitle: 'kolmenlaisia tiimejä',
+        g1: 'startupit', g1p: 'Lanseeraa brändillä ja tuotteella, jotka näyttävät rahoitetuilta jo ennen kuin ovat.',
+        g2: 'studiot', g2p: 'Lisää suunnittelu-, kehitys- ja tekoälykapasiteettia projektiin tai sesonkiin ilman uusia rekrytointeja.',
+        g3: 'perinteiset brändit', g3p: 'Uudista identiteetti, käyttöliittymät ja niiden taustalla olevat prosessit menettämättä sitä, mihin ihmiset jo luottavat.',
+        contactTitle: 'lähetä meille näkymä tai tehtävä, joka hidastaa teitä', email: '[SÄHKÖPOSTIOSOITTEESI]',
+        ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
+      }
+    };
+    const LEGAL = {
+      en: {
+        legalNav: 'Legal',
+        navBook: 'Book a time',
+        bk: {
+          label: 'Book a time', title: 'book a 30-minute consultation',
+          intro: 'Pick a day and a time that suits you. Consultations last 30 minutes, Monday to Friday, 11:00–20:00 Finnish time.',
+          prev: 'Previous month', next: 'Next month',
+          weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          legendOpen: 'Free times', legendSel: 'Selected', tzNote: 'Finnish time', unavailable: 'no free times',
+          pickDay: 'Select a day in the calendar to see its free times.',
+          slotsFor: 'Free times', cont: 'Continue', back: 'Back to times', selected: 'Selected time',
+          topic: 'What would you like to talk about?', confirm: 'Confirm booking',
+          noneYet: 'No time selected', doneTitle: 'booked',
+          doneText: 'We will confirm the booking and send the meeting details by email.', again: 'Book another time'
+        },
+        cf: {
+          open: 'Send us a message', label: 'Contact', title: 'tell us what slows you down',
+          intro: 'Send a short note about your product, brand or workflow. We read every message and reply by email.',
+          name: 'Name', email: 'Email', company: 'Company', optional: 'optional',
+          interest: 'What are you interested in?',
+          interests: ['Brand identity', 'Web and product', 'Video', 'Software', 'Automation', 'Design audit'],
+          message: 'Message', messageHint: 'A screen, a task or an idea is enough to start.',
+          privacy: 'We use your details only to reply to you.',
+          required: '* Required', send: 'Send message',
+          errSummary: 'Check the highlighted fields.',
+          errName: 'Please enter your name.',
+          errEmail: 'Please enter a valid email address, like name@company.com.',
+          errMessage: 'Tell us briefly what you need (at least 10 characters).',
+          thanksTitle: 'thanks, message received', thanksText: 'We will get back to you by email.', done: 'Close'
+        },
+        rowLabels: { purpose: 'Purpose', type: 'Type', duration: 'Duration', category: 'Category' },
+        ck: {
+          label: 'Cookies', title: 'your choice, your data',
+          intro: 'We only use what the site needs to work. Anything more, like remembering your settings or measuring visits, needs your permission. You can change your mind at any time from Cookie settings in the footer.',
+          howTitle: 'How to choose',
+          how: ['Accept all turns every category on.', 'Reject all keeps only the strictly necessary storage.', 'Or set the switches yourself and press Confirm choices.'],
+          nec: 'Strictly necessary', necD: 'Stores your cookie choice and shows the loading animation only once per visit. The site cannot work properly without these, so they are always on.',
+          pref: 'Preferences', prefD: 'Remembers your theme, language and animation choice for your next visit.',
+          an: 'Analytics', anD: 'Would help us understand anonymously how visitors use the site. Not in use yet: nothing is collected even if you switch this on.',
+          mk: 'Marketing', mkD: 'Would let us measure campaigns and show relevant ads elsewhere. Not in use yet: nothing is collected even if you switch this on.',
+          on: 'On', off: 'Off', always: 'Always on',
+          reject: 'Reject all', accept: 'Accept all', confirm: 'Confirm choices',
+          more: 'Read more:', cookiePolicy: 'Cookie policy', privacy: 'Privacy notice', settings: 'Cookie settings', close: 'Close'
+        },
+        cookieDoc: {
+          title: 'cookie policy', updated: 'Last updated: [DATE]',
+          a: [
+            { h: 'What cookies are', ps: ['Cookies and similar technologies, such as your browser’s local storage, are small pieces of data a website saves in your browser. We use them only as described below. Anything beyond the strictly necessary requires your consent under the EU General Data Protection Regulation and the Finnish Act on Electronic Communications Services (section 205).'] },
+            { h: 'What we use', ps: ['This is everything the site stores in your browser.'] }
+          ],
+          rows: [
+            { name: 'fm-consent', purpose: 'Stores your cookie choices and when you made them', type: 'Local storage', duration: '12 months', category: 'Strictly necessary' },
+            { name: 'fm-seen', purpose: 'Shows the loading animation only once per visit', type: 'Session storage', duration: 'Until you close the tab', category: 'Strictly necessary' },
+            { name: 'fm-mode', purpose: 'Remembers the light or dark theme', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
+            { name: 'fm-lang', purpose: 'Remembers your language', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
+            { name: 'fm-paused', purpose: 'Remembers whether animations are paused', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' }
+          ],
+          b: [
+            { h: 'Third parties', ps: ['Fonts are loaded from Google Fonts, so your IP address is sent to Google when the page opens. [REMOVE THIS WHEN THE FONTS ARE SELF-HOSTED.]', 'We do not currently use analytics or marketing cookies. If we add them, we will update this list and ask for your consent before anything is stored.'] },
+            { h: 'Changing your choices', ps: ['Open Cookie settings in the footer at any time to change or withdraw your consent. Withdrawing consent deletes the preference data immediately. You can also clear stored data in your browser settings.'] },
+            { h: 'Contact', ps: ['Questions about cookies: [YOUR EMAIL].'] }
+          ]
+        },
+        privacyDoc: {
+          title: 'privacy notice', updated: 'Last updated: [DATE]',
+          a: [
+            { h: '1. Controller', ps: ['[COMPANY NAME], business ID [BUSINESS ID]', '[STREET ADDRESS], [POSTCODE AND CITY], Finland', 'Contact for privacy matters: [NAME], [YOUR EMAIL]'] },
+            { h: '2. What data we process', ps: ['When you contact us: your name, email address, company and the content of your message.', 'When you use the site: your cookie choices and the preference data listed in the cookie policy. Our hosting provider may log technical data such as your IP address for security. [CHECK WITH YOUR HOSTING PROVIDER]', 'For design audits and business outreach: publicly available work contact details of company representatives, such as name, job title and work email.'] },
+            { h: '3. Purpose and legal basis', ps: ['Answering enquiries and preparing offers: steps prior to entering a contract (GDPR Art. 6(1)(b)) and our legitimate interest (Art. 6(1)(f)).', 'Business outreach and unsolicited audits: our legitimate interest in offering our services to companies (Art. 6(1)(f)). You can object at any time and we will stop.', 'Preference and analytics storage: your consent (Art. 6(1)(a)). Strictly necessary storage: our legitimate interest in a working website.'] },
+            { h: '4. How long we keep data', ps: ['Enquiries and business contact data: up to 24 months from the last contact, unless a customer relationship begins. [CHECK]', 'Cookies and local storage: as listed in the cookie policy.'] },
+            { h: '5. Recipients and transfers', ps: ['We do not sell your data. Service providers process data on our behalf: [EMAIL PROVIDER], [HOSTING PROVIDER], [OTHER TOOLS]. If data is transferred outside the EU or EEA, we use the European Commission’s standard contractual clauses or another lawful transfer mechanism.'] },
+            { h: '6. Your rights', ps: ['You have the right to access, correct and delete your data, to restrict or object to processing, to receive your data in a portable format, and to withdraw consent at any time. Contact us at [YOUR EMAIL].', 'If you believe we process your data unlawfully, you can lodge a complaint with the Office of the Data Protection Ombudsman (tietosuoja.fi).'] },
+            { h: '7. Automated decisions', ps: ['We do not make decisions about you based solely on automated processing, including profiling.'] },
+            { h: '8. Changes', ps: ['We update this notice when our processing changes. The date at the top shows the latest version.'] }
+          ],
+          b: []
+        }
+      },
+      fi: {
+        legalNav: 'Oikeudelliset tiedot',
+        navBook: 'Varaa aika',
+        bk: {
+          label: 'Varaa aika', title: 'varaa 30 minuutin konsultaatio',
+          intro: 'Valitse sinulle sopiva päivä ja aika. Konsultaatio kestää 30 minuuttia, ja aikoja on maanantaista perjantaihin klo 11.00–20.00 Suomen aikaa.',
+          prev: 'Edellinen kuukausi', next: 'Seuraava kuukausi',
+          weekdays: ['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su'],
+          legendOpen: 'Vapaita aikoja', legendSel: 'Valittu', tzNote: 'Suomen aikaa', unavailable: 'ei vapaita aikoja',
+          pickDay: 'Valitse kalenterista päivä, niin näet sen vapaat ajat.',
+          slotsFor: 'Vapaat ajat', cont: 'Jatka', back: 'Takaisin aikoihin', selected: 'Valittu aika',
+          topic: 'Mistä haluaisit puhua?', confirm: 'Vahvista varaus',
+          noneYet: 'Aikaa ei ole valittu', doneTitle: 'varattu',
+          doneText: 'Vahvistamme varauksen ja lähetämme tapaamisen tiedot sähköpostilla.', again: 'Varaa toinen aika'
+        },
+        cf: {
+          open: 'Lähetä meille viesti', label: 'Yhteydenotto', title: 'kerro, mikä teitä hidastaa',
+          intro: 'Lähetä lyhyt viesti tuotteestasi, brändistäsi tai työnkulustasi. Luemme jokaisen viestin ja vastaamme sähköpostilla.',
+          name: 'Nimi', email: 'Sähköposti', company: 'Yritys', optional: 'vapaaehtoinen',
+          interest: 'Mistä olet kiinnostunut?',
+          interests: ['Brändi-identiteetti', 'Verkko ja tuote', 'Video', 'Ohjelmistot', 'Automaatio', 'Design-auditointi'],
+          message: 'Viesti', messageHint: 'Yksi näkymä, tehtävä tai idea riittää alkuun.',
+          privacy: 'Käytämme tietojasi vain vastataksemme sinulle.',
+          required: '* Pakollinen', send: 'Lähetä viesti',
+          errSummary: 'Tarkista merkityt kentät.',
+          errName: 'Kirjoita nimesi.',
+          errEmail: 'Kirjoita toimiva sähköpostiosoite, esim. nimi@yritys.fi.',
+          errMessage: 'Kerro lyhyesti, mitä tarvitset (vähintään 10 merkkiä).',
+          thanksTitle: 'kiitos, viesti vastaanotettu', thanksText: 'Palaamme asiaan sähköpostilla.', done: 'Sulje'
+        },
+        rowLabels: { purpose: 'Tarkoitus', type: 'Tyyppi', duration: 'Säilytysaika', category: 'Luokka' },
+        ck: {
+          label: 'Evästeet', title: 'sinun valintasi, sinun tietosi',
+          intro: 'Käytämme vain sitä, mitä sivusto tarvitsee toimiakseen. Kaikkeen muuhun, kuten asetustesi muistamiseen tai käyntien mittaamiseen, tarvitsemme luvan. Voit muuttaa valintojasi milloin tahansa alatunnisteen Evästeasetukset-linkistä.',
+          howTitle: 'Näin valitset',
+          how: ['Hyväksy kaikki kytkee kaikki luokat päälle.', 'Hylkää kaikki jättää käyttöön vain välttämättömät.', 'Tai valitse itse liukukytkimillä ja paina Vahvista valinnat.'],
+          nec: 'Välttämättömät', necD: 'Tallentavat evästevalintasi ja näyttävät latausanimaation vain kerran käynnin aikana. Sivusto ei toimi kunnolla ilman näitä, joten ne ovat aina päällä.',
+          pref: 'Asetukset', prefD: 'Muistavat teeman, kielen ja animaatiovalintasi seuraavaa käyntiä varten.',
+          an: 'Analytiikka', anD: 'Auttaisi meitä ymmärtämään nimettömästi, miten sivustoa käytetään. Ei vielä käytössä: mitään ei kerätä, vaikka kytket tämän päälle.',
+          mk: 'Markkinointi', mkD: 'Mahdollistaisi kampanjoiden mittaamisen ja kohdennetut mainokset muualla. Ei vielä käytössä: mitään ei kerätä, vaikka kytket tämän päälle.',
+          on: 'Päällä', off: 'Pois', always: 'Aina päällä',
+          reject: 'Hylkää kaikki', accept: 'Hyväksy kaikki', confirm: 'Vahvista valinnat',
+          more: 'Lue lisää:', cookiePolicy: 'Evästekäytäntö', privacy: 'Tietosuojaseloste', settings: 'Evästeasetukset', close: 'Sulje'
+        },
+        cookieDoc: {
+          title: 'evästekäytäntö', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
+          a: [
+            { h: 'Mitä evästeet ovat', ps: ['Evästeet ja vastaavat tekniikat, kuten selaimen paikallinen tallennustila, ovat pieniä tietoja, joita verkkosivusto tallentaa selaimeesi. Käytämme niitä vain alla kuvatulla tavalla. Kaikki välttämätöntä laajempi käyttö edellyttää suostumustasi EU:n tietosuoja-asetuksen ja sähköisen viestinnän palveluista annetun lain (205 §) mukaisesti.'] },
+            { h: 'Mitä käytämme', ps: ['Tässä on kaikki, mitä sivusto tallentaa selaimeesi.'] }
+          ],
+          rows: [
+            { name: 'fm-consent', purpose: 'Tallentaa evästevalintasi ja niiden ajankohdan', type: 'Paikallinen tallennustila', duration: '12 kuukautta', category: 'Välttämätön' },
+            { name: 'fm-seen', purpose: 'Näyttää latausanimaation vain kerran käynnin aikana', type: 'Istuntotallennus', duration: 'Kunnes suljet välilehden', category: 'Välttämätön' },
+            { name: 'fm-mode', purpose: 'Muistaa vaalean tai tumman teeman', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
+            { name: 'fm-lang', purpose: 'Muistaa kielivalintasi', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
+            { name: 'fm-paused', purpose: 'Muistaa, onko animaatiot pysäytetty', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' }
+          ],
+          b: [
+            { h: 'Kolmannet osapuolet', ps: ['Fontit ladataan Google Fontsista, jolloin IP-osoitteesi välittyy Googlelle sivun avautuessa. [POISTA TÄMÄ, KUN FONTIT ON SIIRRETTY OMALLE PALVELIMELLE.]', 'Emme tällä hetkellä käytä analytiikka- tai markkinointievästeitä. Jos otamme niitä käyttöön, päivitämme tämän luettelon ja pyydämme suostumuksesi ennen kuin mitään tallennetaan.'] },
+            { h: 'Valintojen muuttaminen', ps: ['Voit muuttaa tai peruuttaa suostumuksesi milloin tahansa alatunnisteen Evästeasetukset-linkistä. Kun peruutat suostumuksen, asetustiedot poistetaan heti. Voit myös tyhjentää tallennetut tiedot selaimesi asetuksista.'] },
+            { h: 'Yhteystiedot', ps: ['Evästeitä koskevat kysymykset: [SÄHKÖPOSTIOSOITTEESI].'] }
+          ]
+        },
+        privacyDoc: {
+          title: 'tietosuojaseloste', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
+          a: [
+            { h: '1. Rekisterinpitäjä', ps: ['[YRITYKSEN NIMI], Y-tunnus [Y-TUNNUS]', '[KATUOSOITE], [POSTINUMERO JA -TOIMIPAIKKA]', 'Yhteyshenkilö tietosuoja-asioissa: [NIMI], [SÄHKÖPOSTIOSOITTEESI]'] },
+            { h: '2. Mitä tietoja käsittelemme', ps: ['Kun otat meihin yhteyttä: nimesi, sähköpostiosoitteesi, yrityksesi ja viestisi sisältö.', 'Kun käytät sivustoa: evästevalintasi ja evästekäytännössä luetellut asetustiedot. Palveluntarjoajamme voi tallentaa teknisiä tietoja, kuten IP-osoitteen, tietoturvan vuoksi. [TARKISTA PALVELUNTARJOAJALTASI]', 'Design-auditointeja ja yritysyhteydenottoja varten: yritysten edustajien julkisesti saatavilla olevat työyhteystiedot, kuten nimi, tehtävänimike ja työsähköposti.'] },
+            { h: '3. Käsittelyn tarkoitus ja oikeusperuste', ps: ['Yhteydenottoihin vastaaminen ja tarjousten laatiminen: sopimusta edeltävät toimenpiteet (tietosuoja-asetuksen 6 artiklan 1 kohdan b alakohta) ja oikeutettu etumme (f alakohta).', 'Yritysyhteydenotot ja pyytämättömät auditoinnit: oikeutettu etumme tarjota palveluitamme yrityksille (f alakohta). Voit vastustaa käsittelyä milloin tahansa, ja lopetamme sen.', 'Asetus- ja analytiikkatiedot: suostumuksesi (a alakohta). Välttämättömät tallennukset: oikeutettu etumme toimivaan verkkosivustoon.'] },
+            { h: '4. Säilytysaika', ps: ['Yhteydenotto- ja yritysyhteystiedot: enintään 24 kuukautta viimeisestä yhteydenotosta, ellei asiakassuhde ala. [TARKISTA]', 'Evästeet ja paikallinen tallennustila: evästekäytännön mukaisesti.'] },
+            { h: '5. Tietojen vastaanottajat ja siirrot', ps: ['Emme myy tietojasi. Puolestamme tietoja käsittelevät palveluntarjoajat: [SÄHKÖPOSTIPALVELU], [VERKKOHOTELLI], [MUUT TYÖKALUT]. Jos tietoja siirretään EU:n tai ETA:n ulkopuolelle, käytämme Euroopan komission vakiosopimuslausekkeita tai muuta lainmukaista siirtoperustetta.'] },
+            { h: '6. Oikeutesi', ps: ['Sinulla on oikeus saada pääsy tietoihisi, oikaista ja poistaa niitä, rajoittaa tai vastustaa käsittelyä, siirtää tiedot järjestelmästä toiseen sekä peruuttaa suostumuksesi milloin tahansa. Ota yhteyttä: [SÄHKÖPOSTIOSOITTEESI].', 'Jos katsot, että käsittelemme tietojasi lainvastaisesti, voit tehdä valituksen tietosuojavaltuutetun toimistolle (tietosuoja.fi).'] },
+            { h: '7. Automaattinen päätöksenteko', ps: ['Emme tee sinua koskevia päätöksiä pelkästään automaattisen käsittelyn, kuten profiloinnin, perusteella.'] },
+            { h: '8. Muutokset', ps: ['Päivitämme tämän selosteen, kun tietojen käsittely muuttuu. Uusimman version päivämäärä näkyy selosteen alussa.'] }
+          ],
+          b: []
+        }
+      }
+    };
+    const t = Object.assign({}, T[lang] || T.en, LEGAL[lang] || LEGAL.en);
+    const ticker = t.ticker.concat(t.ticker).map((w) => ({ w }));
+    const isEn = lang !== 'fi';
+    const showLoader = motion && (this.props.loader ?? true) && !p.seen;
+    const loaded = !!(this.state && this.state.loaded);
+    const ready = !showLoader || loaded;
+    const readyClass = ready ? 'fm-ready' : '';
+    const loaderClass = showLoader ? (loaded ? 'is-done' : '') : 'is-off';
+    const consent = st.consent !== undefined ? st.consent : p.consent;
+    this._allowPrefs = !!(consent && consent.prefs);
+    const dPrefs = st.dPrefs !== undefined ? st.dPrefs : !!(consent && consent.prefs);
+    const dAn = st.dAn !== undefined ? st.dAn : !!(consent && consent.analytics);
+    const dMk = st.dMk !== undefined ? st.dMk : !!(consent && consent.marketing);
+    const bannerOpen = st.bannerOpen !== undefined ? st.bannerOpen : !consent;
+    const commit = (prefs, an, mk) => {
+      const rec = { v: 1, at: new Date().toISOString(), prefs: prefs, analytics: an, marketing: mk };
+      try { localStorage.setItem('fm-consent', JSON.stringify(rec)); } catch (e) {}
+      this._allowPrefs = prefs;
+      if (prefs) {
+        this.save('fm-mode', mode); this.save('fm-lang', lang); this.save('fm-paused', paused ? '1' : '0');
+      } else {
+        try { ['fm-mode', 'fm-lang', 'fm-paused'].forEach((k) => localStorage.removeItem(k)); } catch (e) {}
+      }
+      this.setState({ consent: rec, bannerOpen: false, dPrefs: prefs, dAn: an, dMk: mk });
+    };
+    const ck = t.ck;
+    const sw = (on) => ({ cls: on ? 'is-on' : '', stateText: on ? ck.on : ck.off });
+    const cats = [
+      { labelId: 'fm-ck-nec', name: ck.nec, desc: ck.necD, on: true, locked: true, cls: 'is-on', stateText: ck.always, toggle: () => {} },
+      Object.assign({ labelId: 'fm-ck-pref', name: ck.pref, desc: ck.prefD, on: dPrefs, locked: false, toggle: () => this.setState({ dPrefs: !dPrefs }) }, sw(dPrefs)),
+      Object.assign({ labelId: 'fm-ck-an', name: ck.an, desc: ck.anD, on: dAn, locked: false, toggle: () => this.setState({ dAn: !dAn }) }, sw(dAn)),
+      Object.assign({ labelId: 'fm-ck-mk', name: ck.mk, desc: ck.mkD, on: dMk, locked: false, toggle: () => this.setState({ dMk: !dMk }) }, sw(dMk))
+    ];
+    const howItems = ck.how.map((x, i) => ({ n: '0' + (i + 1), x: x }));
+    const dlgKind = st.dialog || '';
+    const doc = dlgKind === 'privacy' ? t.privacyDoc : t.cookieDoc;
+    const openDoc = (k) => () => { try { this._opener = document.activeElement; } catch (e) {} this.setState({ dialog: k }); };
+    const cf = t.cf;
+    const EMPTY = { name: '', email: '', company: '', message: '' };
+    const f = st.cfData || EMPTY;
+    const cfInt = st.cfInt || [];
+    const tried = !!st.cfTried;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(f.email).trim());
+    const errs = {
+      name: String(f.name).trim() ? '' : cf.errName,
+      email: emailOk ? '' : cf.errEmail,
+      message: String(f.message).trim().length >= 10 ? '' : cf.errMessage
+    };
+    const shown = (k) => tried && !!errs[k];
+    const e = {
+      name: errs.name, nameShow: shown('name'), nameInvalid: shown('name') ? 'true' : 'false',
+      email: errs.email, emailShow: shown('email'), emailInvalid: shown('email') ? 'true' : 'false',
+      message: errs.message, messageShow: shown('message'), messageInvalid: shown('message') ? 'true' : 'false'
+    };
+    const setField = (k) => (ev) => {
+      const v = ev.target.value;
+      this.setState((s) => ({ cfData: Object.assign({}, s.cfData || EMPTY, { [k]: v }) }));
+    };
+    const interests = cf.interests.map((label, i) => ({
+      label: label, on: !!cfInt[i], cls: cfInt[i] ? 'is-on' : '',
+      toggle: () => { const n = cfInt.slice(); n[i] = !n[i]; this.setState({ cfInt: n }); }
+    }));
+    const closeContact = () => {
+      this._cfFocused = false;
+      this.setState({ contactOpen: false });
+      const o = this._cfOpener;
+      setTimeout(() => { try { if (o && o.focus) o.focus(); } catch (err) {} }, 0);
+    };
+    const cfVals = {
+      contactOpen: !!st.contactOpen, cfSent: !!st.cfSent, cfForm: !st.cfSent,
+      cfHasErrors: tried && !!(errs.name || errs.email || errs.message),
+      f: f, e: e, interests: interests,
+      setName: setField('name'), setEmail: setField('email'), setCompany: setField('company'), setMessage: setField('message'),
+      openContact: () => {
+        try { this._cfOpener = document.activeElement; } catch (err) {}
+        this._cfFocused = false;
+        this.setState({ contactOpen: true, cfSent: false, cfTried: false });
+      },
+      closeContact: closeContact,
+      cfKey: (ev) => { if (ev.key === 'Escape') closeContact(); },
+      cfRef: (el) => { if (el && !this._cfFocused) { this._cfFocused = true; try { el.focus(); } catch (err) {} } },
+      cfSubmit: (ev) => {
+        ev.preventDefault();
+        if (errs.name || errs.email || errs.message) { this.setState({ cfTried: true }); return; }
+        // TODO: send { name, email, company, interests, message } to the form endpoint here (Formspree, Netlify Forms or a Cloudflare Worker).
+        this._cfFocused = false;
+        this.setState({ cfSent: true, cfTried: false, cfData: null, cfInt: [] });
+      }
+    };
+    // ---- booking calendar ----
+    const B = t.bk;
+    const loc = isEn ? 'en-GB' : 'fi-FI';
+    const sep = isEn ? ':' : '.';
+    const hel = (() => {
+      try {
+        const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Helsinki', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+        const g = (ty) => Number((parts.find((x) => x.type === ty) || {}).value);
+        return { y: g('year'), m: g('month'), d: g('day'), h: g('hour') % 24, mi: g('minute') };
+      } catch (err) {
+        const n = new Date();
+        return { y: n.getFullYear(), m: n.getMonth() + 1, d: n.getDate(), h: n.getHours(), mi: n.getMinutes() };
+      }
+    })();
+    const DAY = 86400000;
+    const todayUTC = Date.UTC(hel.y, hel.m - 1, hel.d);
+    const maxUTC = todayUTC + 60 * DAY;
+    const nowMin = hel.h * 60 + hel.mi;
+    const isoOf = (ms) => new Date(ms).toISOString().slice(0, 10);
+    const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + sep + String(m % 60).padStart(2, '0');
+    const SLOT_STARTS = [];
+    for (let m = 11 * 60; m < 20 * 60; m += 30) SLOT_STARTS.push(m);
+    const freeSlots = (ms) => SLOT_STARTS.filter((m) => ms > todayUTC || m >= nowMin + 60);
+    const isOpen = (ms) => {
+      const wd = new Date(ms).getUTCDay();
+      return wd >= 1 && wd <= 5 && ms >= todayUTC && ms <= maxUTC && freeSlots(ms).length > 0;
+    };
+    const fmt = (opts) => new Intl.DateTimeFormat(loc, Object.assign({ timeZone: 'UTC' }, opts));
+    const longDate = (ms) => fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(ms));
+    const calOff = st.calOff || 0;
+    const firstMs = Date.UTC(hel.y, hel.m - 1 + calOff, 1);
+    const fd = new Date(firstMs);
+    const cy = fd.getUTCFullYear(), cm = fd.getUTCMonth();
+    const daysIn = new Date(Date.UTC(cy, cm + 1, 0)).getUTCDate();
+    const lead = (fd.getUTCDay() + 6) % 7;
+    const selDate = st.bkDate || '';
+    const selMs = selDate ? Date.parse(selDate + 'T00:00:00Z') : 0;
+    const days = [];
+    for (let i = 0; i < lead; i++) days.push({ blank: true, real: false });
+    for (let d = 1; d <= daysIn; d++) {
+      const ms = Date.UTC(cy, cm, d);
+      const open = isOpen(ms);
+      const id = isoOf(ms);
+      const sel = id === selDate;
+      days.push({
+        blank: false, real: true, n: String(d), disabled: !open, sel: sel,
+        label: longDate(ms) + (open ? '' : ', ' + B.unavailable),
+        cls: ['fm-day', open ? 'is-open' : '', sel ? 'is-sel' : '', ms === todayUTC ? 'is-today' : ''].join(' '),
+        pick: () => this.setState({ bkDate: id, bkSlot: '', bkStep: 'slots' })
+      });
+    }
+    const monthName = fmt({ month: 'long', year: 'numeric' }).format(fd);
+    const cal = {
+      month: monthName.charAt(0).toLowerCase() + monthName.slice(1),
+      weekdays: B.weekdays, days: days,
+      prevDisabled: calOff <= 0,
+      nextDisabled: Date.UTC(cy, cm + 1, 1) > maxUTC,
+      prev: () => this.setState({ calOff: Math.max(0, calOff - 1) }),
+      next: () => this.setState({ calOff: calOff + 1 })
+    };
+    const bkSlot = st.bkSlot || '';
+    const slotRange = (m) => hhmm(m) + '–' + hhmm(m + 30);
+    const slots = selMs ? freeSlots(selMs).map((m) => {
+      const id = hhmm(m);
+      const sel = id === bkSlot;
+      return { t: id, sel: sel, label: slotRange(m), cls: 'fm-slot' + (sel ? ' is-sel' : ''), pick: () => this.setState({ bkSlot: id }) };
+    }) : [];
+    const selSlotMin = bkSlot ? SLOT_STARTS.find((m) => hhmm(m) === bkSlot) : null;
+    const dateLabel = selMs ? longDate(selMs) : '';
+    const fullSummary = selMs && selSlotMin != null ? dateLabel + ', ' + slotRange(selSlotMin) + ' (' + B.tzNote + ')' : '';
+    const bkStep = st.bkStep || '';
+    const BK_EMPTY = { name: '', email: '', company: '', topic: '' };
+    const bf = st.bkData || BK_EMPTY;
+    const bTried = !!st.bkTried;
+    const bEmailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(bf.email).trim());
+    const bErr = { name: !String(bf.name).trim(), email: !bEmailOk };
+    const bShow = (k) => bTried && bErr[k];
+    const setBk = (k) => (ev) => {
+      const v = ev.target.value;
+      this.setState((s) => ({ bkData: Object.assign({}, s.bkData || BK_EMPTY, { [k]: v }) }));
+    };
+    const bk = {
+      stepNone: !selDate && bkStep !== 'done',
+      stepSlots: !!selDate && (bkStep === 'slots' || bkStep === ''),
+      stepDetails: bkStep === 'details',
+      stepDone: bkStep === 'done',
+      dateLabel: dateLabel, slots: slots,
+      noSlot: !bkSlot,
+      slotSummary: bkSlot && selSlotMin != null ? slotRange(selSlotMin) : B.noneYet,
+      fullSummary: fullSummary,
+      doneSummary: st.bkDoneSummary || '',
+      toDetails: () => { if (bkSlot) this.setState({ bkStep: 'details', bkTried: false }); },
+      back: () => this.setState({ bkStep: 'slots' }),
+      f: bf,
+      e: {
+        nameShow: bShow('name'), nameInvalid: bShow('name') ? 'true' : 'false',
+        emailShow: bShow('email'), emailInvalid: bShow('email') ? 'true' : 'false'
+      },
+      hasErrors: bTried && (bErr.name || bErr.email),
+      setName: setBk('name'), setEmail: setBk('email'), setCompany: setBk('company'), setTopic: setBk('topic'),
+      submit: (ev) => {
+        ev.preventDefault();
+        if (bErr.name || bErr.email) { this.setState({ bkTried: true }); return; }
+        // TODO: send { date: selDate, time: bkSlot, ...bkData } to the booking backend here (Cal.com, Google Calendar or a Cloudflare Worker).
+        this.setState({ bkStep: 'done', bkDoneSummary: fullSummary, bkData: null, bkTried: false });
+      },
+      again: () => this.setState({ bkStep: '', bkDate: '', bkSlot: '', bkDoneSummary: '' })
+    };
+    const closeDoc = () => {
+      this._focusedDlg = '';
+      this.setState({ dialog: '' });
+      const o = this._opener;
+      setTimeout(() => { try { if (o && o.focus) o.focus(); } catch (e) {} }, 0);
+    };
+    return {
+      ...cfVals,
+      cal, bk,
+      c, isDark: dark, isLight: !dark, motionClass: (motion && !paused) ? 'fm-motion' : '', ticker, t, lang,
+      scheme: dark ? 'dark' : 'light', mailHref: 'mailto:',
+      paused, playing: !paused, pauseLabel: paused ? t.play : t.pause,
+      togglePause: () => { this.save('fm-paused', paused ? '0' : '1'); this.setState({ paused: !paused }); },
+      menuOpen, menuClosed: !menuOpen, menuClass: menuOpen ? 'is-open' : '',
+      toggleMenu: () => this.setState({ menuOpen: !menuOpen }),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      isEn, isFi: !isEn, readyClass, loaderClass,
+      showBanner: ready && bannerOpen, cats, howItems,
+      acceptAll: () => commit(true, true, true),
+      rejectAll: () => commit(false, false, false),
+      confirmChoices: () => commit(dPrefs, dAn, dMk),
+      openSettings: () => this.setState({ bannerOpen: true, dPrefs: !!(consent && consent.prefs), dAn: !!(consent && consent.analytics), dMk: !!(consent && consent.marketing) }),
+      dialogOpen: !!dlgKind, doc, docRows: doc.rows || [], hasRows: !!doc.rows,
+      openCookies: openDoc('cookies'), openPrivacy: openDoc('privacy'), closeDoc,
+      dlgKey: (e) => { if (e.key === 'Escape') closeDoc(); },
+      stop: (e) => { e.stopPropagation(); },
+      dlgRef: (el) => { if (el && this._focusedDlg !== dlgKind) { this._focusedDlg = dlgKind; try { el.focus(); } catch (e) {} } },
+      enBg: isEn ? c.ink : 'transparent', enFg: isEn ? c.surface : c.muted,
+      fiBg: isEn ? 'transparent' : c.ink, fiFg: isEn ? c.muted : c.surface,
+      modeLabel: dark ? (isEn ? 'Switch to light mode' : 'Vaihda vaaleaan tilaan') : (isEn ? 'Switch to dark mode' : 'Vaihda tummaan tilaan'),
+      toggleMode: () => { const m = dark ? 'light' : 'dark'; this.save('fm-mode', m); this.setState({ mode: m }); },
+      setEn: () => { this.save('fm-lang', 'en'); this.setState({ lang: 'en' }); },
+      setFi: () => { this.save('fm-lang', 'fi'); this.setState({ lang: 'fi' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>
