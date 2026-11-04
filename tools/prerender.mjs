@@ -16,6 +16,10 @@ vm.runInNewContext(fs.readFileSync('assets/js/i18n.js', 'utf8'), ctx);
 const { T, LEGAL } = ctx.window.FM_I18N;
 const template = fs.readFileSync(path.join(out, 'index.html'), 'utf8');
 
+// News cards are drawn by assets/js/news.js from assets/data/news.json.
+vm.runInNewContext(fs.readFileSync('assets/js/news.js', 'utf8'), ctx);
+const NEWS = fs.existsSync('assets/data/news.json') ? JSON.parse(fs.readFileSync('assets/data/news.json', 'utf8')) : [];
+
 const esc = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const get = (o, p) => p.split('.').reduce((a, k) => (a == null ? a : a[k]), o);
 const TAG = "font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);";
@@ -41,6 +45,14 @@ function render(lang) {
     const list = get(tr, key);
     return Array.isArray(list) ? open + list.map((t) => `<span style="${TAG}">${esc(t)}</span>`).join('') + close : m;
   });
+
+  // News carousel: cards in the HTML, data inline so the page needs no extra request.
+  if (NEWS.length) {
+    html = html.replace('<section id="news" class="fm-grain" hidden', '<section id="news" class="fm-grain"');
+    html = html.replace('<div class="fm-news-track" id="fm-news-track" role="list" tabindex="0" data-i18n-aria-label="newsLabel" aria-label="' + esc(tr.newsLabel) + '"></div>',
+      '<div class="fm-news-track" id="fm-news-track" role="list" tabindex="0" data-i18n-aria-label="newsLabel" aria-label="' + esc(tr.newsLabel) + '">' + ctx.window.FM_NEWS_UI.cards(NEWS, tr, lang) + '</div>');
+  }
+  html = html.replace('<script src="assets/js/news.js', '<script>window.FM_NEWS=' + JSON.stringify(NEWS).replace(/</g, '\\u003c') + ';</script>\n<script src="assets/js/news.js');
 
   // Language, title, description, links.
   html = html.replace(/<html lang="[^"]*"/, `<html lang="${lang}" data-page-lang="${lang}"`);

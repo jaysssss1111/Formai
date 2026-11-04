@@ -515,6 +515,25 @@
 </div>
 </section>
 
+<!-- AI NEWS: carousel, filled from assets/data/news.json -->
+<section id="news" class="fm-grain" hidden style="width: 100%; border-top: 1px solid var(--line);">
+<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px;">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;">
+<div class="fm-reveal" style="flex: 1 1 520px; display: flex; flex-direction: column; gap: 16px; max-width: 720px;">
+<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);" data-i18n="newsLabel"></span>
+<h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="newsTitle"></h2>
+<p style="margin: 0; font-size: 20px; line-height: 1.4; font-weight: 300; letter-spacing: -0.01em; color: var(--muted);" data-i18n="newsIntro"></p>
+<span class="fm-news-note" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="newsNote"></span>
+</div>
+<div style="display: flex; gap: 8px;">
+<button type="button" class="fm-mode" data-news="prev" data-i18n-aria-label="newsPrev" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+<button type="button" class="fm-mode" data-news="next" data-i18n-aria-label="newsNext" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+<div class="fm-news-track" id="fm-news-track" role="list" tabindex="0" data-i18n-aria-label="newsLabel"></div>
+</div>
+</section>
+
 <!-- FAQ -->
 <section id="faq" class="fm-grain" style="width: 100%; border-top: 1px solid var(--line);">
 <div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 48px 64px;">
@@ -571,6 +590,7 @@
 </div>
 <script src="assets/js/config.js?v=dev"></script>
 <script src="assets/js/i18n.js?v=dev"></script>
+<script src="assets/js/news.js?v=dev"></script>
 <script src="assets/js/main.js?v=dev"></script>
 <script src="assets/js/film.js?v=dev"></script>
 <script src="assets/js/hero-grid.js?v=dev"></script>
