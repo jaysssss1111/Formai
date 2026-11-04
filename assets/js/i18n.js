@@ -111,6 +111,10 @@ const T = {
       { h: 'Files you own', p: 'Everything we make is handed over as working files that you and any other team can keep building on.' },
       { h: 'Days, not weeks', p: 'Short sprints with working versions from the first days, so you can steer early.' }
     ],
+    newsLabel: 'AI news', newsTitle: 'What is moving in AI',
+    newsIntro: 'Articles on AI in design, code, automation and regulation, picked for what they mean for your business. New ones are added every week.',
+    newsRead: 'Read on', newsPrev: 'Previous articles', newsNext: 'Next articles', newsNote: '',
+    newsTopics: { design: 'Design', code: 'Code', agents: 'Agents and automation', regulation: 'Regulation', search: 'Search' },
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
   },
   fi: {
@@ -223,6 +227,10 @@ const T = {
       { h: 'Tiedostot ovat teidän', p: 'Kaikki tekemämme luovutetaan toimivina tiedostoina, joiden päälle te ja kuka tahansa muu tiimi voi jatkaa rakentamista.' },
       { h: 'Päiviä, ei viikkoja', p: 'Lyhyitä sprinttejä ja toimivia versioita ensimmäisistä päivistä alkaen, jotta voitte ohjata työtä ajoissa.' }
     ],
+    newsLabel: 'Tekoälyuutiset', newsTitle: 'Mitä tekoälyssä tapahtuu',
+    newsIntro: 'Artikkeleita tekoälystä suunnittelussa, koodissa, automaatiossa ja sääntelyssä, valittuina sen mukaan, mitä ne merkitsevät liiketoiminnallesi. Uusia lisätään viikoittain.',
+    newsRead: 'Lue:', newsPrev: 'Edelliset artikkelit', newsNext: 'Seuraavat artikkelit', newsNote: 'Artikkelit ovat englanniksi.',
+    newsTopics: { design: 'Suunnittelu', code: 'Koodi', agents: 'Agentit ja automaatio', regulation: 'Sääntely', search: 'Haku' },
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
   }
 };

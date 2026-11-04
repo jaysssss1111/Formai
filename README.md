@@ -32,6 +32,14 @@ Julkaisuajo kirjoittaa sivun tekstit valmiiksi HTML:ään skriptillä `tools/pre
 
 `.github/workflows/pages.yml` julkaisee sivuston GitHub Pagesiin aina, kun `main`-haaraan pusketaan. Ota käyttöön kerran: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
+## Tekoälyuutiset
+
+Uutiskaruselli täyttyy tiedostosta `assets/data/news.json`.
+
+- **Automaattisesti:** `.github/workflows/news.yml` hakee joka maanantai artikkeleita alan uutissyötteistä (lista tiedostossa `tools/fetch-news.mjs`). Se valitsee aiheisiin (suunnittelu, koodi, agentit ja automaatio, sääntely, haku) osuvat artikkelit, lisää enintään kolme uutta ja julkaisee sivun. Ajon voi käynnistää myös käsin: Actions → Update news feed → Run workflow.
+- **Käsin:** lisää tiedostoon rivi `{ "title": "…", "url": "https://…", "source": "Julkaisija", "date": "2026-11-04", "summary": "Lyhyt kuvaus omin sanoin.", "topic": "design", "manual": true }`. Merkinnällä `"manual": true` artikkeli pysyy listan alussa, eikä automaattinen haku poista sitä. Aiheet: `design`, `code`, `agents`, `regulation`, `search`.
+- Kansikuvat piirretään brändin tyyliin aiheen mukaan, joten kolmansien osapuolten kuvia ei käytetä.
+
 ## Täydennettävää ennen julkaisua
 
 - **Lomakkeiden lähetys:** yhteydenotto- ja ajanvarauslomake lähettävät tiedot Formspreehen (https://formspree.io). Liitä lomakkeen osoite (`https://formspree.io/f/…`) tiedostoon `assets/js/config.js`. Kun osoite puuttuu, lomake näyttää vahvistuksen mutta ei lähetä mitään. Ajanvaraus tulee sähköpostiin varauspyyntönä, joka vahvistetaan käsin.

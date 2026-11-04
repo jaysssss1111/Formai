@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Publish again after the weekly news update has committed new articles.
+  workflow_run:
+    workflows: ["Update news feed"]
+    types: [completed]
 
 permissions:
   contents: read

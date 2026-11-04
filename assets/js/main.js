@@ -7,6 +7,8 @@
   'use strict';
 
   var root = document.getElementById('top');
+  // .../assets/ — works from / and /fi/ alike.
+  var ASSETS = ((document.currentScript && document.currentScript.src) || '').replace(/js\/main\.js.*$/, '');
   var I18N = window.FM_I18N;
 
   /* ---------- helpers ---------- */
@@ -685,6 +687,53 @@
       });
   }
 
+
+  /* ---------- AI news carousel ---------- */
+  var news = Array.isArray(window.FM_NEWS) ? window.FM_NEWS : null;
+  function renderNews() {
+    var sec = $('#news'), track = $('#fm-news-track');
+    if (!sec || !track || !window.FM_NEWS_UI) return;
+    if (!news || !news.length) { sec.hidden = true; return; }
+    sec.hidden = false;
+    track.innerHTML = window.FM_NEWS_UI.cards(news, t(), state.lang);
+    updateNewsButtons();
+  }
+  function updateNewsButtons() {
+    var track = $('#fm-news-track'); if (!track) return;
+    var max = track.scrollWidth - track.clientWidth - 2;
+    var prev = $('[data-news="prev"]'), next = $('[data-news="next"]');
+    if (prev) prev.disabled = track.scrollLeft <= 2;
+    if (next) next.disabled = track.scrollLeft >= max;
+  }
+  function scrollNews(dir) {
+    var track = $('#fm-news-track'); if (!track) return;
+    var card = track.querySelector('.fm-news-card');
+    var step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+    track.scrollBy({ left: dir * step, behavior: reducedMotion ? 'auto' : 'smooth' });
+  }
+  function loadNews() {
+    if (news) { renderNews(); return; }
+    if (!window.fetch) return;
+    fetch(ASSETS + 'data/news.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (list) { news = Array.isArray(list) ? list : []; renderNews(); })
+      .catch(function () {});
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('[data-news]');
+    if (b && !b.disabled) scrollNews(b.getAttribute('data-news') === 'next' ? 1 : -1);
+  });
+  document.addEventListener('keydown', function (ev) {
+    if (ev.target && ev.target.id === 'fm-news-track' && (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft')) {
+      ev.preventDefault(); scrollNews(ev.key === 'ArrowRight' ? 1 : -1);
+    }
+  });
+  var newsTrack = $('#fm-news-track');
+  if (newsTrack) {
+    newsTrack.addEventListener('scroll', function () { window.requestAnimationFrame(updateNewsButtons); }, { passive: true });
+    window.addEventListener('resize', updateNewsButtons);
+  }
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -694,6 +743,7 @@
     renderAudit();
     renderDoc();
     renderBooking();
+    renderNews();
   }
 
   function switchLang(lang) {
@@ -849,6 +899,7 @@
 
   var yr = $('#fm-year'); if (yr) yr.textContent = String(new Date().getFullYear());
   renderAll();
+  loadNews();
   loadTaken(true);
   startLoader();
 })();
