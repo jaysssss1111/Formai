@@ -3,7 +3,7 @@
 // (design, web, code, agents, automation, regulation, AI search), and
 // merges them with hand-picked entries in assets/data/news.json.
 // Runs in GitHub Actions (see .github/workflows/news.yml). Usage:
-//   node tools/fetch-news.mjs [--max 9] [--new 3] [--dry-run] [--pick "url,url"]
+//   node tools/fetch-news.mjs [--max 9] [--new 3] [--dry-run] [--pick "url,url"] [--images-only]
 import fs from 'node:fs';
 
 const FILE = 'assets/data/news.json';
@@ -74,6 +74,45 @@ function classify(item) {
   return best;   // null: AI news, but not about the studio's fields
 }
 
+
+// The article's own preview image (og:image / twitter:image), the picture
+// publishers provide for link previews. Looked up once per article.
+const metaContent = (html, key) => {
+  const tags = html.match(/<meta\b[^>]*>/gi) || [];
+  for (const t of tags) {
+    if (new RegExp('(?:property|name)=["\']' + key + '["\']', 'i').test(t)) {
+      const m = t.match(/content=["']([^"']+)["']/i);
+      if (m) return decode(m[1]);
+    }
+  }
+  return '';
+};
+async function addImages(list) {
+  for (const x of list) {
+    if (x.image || x.image === false) continue;
+    try {
+      const res = await fetch(x.url, { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; formai-news-bot; +https://github.com/jaysssss1111/Formai)', Accept: 'text/html' }, redirect: 'follow', signal: AbortSignal.timeout(20000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const html = (await res.text()).slice(0, 400000);
+      let img = metaContent(html, 'og:image:secure_url') || metaContent(html, 'og:image') || metaContent(html, 'twitter:image') || metaContent(html, 'twitter:image:src');
+      if (img) img = new URL(img, res.url || x.url).href;
+      if (img && /^https:\/\//.test(img)) { x.image = img; console.log('  image: ' + x.title); }
+      else console.log('  no image found: ' + x.title);
+    } catch (e) {
+      console.log(`  image skipped (${e.message}): ${x.title}`);
+    }
+  }
+  return list;
+}
+
+// --images-only: look up preview images for the listed articles, add nothing new.
+if (args.includes('--images-only')) {
+  const list = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : [];
+  fs.writeFileSync(FILE, JSON.stringify(await addImages(list), null, 2) + '\n');
+  console.log('news.json: images checked for ' + list.length + ' articles');
+  process.exit(0);
+}
+
 const existing = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : [];
 const manual = existing.filter((x) => x.manual);
 const seen = new Set(existing.map((x) => x.url));
@@ -119,7 +158,7 @@ if (pickArg.trim()) {
   urls.filter((u) => !all.some((x) => x.url === u)).forEach((u) => console.log('  not in any feed, skipped: ' + u));
   add.forEach((x) => { delete x.score; x.manual = true; console.log('  picked: ' + x.title); });
   const out = [...manual, ...add, ...existing.filter((x) => !x.manual)];
-  if (!args.includes('--dry-run')) fs.writeFileSync(FILE, JSON.stringify(out, null, 2) + '\n');
+  if (!args.includes('--dry-run')) fs.writeFileSync(FILE, JSON.stringify(await addImages(out), null, 2) + '\n');
   console.log(`news.json: ${add.length} hand-picked articles added`);
   process.exit(0);
 }
@@ -143,5 +182,5 @@ const picked = [...added, ...auto]
 const out = [...manual, ...picked];
 if (args.includes('--dry-run')) { console.log('dry run: news.json not changed'); process.exit(0); }
 fs.mkdirSync('assets/data', { recursive: true });
-fs.writeFileSync(FILE, JSON.stringify(out, null, 2) + '\n');
+fs.writeFileSync(FILE, JSON.stringify(await addImages(out), null, 2) + '\n');
 console.log(`news.json: ${manual.length} hand-picked + ${picked.length} collected (${added.length} new)`);

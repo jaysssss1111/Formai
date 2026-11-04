@@ -11,6 +11,10 @@ on:
         description: 'Only list candidate articles, do not change the site'
         type: boolean
         default: false
+      images_only:
+        description: 'Only fetch preview images for the articles already listed'
+        type: boolean
+        default: false
       pick:
         description: 'Hand-pick: comma-separated article links from the candidate list'
         type: string
@@ -31,7 +35,7 @@ jobs:
       - name: Collect articles
         env:
           PICK: ${{ inputs.pick }}
-        run: node tools/fetch-news.mjs ${{ inputs.dry_run && '--dry-run' || '' }} ${PICK:+--pick "$PICK"}
+        run: node tools/fetch-news.mjs ${{ inputs.dry_run && '--dry-run' || '' }} ${{ inputs.images_only && '--images-only' || '' }} ${PICK:+--pick "$PICK"}
       - name: Commit if changed
         run: |
           if git diff --quiet -- assets/data/news.json; then

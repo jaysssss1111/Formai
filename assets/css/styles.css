@@ -434,3 +434,7 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 .fm-root[data-theme="light"] h2[data-i18n="newsTitle"]{color:#3A342D}
 /* While the carousel drifts on its own, snapping is off so the motion stays smooth. */
 .fm-news-track.is-auto{scroll-snap-type:none}
+/* Publisher preview image fills the cover; the drawn cover sits underneath as fallback. */
+.fm-news-cover{position:relative}
+.fm-news-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s linear}
+.fm-news-link:hover .fm-news-cover img{transform:scale(1.04)}
