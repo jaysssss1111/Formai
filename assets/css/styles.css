@@ -349,3 +349,9 @@ mask-composite:intersect}
 .fm-grain::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
 background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .08 0 0 0 0 .08 0 0 0 0 .08 1.6 0 0 0 -.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px;opacity:.35}
 .fm-root[data-theme="dark"] .fm-grain::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .93 0 0 0 0 .93 1.6 0 0 0 -.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.16}
+
+/* ---------- Subtle shadow on all headings ----------
+   A soft lift, not a drop shadow: a tight 1px edge plus a wide, faint glow
+   in the page's own charcoal. Darker in the dark theme so it still reads. */
+.fm-root h1,.fm-root h2,.fm-root h3,.fm-root h4,.fm-root h5,.fm-film-end-title{text-shadow:0 1px 1px rgba(20,18,16,.10),0 6px 18px rgba(20,18,16,.10)}
+.fm-root[data-theme="dark"] h1,.fm-root[data-theme="dark"] h2,.fm-root[data-theme="dark"] h3,.fm-root[data-theme="dark"] h4,.fm-root[data-theme="dark"] h5,.fm-root[data-theme="dark"] .fm-film-end-title{text-shadow:0 1px 1px rgba(0,0,0,.45),0 8px 22px rgba(0,0,0,.55)}
