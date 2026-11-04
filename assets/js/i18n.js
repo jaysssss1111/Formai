@@ -133,6 +133,7 @@ const LEGAL = {
       pickDay: 'Select a day in the calendar to see its free times.',
       slotsFor: 'Free times', cont: 'Continue', back: 'Back to times', selected: 'Selected time',
       topic: 'What would you like to talk about?', confirm: 'Confirm booking',
+      taken: 'booked', takenNotice: 'Someone just booked that time. Please pick another one.',
       noneYet: 'No time selected', doneTitle: 'booked',
       doneText: 'We will confirm the booking and send the meeting details by email.', again: 'Book another time'
     },
@@ -212,6 +213,7 @@ const LEGAL = {
       pickDay: 'Valitse kalenterista päivä, niin näet sen vapaat ajat.',
       slotsFor: 'Vapaat ajat', cont: 'Jatka', back: 'Takaisin aikoihin', selected: 'Valittu aika',
       topic: 'Mistä haluaisit puhua?', confirm: 'Vahvista varaus',
+      taken: 'varattu', takenNotice: 'Joku ehti juuri varata tämän ajan. Valitse toinen aika.',
       noneYet: 'Aikaa ei ole valittu', doneTitle: 'varattu',
       doneText: 'Vahvistamme varauksen ja lähetämme tapaamisen tiedot sähköpostilla.', again: 'Varaa toinen aika'
     },

@@ -33,4 +33,5 @@ python3 -m http.server 8000
 ## Täydennettävää ennen julkaisua
 
 - **Lomakkeiden lähetys:** yhteydenotto- ja ajanvarauslomake lähettävät tiedot Formspreehen (https://formspree.io). Liitä lomakkeen osoite (`https://formspree.io/f/…`) tiedostoon `assets/js/config.js`. Kun osoite puuttuu, lomake näyttää vahvistuksen mutta ei lähetä mitään. Ajanvaraus tulee sähköpostiin varauspyyntönä, joka vahvistetaan käsin.
+- **Varatut ajat kaikille kävijöille:** varattu aika sumennetaan ja lukitaan Supabasen avulla (ilmainen tietokanta). Aja `docs/supabase-booked-slots.sql` Supabasen SQL Editorissa ja lisää projektin URL ja publishable key tiedostoon `assets/js/config.js`. Supabaseen tallentuu vain päivä ja kellonaika, ei nimiä eikä sähköposteja. Peruttu aika vapautetaan poistamalla sen rivi taulusta `booked_slots`.
 - **Oikeudelliset tiedot:** tietosuojaselosteessa ja evästekäytännössä on paikkamerkkejä, kuten `[COMPANY NAME]`, `[YOUR EMAIL]` ja `[DATE]` (tiedosto `assets/js/i18n.js`).

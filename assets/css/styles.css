@@ -266,3 +266,6 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 
 /* Honeypot field for form spam: off-screen, never shown to people */
 .fm-hp{position:absolute !important;left:-10000px !important;width:1px;height:1px;opacity:0;pointer-events:none}
+
+/* Booked times: blurred and unavailable for every visitor */
+.fm-slot.is-taken,.fm-slot.is-taken:hover{filter:blur(1.5px);opacity:.4;text-decoration:line-through;cursor:not-allowed;border-color:var(--line)}
