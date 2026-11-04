@@ -52,13 +52,24 @@ const link = (xml) => {
 };
 const clip = (s, n) => (s.length <= n ? s : s.slice(0, s.lastIndexOf(' ', n)).replace(/[,;:.\s]+$/, '') + '…');
 
+function openingText(html) {
+  html = String(html || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
+  if (!/<p\b/i.test(html)) html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+  html = html.replace(/<figure\b[\s\S]*?<\/figure>/gi, ' ').replace(/<figcaption\b[\s\S]*?<\/figcaption>/gi, ' ');
+  const paras = (html.match(/<p\b[^>]*>[\s\S]*?<\/p>/gi) || []).map(decode).filter((t) => t.length > 40);
+  return (paras.length ? paras.slice(0, 2).join(' ') : decode(html));
+}
+
 function parse(xml, source) {
   const blocks = xml.match(/<item\b[\s\S]*?<\/item>/gi) || xml.match(/<entry\b[\s\S]*?<\/entry>/gi) || [];
   return blocks.map((b) => {
     const title = decode(tag(b, 'title'));
     const url = link(b).trim();
     const date = new Date(decode(tag(b, 'pubDate') || tag(b, 'published') || tag(b, 'updated') || tag(b, 'dc:date')));
-    const summary = clip(decode(tag(b, 'description') || tag(b, 'summary') || tag(b, 'content')), 220);
+    // Short description from the feed; if there is none (Medium feeds carry only the
+    // full article), the opening paragraphs of the article text, without image captions.
+    let summary = clip(decode(tag(b, 'description') || tag(b, 'summary')), 220);
+    if (!summary) summary = clip(openingText(tag(b, 'content:encoded') || tag(b, 'content')), 220);
     // Image the feed itself gives for the item (media:content, media:thumbnail, enclosure, or an <img>).
     const fm = b.match(/<media:(?:content|thumbnail)\b[^>]*url=["']([^"']+)["']/i) ||
       b.match(/<enclosure\b[^>]*type=["']image\/[^"']*["'][^>]*url=["']([^"']+)["']/i) ||
@@ -97,9 +108,11 @@ const metaContent = (html, key) => {
   return '';
 };
 const feedImages = new Map();   // article url -> image the feed provides
+const feedSummaries = new Map(); // article url -> summary from the feed
 async function addImages(list) {
   for (const x of list) {
     if (!x.image && feedImages.get(x.url)) x.feedImage = feedImages.get(x.url);
+    if (!x.summary && feedSummaries.get(x.url)) { x.summary = feedSummaries.get(x.url); console.log('  summary: ' + x.title); }
     const fallback = () => {
       if (x.feedImage && /^https:\/\//.test(x.feedImage)) { x.image = x.feedImage; console.log('  image from feed: ' + x.title); }
     };
@@ -144,7 +157,7 @@ for (const f of FEEDS) {
   }
 }
 
-found.forEach((x) => { if (x.feedImage) feedImages.set(x.url, x.feedImage); });
+found.forEach((x) => { if (x.feedImage) feedImages.set(x.url, x.feedImage); if (x.summary) feedSummaries.set(x.url, x.summary); });
 
 // --images-only: look up preview images for the listed articles, add nothing new.
 if (args.includes('--images-only')) {
