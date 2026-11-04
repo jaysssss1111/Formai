@@ -389,22 +389,60 @@
     var nowMin = hel.h * 60 + hel.mi;
     var hhmm = function (m) { return String(Math.floor(m / 60)).padStart(2, '0') + sep + String(m % 60).padStart(2, '0'); };
     var freeSlots = function (ms) { return SLOT_STARTS.filter(function (m) { return ms > todayUTC || m >= nowMin + 60; }); };
+    var isTaken = function (ms, m) { var d = TAKEN[new Date(ms).toISOString().slice(0, 10)]; return !!(d && d[key24(m)]); };
     var isOpen = function (ms) {
       var wd = new Date(ms).getUTCDay();
-      return wd >= 1 && wd <= 5 && ms >= todayUTC && ms <= maxUTC && freeSlots(ms).length > 0;
+      return wd >= 1 && wd <= 5 && ms >= todayUTC && ms <= maxUTC &&
+        freeSlots(ms).some(function (m) { return !isTaken(ms, m); });
     };
     var fmt = function (opts) { return new Intl.DateTimeFormat(loc, Object.assign({ timeZone: 'UTC' }, opts)); };
     var longDate = function (ms) { return fmt({ weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(ms)); };
     var slotRange = function (m) { return hhmm(m) + '–' + hhmm(m + 30); };
-    return { B: B, todayUTC: todayUTC, maxUTC: maxUTC, hhmm: hhmm, freeSlots: freeSlots, isOpen: isOpen, fmt: fmt, longDate: longDate, slotRange: slotRange, hel: hel };
+    return { B: B, todayUTC: todayUTC, maxUTC: maxUTC, hhmm: hhmm, freeSlots: freeSlots, isTaken: isTaken, isOpen: isOpen, fmt: fmt, longDate: longDate, slotRange: slotRange, hel: hel };
+  }
+
+  /* Booked times, shared by every visitor through Supabase (see assets/js/config.js). */
+  var TAKEN = {};
+  var takenLoadedAt = 0;
+  function key24(m) { return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
+  function markTaken(date, time) { (TAKEN[date] = TAKEN[date] || {})[time] = true; }
+  function sbConfig() { var c = window.FM_CONFIG || {}; return c.supabaseUrl && c.supabaseKey ? c : null; }
+  function sbRequest(c, path, opts) {
+    var h = { apikey: c.supabaseKey, 'Content-Type': 'application/json' };
+    if (/^eyJ/.test(c.supabaseKey)) h.Authorization = 'Bearer ' + c.supabaseKey;
+    return fetch(c.supabaseUrl.replace(/\/$/, '') + '/rest/v1/' + path, Object.assign({ headers: Object.assign(h, (opts && opts.headers) || {}) }, opts, { headers: Object.assign(h, (opts && opts.headers) || {}) }));
+  }
+  function loadTaken(force) {
+    var c = sbConfig();
+    if (!c || (!force && Date.now() - takenLoadedAt < 30000)) return;
+    takenLoadedAt = Date.now();
+    var from = new Date(calModel().todayUTC).toISOString().slice(0, 10);
+    sbRequest(c, 'booked_slots?select=date,time&date=gte.' + from)
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (rows) {
+        TAKEN = {};
+        rows.forEach(function (row) { markTaken(row.date, row.time); });
+        renderCalendar();
+        if (state.bk.step !== 'details') renderPanel();
+      })
+      .catch(function () {});
+  }
+  // Claim a time for everyone. A second booking of the same time is refused by the database.
+  function reserveSlot(date, time) {
+    var c = sbConfig();
+    if (!c) return Promise.resolve();
+    return sbRequest(c, 'booked_slots', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ date: date, time: time }) })
+      .then(function (r) {
+        if (r.status === 409) { var e = new Error('taken'); e.taken = true; throw e; }
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+      });
   }
 
   function bkSummary(M) {
     var b = state.bk;
     if (!b.date || !b.slot) return '';
     var ms = Date.parse(b.date + 'T00:00:00Z');
-    var min = SLOT_STARTS.find(function (m) { return M.hhmm(m) === b.slot; });
-    if (min == null) return '';
+    var min = Number(b.slot);
     return M.longDate(ms) + ', ' + M.slotRange(min) + ' (' + M.B.tzNote + ')';
   }
 
@@ -457,13 +495,17 @@
         '<p style="margin: 0; max-width: 300px; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.pickDay) + '</p></div>';
     } else if (step === 'slots') {
       var ms = Date.parse(b.date + 'T00:00:00Z');
-      var selMin = SLOT_STARTS.find(function (m) { return M.hhmm(m) === b.slot; });
+      var selMin = b.slot ? Number(b.slot) : null;
       html = '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(B.slotsFor) + '</span>' +
         '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(M.longDate(ms)) + '</h3></div>' +
+        (b.takenNotice ? '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(B.takenNotice) + '</div>' : '') +
         '<div role="group" aria-label="' + esc(B.slotsFor) + '" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">' +
         M.freeSlots(ms).map(function (m) {
-          var id = M.hhmm(m), sel = id === b.slot;
-          return '<button type="button" class="fm-slot' + (sel ? ' is-sel' : '') + '" aria-pressed="' + sel + '" aria-label="' + esc(M.slotRange(m)) + '" data-action="pickSlot" data-slot="' + esc(id) + '">' + esc(id) + '</button>';
+          var id = String(m), sel = id === b.slot;
+          if (M.isTaken(ms, m)) {
+            return '<button type="button" class="fm-slot is-taken" disabled aria-label="' + esc(M.slotRange(m) + ', ' + B.taken) + '">' + esc(M.hhmm(m)) + '</button>';
+          }
+          return '<button type="button" class="fm-slot' + (sel ? ' is-sel' : '') + '" aria-pressed="' + sel + '" aria-label="' + esc(M.slotRange(m)) + '" data-action="pickSlot" data-slot="' + id + '">' + esc(M.hhmm(m)) + '</button>';
         }).join('') + '</div>' +
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: auto;">' +
         '<span aria-live="polite" style="font-size: 15px; line-height: 1.4; font-weight: 400;">' + esc(b.slot && selMin != null ? M.slotRange(selMin) : B.noneYet) + '</span>' +
@@ -515,20 +557,37 @@
     };
     if (isBot($('#fm-bk-form'))) { done(); return; }
     var payload = {
-      _subject: 'formai: booking request ' + b.date + ' ' + b.slot + ' (Europe/Helsinki)',
+      _subject: 'formai: booking request ' + b.date + ' ' + key24(Number(b.slot)) + ' (Europe/Helsinki)',
       booking: summary,
-      date: b.date, time: b.slot, duration: '30 min', timezone: 'Europe/Helsinki',
+      date: b.date, time: key24(Number(b.slot)), duration: '30 min', timezone: 'Europe/Helsinki',
       name: String(f.name).trim(), email: String(f.email).trim(), company: String(f.company).trim(),
       interests: selectedInterests(b.interests).join(', '),
       topic: String(f.topic).trim(),
       language: state.lang
     };
+    var date = b.date, time = key24(Number(b.slot)), claim = date + ' ' + time;
     b.sending = true; b.sendError = false;
     renderPanel();
-    postForm((window.FM_CONFIG || {}).bookingEndpoint, payload).then(done, function () {
-      b.sending = false; b.sendError = true;
-      renderPanel();
-    });
+    // Reserve first so two visitors cannot book the same time; skip if this visitor already holds it.
+    (b.reserved === claim ? Promise.resolve() : reserveSlot(date, time))
+      .then(function () { b.reserved = claim; return postForm((window.FM_CONFIG || {}).bookingEndpoint, payload); })
+      .then(function () {
+        markTaken(date, time);
+        b.reserved = '';
+        done();
+        renderCalendar();
+      }, function (err) {
+        b.sending = false;
+        if (err && err.taken) {
+          markTaken(date, time);
+          b.slot = ''; b.step = 'slots'; b.takenNotice = true;
+          renderBooking();
+          var n = $('#fm-bk-panel [role="alert"]'); if (n) n.scrollIntoView({ block: 'nearest' });
+          return;
+        }
+        b.sendError = true;
+        renderPanel();
+      });
   }
 
   /* ---------- full re-render (language / theme change) ---------- */
@@ -574,12 +633,13 @@
     calPrev: function () { state.bk.calOff = Math.max(0, state.bk.calOff - 1); renderCalendar(); },
     calNext: function () { state.bk.calOff += 1; renderCalendar(); },
     pickDay: function (el) {
-      var b = state.bk; b.date = el.getAttribute('data-date'); b.slot = ''; b.step = 'slots';
+      var b = state.bk; b.date = el.getAttribute('data-date'); b.slot = ''; b.step = 'slots'; b.takenNotice = false;
+      loadTaken();
       renderBooking();
       var again = $('#fm-cal [data-date="' + b.date + '"]'); if (again) again.focus();
     },
     pickSlot: function (el) {
-      state.bk.slot = el.getAttribute('data-slot');
+      state.bk.slot = el.getAttribute('data-slot'); state.bk.takenNotice = false;
       renderPanel();
       var again = $('#fm-bk-panel [data-slot="' + state.bk.slot + '"]'); if (again) again.focus();
     },
@@ -656,5 +716,6 @@
 
   var yr = $('#fm-year'); if (yr) yr.textContent = String(new Date().getFullYear());
   renderAll();
+  loadTaken(true);
   startLoader();
 })();
