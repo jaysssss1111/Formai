@@ -438,6 +438,8 @@
       });
   }
 
+  function capFirst(v) { v = String(v); return v.charAt(0).toUpperCase() + v.slice(1); }
+
   function bkSummary(M) {
     var b = state.bk;
     if (!b.date || !b.slot) return '';
@@ -454,7 +456,7 @@
     var daysIn = new Date(Date.UTC(cy, cm + 1, 0)).getUTCDate();
     var lead = (fd.getUTCDay() + 6) % 7;
     var monthName = M.fmt({ month: 'long', year: 'numeric' }).format(fd);
-    monthName = monthName.charAt(0).toLowerCase() + monthName.slice(1);
+    monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
     var prevDisabled = b.calOff <= 0;
     var nextDisabled = Date.UTC(cy, cm + 1, 1) > M.maxUTC;
     var cells = '';
@@ -497,7 +499,7 @@
       var ms = Date.parse(b.date + 'T00:00:00Z');
       var selMin = b.slot ? Number(b.slot) : null;
       html = '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(B.slotsFor) + '</span>' +
-        '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(M.longDate(ms)) + '</h3></div>' +
+        '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(capFirst(M.longDate(ms))) + '</h3></div>' +
         (b.takenNotice ? '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(B.takenNotice) + '</div>' : '') +
         '<div role="group" aria-label="' + esc(B.slotsFor) + '" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">' +
         M.freeSlots(ms).map(function (m) {

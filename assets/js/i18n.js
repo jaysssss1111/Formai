@@ -3,19 +3,19 @@
 const T = {
   en: {
     langLabel: 'Language', loading: 'Loading', home: 'formai, home', navLabel: 'Main', menu: 'Menu', skip: 'Skip to content', pause: 'Pause animations', play: 'Play animations',navServices: 'Services', navMethod: 'Method', navAudit: 'Audit', cta: 'Book an audit', cta2: 'See what we make',
-    eyebrow: 'AI-native studio', h1: 'built', h2: 'at', h3: 'machine', h4: 'pace.',
+    eyebrow: 'AI-native studio', h1: 'Built', h2: 'at', h3: 'machine', h4: 'pace.',
     heroP: 'Brand, product, software and automation for startups, studios and legacy brands. AI runs through every step of how we work, so you get in days what agencies quote in weeks.',
-    methodLabel: 'Method', methodTitle: 'ai in every step',
-    m1: 'audit', m1p: 'We study your product, brand and workflows, then send the three changes that matter most. Before any contract.',
-    m2: 'sprint', m2p: 'People and AI agents work in the same loop. Designs, code and automations arrive as working files, not decks.',
-    m3: 'ship', m3p: 'You get a working whole: a brand, a product and the automations your team and tools can build on.',
-    servicesLabel: 'Services', servicesTitle: 'from brand to intelligence',
-    s1Label: 'Brand', s1: 'identity', s1p: 'Logo, type, color and a living design system, delivered as files that people and AI agents can build on.',
-    s2Label: 'Web and product', s2: 'interfaces', s2p: 'Landing pages, app screens and UI systems, designed and handed over as clickable prototypes ready to build.',
-    s3Label: 'Motion', s3: 'film', s3p: 'Launch films, social cuts and product explainers that carry the identity from the first frame.',
-    s4Label: 'Software', s4: 'development', s4p: 'Web apps, internal tools and integrations, built on the same design system, so what we design is what ships.',
-    s5Label: 'Automation', s5: 'automation', s5p: 'AI agents and automated workflows that take repetitive work off your team and connect to the tools you already use.',
-    s6Label: 'AI products', s6: 'intelligence', s6p: 'Assistants, smart search and AI features your customers use, designed and built into your product, tested before they ship.',
+    methodLabel: 'Method', methodTitle: 'AI in every step',
+    m1: 'Audit', m1p: 'We study your product, brand and workflows, then send the three changes that matter most. Before any contract.',
+    m2: 'Sprint', m2p: 'People and AI agents work in the same loop. Designs, code and automations arrive as working files, not decks.',
+    m3: 'Ship', m3p: 'You get a working whole: a brand, a product and the automations your team and tools can build on.',
+    servicesLabel: 'Services', servicesTitle: 'From brand to intelligence',
+    s1Label: 'Brand', s1: 'Identity', s1p: 'Logo, type, color and a living design system, delivered as files that people and AI agents can build on.',
+    s2Label: 'Web and product', s2: 'Interfaces', s2p: 'Landing pages, app screens and UI systems, designed and handed over as clickable prototypes ready to build.',
+    s3Label: 'Motion', s3: 'Film', s3p: 'Launch films, social cuts and product explainers that carry the identity from the first frame.',
+    s4Label: 'Software', s4: 'Development', s4p: 'Web apps, internal tools and integrations, built on the same design system, so what we design is what ships.',
+    s5Label: 'Automation', s5: 'Automation', s5p: 'AI agents and automated workflows that take repetitive work off your team and connect to the tools you already use.',
+    s6Label: 'AI products', s6: 'Intelligence', s6p: 'Assistants, smart search and AI features your customers use, designed and built into your product, tested before they ship.',
     tags6: ['AI assistants', 'Smart search', 'Recommendations', 'Conversational UI', 'LLM integration', 'Evaluation'],
     artAi: 'AI / ASSIST', artQuery: 'how do I return an order?', artAnswer: 'ANSWERED / 3 SOURCES',
     tags1: ['Logo', 'Visual identity', 'Brand guidelines', 'Design system', 'Packaging', 'Print and signage'],
@@ -25,14 +25,14 @@ const T = {
     tags5: ['AI agents', 'Chatbots', 'Workflow automation', 'Document processing', 'Reporting', 'AI training'],
     artBuild: 'BUILD PASSED', artN1: 'TRIGGER', artN2: 'AGENT', artN3: 'CHECK', artN4: 'ACTION', artFlow: 'FLOW / 24/7',
     tagSystem: 'System', tagWeb: 'Web', tagSocial: 'Social', artMark: 'MARK / CONSTRUCTION', artScreen: 'SCREEN / 01',
-    auditLabel: 'The unsolicited audit', auditTitle: 'we find the problem before you ask',
+    auditLabel: 'The unsolicited audit', auditTitle: 'We find the problem before you ask',
     auditP: 'We pick one screen or one workflow of your business, find what costs you users or hours, and send the fix. No pitch deck, no call. If it helps, we talk.',
     auditCta: 'Request your audit',
-    segLabel: 'Who we work with', segTitle: 'three kinds of team',
-    g1: 'startups', g1p: 'Launch with a brand and a product that look funded before they are.',
-    g2: 'studios', g2p: 'Add design, development and AI capacity for a project or a season, without adding headcount.',
-    g3: 'legacy brands', g3p: 'Modernize the identity, the interfaces and the processes behind them, without losing what people already trust.',
-    contactTitle: 'send us the screen or task that slows you down', email: '[YOUR EMAIL]',
+    segLabel: 'Who we work with', segTitle: 'Three kinds of team',
+    g1: 'Startups', g1p: 'Launch with a brand and a product that look funded before they are.',
+    g2: 'Studios', g2p: 'Add design, development and AI capacity for a project or a season, without adding headcount.',
+    g3: 'Legacy brands', g3p: 'Modernize the identity, the interfaces and the processes behind them, without losing what people already trust.',
+    contactTitle: 'Send us the screen or task that slows you down', email: '[YOUR EMAIL]',
     film: {
       label: 'Method / film', play: 'Play film', pause: 'Pause film', replay: 'Replay film', script: 'Read the script',
       ann: ['CTA BELOW THE FOLD', 'NINE FORM FIELDS', '4.2 S TO LOAD'], fold: 'FOLD',
@@ -42,7 +42,7 @@ const T = {
       files: ['brand.svg', 'app.ts', 'flow.yml'],
       fix: ['CTA ABOVE THE FOLD', 'THREE FIELDS', '0.9 S TO LOAD'], live: 'LIVE',
       deliver: ['BRAND', 'PRODUCT', 'AUTOMATIONS'],
-      endTitle: 'your turn',
+      endTitle: 'Your turn',
       lines: [
         [0.3, 'It starts with one screen of yours.'],
         [2.2, 'We look at it the way your users do.'],
@@ -62,19 +62,19 @@ const T = {
   },
   fi: {
     langLabel: 'Kieli', loading: 'Ladataan', home: 'formai, etusivu', navLabel: 'Päävalikko', menu: 'Valikko', skip: 'Siirry sisältöön', pause: 'Pysäytä animaatiot', play: 'Käynnistä animaatiot',navServices: 'Palvelut', navMethod: 'Menetelmä', navAudit: 'Auditointi', cta: 'Varaa auditointi', cta2: 'Katso mitä teemme',
-    eyebrow: 'AI-natiivi studio', h1: 'ideasta', h2: 'tuotteeksi', h3: 'koneen', h4: 'tahdissa.',
+    eyebrow: 'AI-natiivi studio', h1: 'Ideasta', h2: 'tuotteeksi', h3: 'koneen', h4: 'tahdissa.',
     heroP: 'Brändi, tuotteet, ohjelmistot ja automaatio startupeille, studioille ja perinteisille brändeille. Tekoäly kulkee mukana jokaisessa työvaiheessa, joten saat päivissä sen, mihin toimistot arvioivat viikkoja.',
-    methodLabel: 'Menetelmä', methodTitle: 'tekoäly joka vaiheessa',
-    m1: 'auditointi', m1p: 'Tutkimme tuotteesi, brändisi ja työnkulkusi ja lähetämme kolme tärkeintä muutosta. Jo ennen sopimusta.',
-    m2: 'sprintti', m2p: 'Ihmiset ja tekoälyagentit työskentelevät samassa silmukassa. Suunnitelmat, koodi ja automaatiot tulevat toimivina tiedostoina, eivät esityksinä.',
-    m3: 'julkaisu', m3p: 'Saat toimivan kokonaisuuden: brändin, tuotteen ja automaatiot, joiden päälle tiimisi ja työkalusi voivat rakentaa.',
-    servicesLabel: 'Palvelut', servicesTitle: 'brändistä älykkyyteen',
-    s1Label: 'Brändi', s1: 'identiteetti', s1p: 'Logo, typografia, värit ja elävä design-järjestelmä tiedostoina, joiden päälle ihmiset ja tekoälyagentit voivat rakentaa.',
-    s2Label: 'Verkko ja tuote', s2: 'käyttöliittymät', s2p: 'Laskeutumissivut, sovellusnäkymät ja UI-järjestelmät, suunniteltuina ja luovutettuina klikattavina prototyyppeinä.',
-    s3Label: 'Liike', s3: 'video', s3p: 'Lanseerausvideot, somemateriaalit ja tuote-esittelyt, joissa identiteetti näkyy ensimmäisestä ruudusta lähtien.',
-    s4Label: 'Ohjelmisto', s4: 'ohjelmistokehitys', s4p: 'Verkkosovellukset, sisäiset työkalut ja integraatiot samalle design-järjestelmälle rakennettuina, joten se mikä suunnitellaan, myös julkaistaan.',
-    s5Label: 'Automaatio', s5: 'automaatio', s5p: 'Tekoälyagentit ja automatisoidut työnkulut, jotka vievät toistuvan työn tiimiltäsi ja toimivat jo käyttämiesi työkalujen kanssa.',
-    s6Label: 'Tekoälytuotteet', s6: 'älykkyys', s6p: 'Avustajat, älykäs haku ja tekoälyominaisuudet, joita asiakkaasi käyttävät, suunniteltuina ja rakennettuina tuotteeseesi ja testattuina ennen julkaisua.',
+    methodLabel: 'Menetelmä', methodTitle: 'Tekoäly joka vaiheessa',
+    m1: 'Auditointi', m1p: 'Tutkimme tuotteesi, brändisi ja työnkulkusi ja lähetämme kolme tärkeintä muutosta. Jo ennen sopimusta.',
+    m2: 'Sprintti', m2p: 'Ihmiset ja tekoälyagentit työskentelevät samassa silmukassa. Suunnitelmat, koodi ja automaatiot tulevat toimivina tiedostoina, eivät esityksinä.',
+    m3: 'Julkaisu', m3p: 'Saat toimivan kokonaisuuden: brändin, tuotteen ja automaatiot, joiden päälle tiimisi ja työkalusi voivat rakentaa.',
+    servicesLabel: 'Palvelut', servicesTitle: 'Brändistä älykkyyteen',
+    s1Label: 'Brändi', s1: 'Identiteetti', s1p: 'Logo, typografia, värit ja elävä design-järjestelmä tiedostoina, joiden päälle ihmiset ja tekoälyagentit voivat rakentaa.',
+    s2Label: 'Verkko ja tuote', s2: 'Käyttöliittymät', s2p: 'Laskeutumissivut, sovellusnäkymät ja UI-järjestelmät, suunniteltuina ja luovutettuina klikattavina prototyyppeinä.',
+    s3Label: 'Liike', s3: 'Video', s3p: 'Lanseerausvideot, somemateriaalit ja tuote-esittelyt, joissa identiteetti näkyy ensimmäisestä ruudusta lähtien.',
+    s4Label: 'Ohjelmisto', s4: 'Ohjelmistokehitys', s4p: 'Verkkosovellukset, sisäiset työkalut ja integraatiot samalle design-järjestelmälle rakennettuina, joten se mikä suunnitellaan, myös julkaistaan.',
+    s5Label: 'Automaatio', s5: 'Automaatio', s5p: 'Tekoälyagentit ja automatisoidut työnkulut, jotka vievät toistuvan työn tiimiltäsi ja toimivat jo käyttämiesi työkalujen kanssa.',
+    s6Label: 'Tekoälytuotteet', s6: 'Älykkyys', s6p: 'Avustajat, älykäs haku ja tekoälyominaisuudet, joita asiakkaasi käyttävät, suunniteltuina ja rakennettuina tuotteeseesi ja testattuina ennen julkaisua.',
     tags6: ['Tekoälyavustajat', 'Älykäs haku', 'Suositukset', 'Keskustelukäyttöliittymät', 'LLM-integraatiot', 'Laadun arviointi'],
     artAi: 'TEKOÄLY / AVUSTAJA', artQuery: 'miten palautan tilauksen?', artAnswer: 'VASTATTU / 3 LÄHDETTÄ',
     tags1: ['Logo', 'Visuaalinen identiteetti', 'Brändiohjeisto', 'Design-järjestelmä', 'Pakkaukset', 'Painotuotteet'],
@@ -84,14 +84,14 @@ const T = {
     tags5: ['Tekoälyagentit', 'Chatbotit', 'Työnkulkujen automaatio', 'Dokumenttien käsittely', 'Raportointi', 'Tekoälykoulutus'],
     artBuild: 'KÄÄNNÖS ONNISTUI', artN1: 'LAUKAISU', artN2: 'AGENTTI', artN3: 'TARKISTUS', artN4: 'TOIMINTO', artFlow: 'TYÖNKULKU / 24/7',
     tagSystem: 'Järjestelmä', tagWeb: 'Verkko', tagSocial: 'Some', artMark: 'MERKKI / RAKENNE', artScreen: 'NÄKYMÄ / 01',
-    auditLabel: 'Pyytämätön auditointi', auditTitle: 'löydämme ongelman ennen kuin kysyt',
+    auditLabel: 'Pyytämätön auditointi', auditTitle: 'Löydämme ongelman ennen kuin kysyt',
     auditP: 'Valitsemme yrityksestäsi yhden näkymän tai työnkulun, etsimme sen, mikä maksaa sinulle käyttäjiä tai työtunteja, ja lähetämme korjauksen. Ei myyntiesitystä, ei puhelua. Jos siitä on apua, jutellaan.',
     auditCta: 'Pyydä auditointi',
-    segLabel: 'Kenen kanssa teemme töitä', segTitle: 'kolmenlaisia tiimejä',
-    g1: 'startupit', g1p: 'Lanseeraa brändillä ja tuotteella, jotka näyttävät rahoitetuilta jo ennen kuin ovat.',
-    g2: 'studiot', g2p: 'Lisää suunnittelu-, kehitys- ja tekoälykapasiteettia projektiin tai sesonkiin ilman uusia rekrytointeja.',
-    g3: 'perinteiset brändit', g3p: 'Uudista identiteetti, käyttöliittymät ja niiden taustalla olevat prosessit menettämättä sitä, mihin ihmiset jo luottavat.',
-    contactTitle: 'lähetä meille näkymä tai tehtävä, joka hidastaa teitä', email: '[SÄHKÖPOSTIOSOITTEESI]',
+    segLabel: 'Kenen kanssa teemme töitä', segTitle: 'Kolmenlaisia tiimejä',
+    g1: 'Startupit', g1p: 'Lanseeraa brändillä ja tuotteella, jotka näyttävät rahoitetuilta jo ennen kuin ovat.',
+    g2: 'Studiot', g2p: 'Lisää suunnittelu-, kehitys- ja tekoälykapasiteettia projektiin tai sesonkiin ilman uusia rekrytointeja.',
+    g3: 'Perinteiset brändit', g3p: 'Uudista identiteetti, käyttöliittymät ja niiden taustalla olevat prosessit menettämättä sitä, mihin ihmiset jo luottavat.',
+    contactTitle: 'Lähetä meille näkymä tai tehtävä, joka hidastaa teitä', email: '[SÄHKÖPOSTIOSOITTEESI]',
     film: {
       label: 'Menetelmä / video', play: 'Toista video', pause: 'Pysäytä video', replay: 'Toista video uudelleen', script: 'Lue käsikirjoitus',
       ann: ['CTA TAITTEEN ALLA', 'YHDEKSÄN KENTTÄÄ', 'LATAUS 4,2 S'], fold: 'TAITE',
@@ -101,7 +101,7 @@ const T = {
       files: ['brand.svg', 'app.ts', 'flow.yml'],
       fix: ['CTA TAITTEEN YLLÄ', 'KOLME KENTTÄÄ', 'LATAUS 0,9 S'], live: 'KÄYTÖSSÄ',
       deliver: ['BRÄNDI', 'TUOTE', 'AUTOMAATIOT'],
-      endTitle: 'sinun vuorosi',
+      endTitle: 'Sinun vuorosi',
       lines: [
         [0.3, 'Kaikki alkaa yhdestä näkymästäsi.'],
         [2.2, 'Katsomme sitä niin kuin käyttäjäsi.'],
@@ -125,7 +125,7 @@ const LEGAL = {
     legalNav: 'Legal',
     navBook: 'Book a time',
     bk: {
-      label: 'Book a time', title: 'book a 30-minute consultation',
+      label: 'Book a time', title: 'Book a 30-minute consultation',
       intro: 'Pick a day and a time that suits you. Consultations last 30 minutes, Monday to Friday, 11:00–20:00 Finnish time.',
       prev: 'Previous month', next: 'Next month',
       weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -134,11 +134,11 @@ const LEGAL = {
       slotsFor: 'Free times', cont: 'Continue', back: 'Back to times', selected: 'Selected time',
       topic: 'What would you like to talk about?', confirm: 'Confirm booking',
       taken: 'booked', takenNotice: 'Someone just booked that time. Please pick another one.',
-      noneYet: 'No time selected', doneTitle: 'booked',
+      noneYet: 'No time selected', doneTitle: 'Booked',
       doneText: 'We will confirm the booking and send the meeting details by email.', again: 'Book another time'
     },
     cf: {
-      open: 'Send us a message', label: 'Contact', title: 'tell us what slows you down',
+      open: 'Send us a message', label: 'Contact', title: 'Tell us what slows you down',
       intro: 'Send a short note about your product, brand or workflow. We read every message and reply by email.',
       name: 'Name', email: 'Email', company: 'Company', optional: 'optional',
       interest: 'What are you interested in?',
@@ -151,11 +151,11 @@ const LEGAL = {
       errEmail: 'Please enter a valid email address, like name@company.com.',
       errMessage: 'Tell us briefly what you need (at least 10 characters).',
       sending: 'Sending…', errSend: 'Sending failed. Check your connection and try again, or email us directly.',
-      thanksTitle: 'thanks, message received', thanksText: 'We will get back to you by email.', done: 'Close'
+      thanksTitle: 'Thanks, message received', thanksText: 'We will get back to you by email.', done: 'Close'
     },
     rowLabels: { purpose: 'Purpose', type: 'Type', duration: 'Duration', category: 'Category' },
     ck: {
-      label: 'Cookies', title: 'your choice, your data',
+      label: 'Cookies', title: 'Your choice, your data',
       intro: 'We only use what the site needs to work. Anything more, like remembering your settings or measuring visits, needs your permission. You can change your mind at any time from Cookie settings in the footer.',
       howTitle: 'How to choose',
       how: ['Accept all turns every category on.', 'Reject all keeps only the strictly necessary storage.', 'Or set the switches yourself and press Confirm choices.'],
@@ -168,7 +168,7 @@ const LEGAL = {
       more: 'Read more:', cookiePolicy: 'Cookie policy', privacy: 'Privacy notice', settings: 'Cookie settings', close: 'Close'
     },
     cookieDoc: {
-      title: 'cookie policy', updated: 'Last updated: [DATE]',
+      title: 'Cookie policy', updated: 'Last updated: [DATE]',
       a: [
         { h: 'What cookies are', ps: ['Cookies and similar technologies, such as your browser’s local storage, are small pieces of data a website saves in your browser. We use them only as described below. Anything beyond the strictly necessary requires your consent under the EU General Data Protection Regulation and the Finnish Act on Electronic Communications Services (section 205).'] },
         { h: 'What we use', ps: ['This is everything the site stores in your browser.'] }
@@ -187,7 +187,7 @@ const LEGAL = {
       ]
     },
     privacyDoc: {
-      title: 'privacy notice', updated: 'Last updated: [DATE]',
+      title: 'Privacy notice', updated: 'Last updated: [DATE]',
       a: [
         { h: '1. Controller', ps: ['[COMPANY NAME], business ID [BUSINESS ID]', '[STREET ADDRESS], [POSTCODE AND CITY], Finland', 'Contact for privacy matters: [NAME], [YOUR EMAIL]'] },
         { h: '2. What data we process', ps: ['When you contact us: your name, email address, company and the content of your message.', 'When you use the site: your cookie choices and the preference data listed in the cookie policy. Our hosting provider may log technical data such as your IP address for security. [CHECK WITH YOUR HOSTING PROVIDER]', 'For design audits and business outreach: publicly available work contact details of company representatives, such as name, job title and work email.'] },
@@ -205,7 +205,7 @@ const LEGAL = {
     legalNav: 'Oikeudelliset tiedot',
     navBook: 'Varaa aika',
     bk: {
-      label: 'Varaa aika', title: 'varaa 30 minuutin konsultaatio',
+      label: 'Varaa aika', title: 'Varaa 30 minuutin konsultaatio',
       intro: 'Valitse sinulle sopiva päivä ja aika. Konsultaatio kestää 30 minuuttia, ja aikoja on maanantaista perjantaihin klo 11.00–20.00 Suomen aikaa.',
       prev: 'Edellinen kuukausi', next: 'Seuraava kuukausi',
       weekdays: ['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su'],
@@ -214,11 +214,11 @@ const LEGAL = {
       slotsFor: 'Vapaat ajat', cont: 'Jatka', back: 'Takaisin aikoihin', selected: 'Valittu aika',
       topic: 'Mistä haluaisit puhua?', confirm: 'Vahvista varaus',
       taken: 'varattu', takenNotice: 'Joku ehti juuri varata tämän ajan. Valitse toinen aika.',
-      noneYet: 'Aikaa ei ole valittu', doneTitle: 'varattu',
+      noneYet: 'Aikaa ei ole valittu', doneTitle: 'Varattu',
       doneText: 'Vahvistamme varauksen ja lähetämme tapaamisen tiedot sähköpostilla.', again: 'Varaa toinen aika'
     },
     cf: {
-      open: 'Lähetä meille viesti', label: 'Yhteydenotto', title: 'kerro, mikä teitä hidastaa',
+      open: 'Lähetä meille viesti', label: 'Yhteydenotto', title: 'Kerro, mikä teitä hidastaa',
       intro: 'Lähetä lyhyt viesti tuotteestasi, brändistäsi tai työnkulustasi. Luemme jokaisen viestin ja vastaamme sähköpostilla.',
       name: 'Nimi', email: 'Sähköposti', company: 'Yritys', optional: 'vapaaehtoinen',
       interest: 'Mistä olet kiinnostunut?',
@@ -231,11 +231,11 @@ const LEGAL = {
       errEmail: 'Kirjoita toimiva sähköpostiosoite, esim. nimi@yritys.fi.',
       errMessage: 'Kerro lyhyesti, mitä tarvitset (vähintään 10 merkkiä).',
       sending: 'Lähetetään…', errSend: 'Lähetys epäonnistui. Tarkista yhteys ja yritä uudelleen, tai lähetä meille sähköpostia.',
-      thanksTitle: 'kiitos, viesti vastaanotettu', thanksText: 'Palaamme asiaan sähköpostilla.', done: 'Sulje'
+      thanksTitle: 'Kiitos, viesti vastaanotettu', thanksText: 'Palaamme asiaan sähköpostilla.', done: 'Sulje'
     },
     rowLabels: { purpose: 'Tarkoitus', type: 'Tyyppi', duration: 'Säilytysaika', category: 'Luokka' },
     ck: {
-      label: 'Evästeet', title: 'sinun valintasi, sinun tietosi',
+      label: 'Evästeet', title: 'Sinun valintasi, sinun tietosi',
       intro: 'Käytämme vain sitä, mitä sivusto tarvitsee toimiakseen. Kaikkeen muuhun, kuten asetustesi muistamiseen tai käyntien mittaamiseen, tarvitsemme luvan. Voit muuttaa valintojasi milloin tahansa alatunnisteen Evästeasetukset-linkistä.',
       howTitle: 'Näin valitset',
       how: ['Hyväksy kaikki kytkee kaikki luokat päälle.', 'Hylkää kaikki jättää käyttöön vain välttämättömät.', 'Tai valitse itse liukukytkimillä ja paina Vahvista valinnat.'],
@@ -248,7 +248,7 @@ const LEGAL = {
       more: 'Lue lisää:', cookiePolicy: 'Evästekäytäntö', privacy: 'Tietosuojaseloste', settings: 'Evästeasetukset', close: 'Sulje'
     },
     cookieDoc: {
-      title: 'evästekäytäntö', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
+      title: 'Evästekäytäntö', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
       a: [
         { h: 'Mitä evästeet ovat', ps: ['Evästeet ja vastaavat tekniikat, kuten selaimen paikallinen tallennustila, ovat pieniä tietoja, joita verkkosivusto tallentaa selaimeesi. Käytämme niitä vain alla kuvatulla tavalla. Kaikki välttämätöntä laajempi käyttö edellyttää suostumustasi EU:n tietosuoja-asetuksen ja sähköisen viestinnän palveluista annetun lain (205 §) mukaisesti.'] },
         { h: 'Mitä käytämme', ps: ['Tässä on kaikki, mitä sivusto tallentaa selaimeesi.'] }
@@ -267,7 +267,7 @@ const LEGAL = {
       ]
     },
     privacyDoc: {
-      title: 'tietosuojaseloste', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
+      title: 'Tietosuojaseloste', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
       a: [
         { h: '1. Rekisterinpitäjä', ps: ['[YRITYKSEN NIMI], Y-tunnus [Y-TUNNUS]', '[KATUOSOITE], [POSTINUMERO JA -TOIMIPAIKKA]', 'Yhteyshenkilö tietosuoja-asioissa: [NIMI], [SÄHKÖPOSTIOSOITTEESI]'] },
         { h: '2. Mitä tietoja käsittelemme', ps: ['Kun otat meihin yhteyttä: nimesi, sähköpostiosoitteesi, yrityksesi ja viestisi sisältö.', 'Kun käytät sivustoa: evästevalintasi ja evästekäytännössä luetellut asetustiedot. Palveluntarjoajamme voi tallentaa teknisiä tietoja, kuten IP-osoitteen, tietoturvan vuoksi. [TARKISTA PALVELUNTARJOAJALTASI]', 'Design-auditointeja ja yritysyhteydenottoja varten: yritysten edustajien julkisesti saatavilla olevat työyhteystiedot, kuten nimi, tehtävänimike ja työsähköposti.'] },
