@@ -240,3 +240,26 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 .fm-motion .fm-think{animation:fm-think-loop 7s linear infinite both}
 .fm-motion .fm-think-dot{animation:fm-think-dot .6s linear infinite both}
 .fm-motion .fm-ai-pupil{animation:fm-ai-turn 7s cubic-bezier(.6,0,.2,1) infinite both}
+
+/* ---------- Segment icons (Who we work with) ---------- */
+.fm-ic{display:block;width:64px;height:64px;margin-bottom:12px;overflow:visible}
+.fm-ic rect,.fm-ic path,.fm-ic g{transform-box:fill-box;transform-origin:center}
+.fm-ic .fm-ic-bar{transform-origin:50% 100%}
+.fm-ic-trail{stroke-dasharray:1 1;stroke-dashoffset:0}
+.fm-ic-old{opacity:0}
+@keyframes fm-ic-bar{0%{transform:scaleY(0)}16%,84%{transform:scaleY(1)}96%,100%{transform:scaleY(0)}}
+@keyframes fm-ic-trail{0%,24%{stroke-dashoffset:1}54%,84%{stroke-dashoffset:0}96%,100%{stroke-dashoffset:-1}}
+@keyframes fm-ic-climb{0%,24%{opacity:0;transform:translate(-28px,24px)}30%{opacity:1;transform:translate(-28px,24px)}42%{transform:translate(-14px,14px)}54%,84%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
+@keyframes fm-ic-slide{0%,8%{opacity:0;transform:translateX(18px)}28%,84%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
+@keyframes fm-ic-pop{0%,30%{transform:scale(0) rotate(-90deg)}40%,84%{transform:none}94%,100%{transform:scale(0) rotate(90deg)}}
+@keyframes fm-ic-old{0%,18%{opacity:1;transform:none}40%,82%{opacity:0;transform:rotate(45deg) scale(1.2)}100%{opacity:1;transform:none}}
+@keyframes fm-ic-new{0%,18%{opacity:0;transform:rotate(-45deg) scale(.6)}40%,82%{opacity:1;transform:none}100%{opacity:0;transform:rotate(-45deg) scale(.6)}}
+.fm-motion .fm-ic-bar{animation:fm-ic-bar 6s cubic-bezier(.2,.7,.2,1) infinite both}
+.fm-motion .fm-ic-bar:nth-of-type(2){animation-delay:.12s}
+.fm-motion .fm-ic-bar:nth-of-type(3){animation-delay:.24s}
+.fm-motion .fm-ic-trail{animation:fm-ic-trail 6s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-ic-climb{animation:fm-ic-climb 6s cubic-bezier(.6,0,.2,1) infinite both}
+.fm-motion .fm-ic-slide{animation:fm-ic-slide 6s cubic-bezier(.2,.7,.2,1) .4s infinite both}
+.fm-motion .fm-ic-pop{animation:fm-ic-pop 6s cubic-bezier(.6,0,.2,1) .4s infinite both}
+.fm-motion .fm-ic-old{animation:fm-ic-old 6s cubic-bezier(.6,0,.2,1) .8s infinite both}
+.fm-motion .fm-ic-new{animation:fm-ic-new 6s cubic-bezier(.6,0,.2,1) .8s infinite both}
