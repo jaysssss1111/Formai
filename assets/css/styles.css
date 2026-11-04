@@ -341,3 +341,11 @@ mask-composite:intersect}
 /* Booking grid: the booked slot fills in orange with a cream diamond. */
 .fm-hx-cell.is-booked{background:var(--brand)}
 .fm-hx-cell.is-booked::after{display:block;width:10px;height:10px;margin:-5px 0 0 -5px;background:var(--surface);transform:rotate(45deg)}
+
+/* ---------- Subtle paper grain on the sections without a grid ----------
+   A tiny inline SVG noise tile: only the brightest specks of the noise show,
+   dark specks on cream and light specks on charcoal. No image file. */
+.fm-grain{position:relative;isolation:isolate}
+.fm-grain::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .08 0 0 0 0 .08 0 0 0 0 .08 1.6 0 0 0 -.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px;opacity:.35}
+.fm-root[data-theme="dark"] .fm-grain::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .93 0 0 0 0 .93 1.6 0 0 0 -.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.16}
