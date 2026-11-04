@@ -10,6 +10,46 @@
     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/iStock-2297734847.jpg?resize=1200,600"
   },
   {
+    "title": "What AI has changed in Design Systems, and what is still up to us",
+    "url": "https://uxdesign.cc/what-ai-has-changed-in-design-systems-and-what-is-still-up-to-us-d4e8e8f4ceb2?source=rss----138adf9c44c---4",
+    "source": "UX Collective",
+    "date": "2026-11-04",
+    "summary": "",
+    "topic": "design",
+    "manual": true,
+    "image": "https://cdn-images-1.medium.com/max/1024/1*er_HyzWo0FVdfLtEexv7KQ.jpeg"
+  },
+  {
+    "title": "Everyone is building AI agents. Who’s designing the stop button?",
+    "url": "https://uxdesign.cc/your-ai-is-non-deterministic-but-your-product-cant-be-3ec2a0cf870c?source=rss----138adf9c44c---4",
+    "source": "UX Collective",
+    "date": "2026-11-03",
+    "summary": "",
+    "topic": "agents",
+    "manual": true,
+    "image": "https://cdn-images-1.medium.com/max/1024/1*4xb0tuwC90tLWJBgYVaomg.png"
+  },
+  {
+    "title": "What I learned teaching AI prototyping at university",
+    "url": "https://uxdesign.cc/what-i-learned-teaching-ai-prototyping-at-university-b9fff222625e?source=rss----138adf9c44c---4",
+    "source": "UX Collective",
+    "date": "2026-11-03",
+    "summary": "",
+    "topic": "design",
+    "manual": true,
+    "image": "https://cdn-images-1.medium.com/max/1024/1*_aggjPMjQBpRc_sWKZZ7zA.png"
+  },
+  {
+    "title": "Creating AI value with enterprise context",
+    "url": "https://www.technologyreview.com/2026/10/28/1147709/creating-ai-value-with-enterprise-context/",
+    "source": "MIT Technology Review",
+    "date": "2026-10-28",
+    "summary": "Across a business, any number of AI platforms, systems, and tools may be at work simultaneously—for example, AI-powered customer platforms, conversational assistants, and workflow and process automation tools. Each one…",
+    "topic": "agents",
+    "manual": true,
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR2026_CovSocial1200_1028-e1793220807248.png?resize=1200,600"
+  },
+  {
     "title": "Securing the agentic enterprise with data lineage",
     "url": "https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/",
     "source": "MIT Technology Review",
