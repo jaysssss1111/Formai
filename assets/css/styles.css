@@ -361,3 +361,6 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
    DM Sans cut the site loads. */
 .fm-root h2[data-i18n="methodTitle"],.fm-root h2[data-i18n="servicesTitle"],.fm-root h2[data-i18n="auditTitle"],
 .fm-root h2[data-i18n="segTitle"],.fm-root h2[data-i18n="bk.title"],.fm-root #contact h2{font-weight:400 !important}
+/* Light theme: the six section titles use a softer, warm black instead of the full charcoal ink. */
+.fm-root[data-theme="light"] h2[data-i18n="methodTitle"],.fm-root[data-theme="light"] h2[data-i18n="servicesTitle"],.fm-root[data-theme="light"] h2[data-i18n="auditTitle"],
+.fm-root[data-theme="light"] h2[data-i18n="segTitle"],.fm-root[data-theme="light"] h2[data-i18n="bk.title"],.fm-root[data-theme="light"] #contact h2{color:#3A342D}
