@@ -298,14 +298,6 @@ background-size:48px 48px;background-position:center center;
 mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
 mask-composite:intersect}
 
-/* ---------- Service cards: a tone that stands off the page ground ----------
-   Light: a slightly darker cream. Dark: a slightly lighter charcoal.
-   Muted text stays at 5:1 or better on both. */
-.fm-root[data-theme="light"]{--card:#E6DECF;--card-line:#D2C8B5}
-:root,.fm-root[data-theme="dark"]{--card:#201C19;--card-line:#332E28}
-.fm-root .fm-card{background:var(--card) !important;border-color:var(--card-line) !important}
-.fm-root .fm-card:hover{border-color:var(--strong) !important}
-
 /* ---------- Hero grid motion: a square turns into a diamond, rolls one cell, lands square ---------- */
 .fm-hero-fx{position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);overflow:hidden;pointer-events:none;
 -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 100%),linear-gradient(180deg,transparent 0%,#000 14%,#000 84%,transparent 100%);
@@ -314,11 +306,3 @@ mask-image:linear-gradient(90deg,transparent 0%,#000 22%,#000 78%,transparent 10
 mask-composite:intersect}
 .fm-hx-cell{position:absolute;width:49px;height:49px;box-sizing:border-box;border:1px solid var(--brand);transform-origin:50% 50%;opacity:0;will-change:transform,opacity}
 .fm-hx-cell::after{content:'';position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--brand)}
-
-/* Same card tone on the other card-like blocks: booking calendar, method film
-   frame, cookie banner and the hero tiles. In the light theme small orange text
-   on the card uses a slightly deeper accent so it keeps 4.8:1. */
-.fm-root .fm-booker,.fm-root .fm-film-frame,.fm-root .fm-cookie{background:var(--card) !important}
-.fm-root .fm-booker,.fm-root .fm-film-frame{border-left-color:var(--card-line) !important;border-right-color:var(--card-line) !important;border-bottom-color:var(--card-line) !important}
-.fm-root .fm-hero-art .fm-hx-tile > g > rect:first-child{fill:var(--card) !important;stroke:var(--card-line) !important}
-.fm-root[data-theme="light"] .fm-booker,.fm-root[data-theme="light"] .fm-film-frame,.fm-root[data-theme="light"] .fm-cookie,.fm-root[data-theme="light"] .fm-card{--accent:#9E4218}
