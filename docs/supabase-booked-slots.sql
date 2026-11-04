@@ -11,6 +11,11 @@ create table if not exists public.booked_slots (
 
 alter table public.booked_slots enable row level security;
 
+-- Let the website (the anon role) read and add rows, nothing else.
+-- Needed when "Automatically expose new tables" is turned off.
+grant usage on schema public to anon;
+grant select, insert on public.booked_slots to anon;
+
 -- Visitors may see which times are taken.
 create policy "read booked times" on public.booked_slots
   for select to anon using (true);
