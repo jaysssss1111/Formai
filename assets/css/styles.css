@@ -432,3 +432,5 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 @media (max-width:640px){.fm-news-card{flex-basis:84%}}
 .fm-root h2[data-i18n="newsTitle"]{font-weight:400 !important}
 .fm-root[data-theme="light"] h2[data-i18n="newsTitle"]{color:#3A342D}
+/* While the carousel drifts on its own, snapping is off so the motion stays smooth. */
+.fm-news-track.is-auto{scroll-snap-type:none}

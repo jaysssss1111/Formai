@@ -734,6 +734,60 @@
     window.addEventListener('resize', updateNewsButtons);
   }
 
+  /* Slow autoscroll: drifts sideways at ~18 px/s, waits at the end and glides back.
+     Pauses where it is while the visitor hovers, touches, focuses or uses the arrows,
+     while the section is off screen or the tab is hidden, and never runs with paused
+     or reduced motion (card snapping is off while it drifts, so pausing never jumps). */
+  (function () {
+    if (!newsTrack) return;
+    var SPEED = 18, held = false, visible = false, resumeAt = 0, last = 0, pos = 0, waitUntil = 0;
+    function canRun() {
+      return visible && !held && !document.hidden && !state.paused && !reducedMotion &&
+        Date.now() >= resumeAt && newsTrack.scrollWidth > newsTrack.clientWidth + 4;
+    }
+    function hold(ms) { resumeAt = Date.now() + ms; }
+    function tick(now) {
+      var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+      last = now;
+      if (canRun()) {
+        var max = newsTrack.scrollWidth - newsTrack.clientWidth;
+        if (!newsTrack.classList.contains('is-auto')) { newsTrack.classList.add('is-auto'); pos = newsTrack.scrollLeft; }
+        if (Date.now() < waitUntil) {
+          // resting at an end
+        } else if (pos >= max - 1) {
+          waitUntil = Date.now() + 2500;
+          setTimeout(function () {
+            if (!canRun()) return;
+            newsTrack.scrollTo({ left: 0, behavior: 'smooth' });
+            pos = 0; waitUntil = Date.now() + 2500;
+          }, 2500);
+        } else {
+          pos = Math.min(max, pos + SPEED * dt);
+          newsTrack.scrollLeft = pos;
+        }
+      } else if (newsTrack.classList.contains('is-auto') && (state.paused || reducedMotion)) {
+        // Motion is off: give the visitor card snapping back.
+        newsTrack.classList.remove('is-auto');
+      }
+      requestAnimationFrame(tick);
+    }
+    ['pointerenter', 'focusin', 'touchstart'].forEach(function (e) {
+      newsTrack.addEventListener(e, function () { held = true; }, { passive: true });
+    });
+    ['pointerleave', 'focusout'].forEach(function (e) {
+      newsTrack.addEventListener(e, function () { held = false; hold(1500); pos = newsTrack.scrollLeft; });
+    });
+    newsTrack.addEventListener('touchend', function () { held = false; hold(5000); pos = newsTrack.scrollLeft; }, { passive: true });
+    newsTrack.addEventListener('wheel', function () { hold(5000); pos = newsTrack.scrollLeft; }, { passive: true });
+    document.addEventListener('click', function (ev) {
+      if (ev.target.closest && ev.target.closest('[data-news]')) { hold(6000); setTimeout(function () { pos = newsTrack.scrollLeft; }, 700); }
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) pos = newsTrack.scrollLeft; }, { threshold: 0.3 }).observe(newsTrack);
+    } else { visible = true; }
+    requestAnimationFrame(tick);
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
