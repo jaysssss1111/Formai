@@ -513,3 +513,7 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 @keyframes fm-tools-run{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 .fm-motion .fm-tools-track{animation:fm-tools-run 32s linear infinite}
 .fm-tools-window:hover .fm-tools-track{animation-play-state:paused}
+
+/* Services artwork labels: the drawings now scale to fit (meet) so nothing is
+   cropped; on phones the labels step up so they stay readable after scaling. */
+@media (max-width:640px){#services .fm-art text[style*="font-size: 10px"]{font-size:13px !important}}
