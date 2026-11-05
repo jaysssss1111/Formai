@@ -1423,20 +1423,6 @@
   renderLive();
   setInterval(renderLive, 30000);
 
-  /* ---------- Hero: the phone tile strip ---------- */
-  (function () {
-    // Copy each artwork tile into its own small picture for the phone strip.
-    var track = $('#fm-hero-strip .fm-hero-strip-track'), tiles = $$('.fm-hero-art .fm-hx-tile > g[transform]');
-    if (!track || !tiles.length) return;
-    var order = [0, 1, 2, 3, 4, 5];
-    var html = tiles.map(function (g, k) {
-      return '<button type="button" class="fm-hs-tile" data-action="heroService" data-i="' + order[k] + '" data-i18n-aria-label="heroTiles.' + order[k] + '">' +
-        '<svg viewBox="0 0 144 144" aria-hidden="true" focusable="false">' + g.innerHTML + '</svg>' +
-        '<span data-i18n="s' + (order[k] + 1) + '"></span></button>';
-    }).join('');
-    track.innerHTML = '<div class="fm-hs-set">' + html + '</div><div class="fm-hs-set" aria-hidden="true">' + html.replace(/<button /g, '<button tabindex="-1" ') + '</div>';
-    applyText();
-  })();
 
   /* ---------- Who we work with: a picker of three kinds of team ---------- */
   function pickSeg(k, focus) {

@@ -1050,7 +1050,6 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-hero-trust a:hover{border-bottom-color:var(--ink)}
 .fm-hero-strip{display:none}
 @media (max-width:640px){
-  .fm-hero-artcol{display:none !important}
   .fm-hero-strip{display:block;width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
   .fm-hero-strip-track{display:flex;width:max-content}
   .fm-hs-set{display:flex;gap:10px;padding-right:10px}
@@ -1253,3 +1252,8 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-social{width:48px;height:48px}
 .fm-social svg{width:30px !important;height:30px !important}
 @media (max-width:640px){.fm-social{width:52px;height:52px}.fm-social svg{width:32px !important;height:32px !important}}
+
+/* Hero art: the nine frames always stay in place (no fading in and out), on
+   phones too; the small animations inside the tiles keep running. */
+.fm-motion .fm-hero-art .fm-hx-tile{animation:none !important;opacity:1 !important;transform:none !important}
+@media (max-width:640px){.fm-hero-artcol{display:flex !important;width:100%}.fm-hero-artwrap{max-width:100% !important}}
