@@ -615,12 +615,54 @@
 
   function capFirst(v) { v = String(v); return v.charAt(0).toUpperCase() + v.slice(1); }
 
+  // The visitor's own time zone; local times are shown only when it differs from Helsinki.
+  var VIS_TZ = (function () { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } })();
+  // The real moment of a Helsinki date (YYYY-MM-DD) and minute of the day.
+  function helInstant(date, min) {
+    var p = date.split('-').map(Number), guess = Date.UTC(p[0], p[1] - 1, p[2], Math.floor(min / 60), min % 60);
+    try {
+      var parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Helsinki', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date(guess));
+      var g = function (ty) { return Number((parts.find(function (x) { return x.type === ty; }) || {}).value); };
+      var shown = Date.UTC(g('year'), g('month') - 1, g('day'), g('hour') % 24, g('minute'));
+      return guess - (shown - guess);
+    } catch (e) { return guess - 2 * 3600000; }
+  }
+  // "18:00" (plus the weekday if the date differs) in the visitor's zone, or '' when it is Helsinki time anyway.
+  function localTime(date, min, withEnd) {
+    if (!VIS_TZ || VIS_TZ === 'Europe/Helsinki') return '';
+    var at = helInstant(date, min), en = state.lang !== 'fi', loc = en ? 'en-GB' : 'fi-FI';
+    try {
+      var f = function (ms, o) { return new Intl.DateTimeFormat(loc, Object.assign({ timeZone: VIS_TZ }, o)).format(new Date(ms)); };
+      var hm = { hour: '2-digit', minute: '2-digit', hour12: false };
+      var a = f(at, hm), hel = new Intl.DateTimeFormat(loc, Object.assign({ timeZone: 'Europe/Helsinki' }, hm)).format(new Date(at));
+      if (a === hel) return '';
+      var dayL = f(at, { year: 'numeric', month: '2-digit', day: '2-digit' }), dayH = new Intl.DateTimeFormat(loc, { timeZone: 'Europe/Helsinki', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(at));
+      return (dayL !== dayH ? f(at, { weekday: 'short' }) + ' ' : '') + a + (withEnd ? '–' + f(at + 1800000, hm) : '');
+    } catch (e) { return ''; }
+  }
+  function tzCity() { return VIS_TZ ? VIS_TZ.split('/').pop().replace(/_/g, ' ') : ''; }
+
   function bkSummary(M) {
     var b = state.bk;
     if (!b.date || !b.slot) return '';
     var ms = Date.parse(b.date + 'T00:00:00Z');
     var min = Number(b.slot);
     return M.longDate(ms) + ', ' + M.slotRange(min) + ' (' + M.B.tzNote + ')';
+  }
+  // A calendar file for the requested time, marked as to be confirmed.
+  function icsHref(date, min) {
+    var B = t().bk, start = helInstant(date, min), end = start + 1800000;
+    var z = function (ms) { return new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
+    var e = function (v) { return String(v).replace(/\\/g, '\\\\').replace(/[,;]/g, function (c) { return '\\' + c; }).replace(/\n/g, '\\n'); };
+    var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//formai//booking//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+      'UID:' + date + '-' + min + '-' + Date.now() + '@formai', 'DTSTAMP:' + z(Date.now()), 'DTSTART:' + z(start), 'DTEND:' + z(end),
+      'SUMMARY:' + e(B.calTitle), 'DESCRIPTION:' + e(B.calDesc), 'STATUS:TENTATIVE', 'TRANSP:OPAQUE', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    return 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+  }
+  function bkLocalLine(M) {
+    var b = state.bk; if (!b.date || !b.slot) return '';
+    var l = localTime(b.date, Number(b.slot), true);
+    return l ? l + ' ' + M.B.yourTime + ' (' + tzCity() + ')' : '';
   }
 
   var bkNarrow = window.matchMedia('(max-width: 780px)');
@@ -666,7 +708,8 @@
         var sel = b.date === p.date && b.slot === String(p.min);
         return '<button type="button" class="fm-bk-pick' + (sel ? ' is-sel' : '') + '" data-action="quickSlot" data-date="' + p.date + '" data-slot="' + p.min + '" aria-pressed="' + sel + '"' +
           ' aria-label="' + esc(capFirst(M.longDate(p.ms)) + ', ' + M.slotRange(p.min) + ' (' + B.tzNote + ')') + '">' +
-          '<span class="fm-bk-pick-day">' + esc(day) + '</span><span class="fm-bk-pick-time">' + esc(M.hhmm(p.min)) + '</span>' + ICON_ARROW + '</button>';
+          '<span class="fm-bk-pick-day">' + esc(day) + '</span><span class="fm-bk-pick-time">' + esc(M.hhmm(p.min)) + '</span>' +
+          (localTime(p.date, p.min) ? '<span class="fm-bk-local">' + esc(localTime(p.date, p.min) + ' ' + B.yourTime) + '</span>' : '') + ICON_ARROW + '</button>';
       }).join('') + '</div>';
   }
   function renderStrip(M) {
@@ -756,16 +799,17 @@
       html = '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(B.slotsFor) + '</span>' +
         '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(capFirst(M.longDate(ms))) + '</h3></div>' +
         (b.takenNotice ? '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(B.takenNotice) + '</div>' : '') +
+        (localTime(b.date, 11 * 60) ? '<span class="fm-bk-tzline">' + esc(B.tzNote + ' · ' + B.yourTime + ': ' + tzCity()) + '</span>' : '') +
         '<div role="group" aria-label="' + esc(B.slotsFor) + '" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">' +
         M.freeSlots(ms).map(function (m) {
           var id = String(m), sel = id === b.slot;
           if (M.isTaken(ms, m)) {
             return '<button type="button" class="fm-slot is-taken" disabled aria-label="' + esc(M.slotRange(m) + ', ' + B.taken) + '">' + esc(M.hhmm(m)) + '</button>';
           }
-          return '<button type="button" class="fm-slot' + (sel ? ' is-sel' : '') + '" aria-pressed="' + sel + '" aria-label="' + esc(M.slotRange(m)) + '" data-action="pickSlot" data-slot="' + id + '">' + esc(M.hhmm(m)) + '</button>';
+          return '<button type="button" class="fm-slot' + (sel ? ' is-sel' : '') + '" aria-pressed="' + sel + '" aria-label="' + esc(M.slotRange(m)) + '" data-action="pickSlot" data-slot="' + id + '">' + esc(M.hhmm(m)) + (localTime(b.date, m) ? '<span class="fm-slot-local">' + esc(localTime(b.date, m)) + '</span>' : '') + '</button>';
         }).join('') + '</div>' +
         '<div class="fm-bk-foot" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: auto;">' +
-        '<span aria-live="polite" style="font-size: 15px; line-height: 1.4; font-weight: 400;">' + esc(b.slot && selMin != null ? M.slotRange(selMin) : B.noneYet) + '</span>' +
+        '<span aria-live="polite" style="font-size: 15px; line-height: 1.4; font-weight: 400;">' + esc(b.slot && selMin != null ? M.slotRange(selMin) : B.noneYet) + (b.slot && bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</span>' +
         '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="toDetails"' + (b.slot ? '' : ' disabled') + ' style="flex: none;">' + esc(B.cont) + ' ' + ICON_ARROW + '</button></div>';
     } else if (step === 'details') {
       var f = b.data;
@@ -773,20 +817,28 @@
       var eEmail = b.tried && !EMAIL_RE.test(String(f.email).trim());
       html = '<button type="button" class="fm-link fm-textbtn" data-action="bkBack" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="margin-right: 8px;"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' + esc(B.back) + '</button>' +
         '<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface);"><span style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">' + esc(B.selected) + '</span>' +
-        '<span style="font-size: 16px; line-height: 1.4; font-weight: 400;">' + esc(bkSummary(M)) + '</span></div>' +
+        '<span style="font-size: 16px; line-height: 1.4; font-weight: 400;">' + esc(bkSummary(M)) + '</span>' + (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</div>' +
         (eName || eEmail ? errorSummary() : '') + (b.sendError ? sendErrorBox() : '') +
         '<form id="fm-bk-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
         field('fm-bk-name', cf.name, { key: 'name', required: true, ac: 'name', value: f.name, err: eName ? cf.errName : '' }) +
         field('fm-bk-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: f.email, err: eEmail ? cf.errEmail : '' }) +
-        field('fm-bk-topic', B.topic, { key: 'topic', textarea: true, rows: 3, value: f.topic, style: 'min-height: 96px;' }) +
+        '<fieldset class="fm-bk-topics"><legend class="fm-legend">' + esc(B.topic) + ' <span style="color: var(--muted); font-weight: 300;">(' + esc(cf.optional) + ')</span></legend>' +
+        '<span class="fm-bk-topics-hint">' + esc(B.topicChipsLabel) + '</span><div>' + B.topicChips.map(function (x, k) {
+          var on = !!(b.topics || [])[k];
+          return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="bkTopic" data-i="' + k + '">' + esc(x) + '</button>';
+        }).join('') + '</div></fieldset>' +
+        field('fm-bk-topic', cf.message, { key: 'topic', textarea: true, rows: 3, value: f.topic, style: 'min-height: 96px;' }) +
         privacyLine() +
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;"' + (b.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(B.confirm, b.sending) + '</button></form>';
     } else {
       html = '<div role="status" style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">' + EYE_DRAW +
         '<h3 style="margin: 0; font-size: clamp(32px, 4vw, 44px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(B.doneTitle) + '</h3>' +
         '<span style="font-size: 18px; line-height: 1.4; font-weight: 400;">' + esc(b.doneSummary) + '</span>' +
+        (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') +
         '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.doneText) + '</p>' +
-        '<button type="button" class="fm-btn fm-ck-btn" data-action="bkAgain" style="flex: none;">' + esc(B.again) + '</button></div>';
+        '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + (b.date && b.slot ? '<a class="fm-btn fm-ck-btn fm-ck-primary" download="formai-call.ics" href="' + icsHref(b.date, Number(b.slot)) + '" style="flex: none;">' + esc(B.addCal) + ' ' + ICON_ARROW + '</a>' : '') +
+        '<button type="button" class="fm-btn fm-ck-btn" data-action="bkAgain" style="flex: none;">' + esc(B.again) + '</button></div>' +
+        '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.changeNote) + '</p></div>';
     }
     $('#fm-bk-panel').innerHTML = html;
     renderQuick();
@@ -808,7 +860,7 @@
       b.doneSummary = summary;
       b.step = 'done'; b.tried = false; b.sending = false; b.sendError = false;
       b.data = { name: '', email: '', company: '', topic: '' };
-      b.interests = [];
+      b.interests = []; b.topics = [];
       renderPanel();
     };
     if (isBot($('#fm-bk-form'))) { done(); return; }
@@ -819,6 +871,8 @@
       name: String(f.name).trim(), email: String(f.email).trim(), company: String(f.company).trim(),
       interests: selectedInterests(b.interests).join(', '),
       topic: String(f.topic).trim(),
+      topics: t().bk.topicChips.filter(function (_, k) { return (b.topics || [])[k]; }).join(', '),
+      visitor_time: bkLocalLine(M), visitor_timezone: VIS_TZ,
       language: state.lang
     };
     var date = b.date, time = key24(Number(b.slot)), claim = date + ' ' + time;
@@ -1377,6 +1431,11 @@
       bkReveal();
     },
     bkBack: function () { state.bk.step = 'slots'; renderPanel(); },
+    bkTopic: function (el) {
+      var b = state.bk, k = Number(el.getAttribute('data-i'));
+      b.topics = b.topics || []; b.topics[k] = !b.topics[k];
+      el.classList.toggle('is-on', b.topics[k]); el.setAttribute('aria-pressed', String(b.topics[k]));
+    },
     bkAgain: function () { var b = state.bk; b.step = ''; b.date = ''; b.slot = ''; b.doneSummary = ''; renderBooking(); }
   };
 
