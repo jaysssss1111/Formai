@@ -696,20 +696,7 @@
     if (!news || !news.length) { sec.hidden = true; return; }
     sec.hidden = false;
     track.innerHTML = window.FM_NEWS_UI.cards(news, t(), state.lang);
-    updateNewsButtons();
-  }
-  function updateNewsButtons() {
-    var track = $('#fm-news-track'); if (!track) return;
-    var max = track.scrollWidth - track.clientWidth - 2;
-    var prev = $('[data-news="prev"]'), next = $('[data-news="next"]');
-    if (prev) prev.disabled = track.scrollLeft <= 2;
-    if (next) next.disabled = track.scrollLeft >= max;
-  }
-  function scrollNews(dir) {
-    var track = $('#fm-news-track'); if (!track) return;
-    var card = track.querySelector('.fm-news-card');
-    var step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
-    track.scrollBy({ left: dir * step, behavior: reducedMotion ? 'auto' : 'smooth' });
+    carouselButtons(track);
   }
   function loadNews() {
     if (news) { renderNews(); return; }
@@ -719,74 +706,94 @@
       .then(function (list) { news = Array.isArray(list) ? list : []; renderNews(); })
       .catch(function () {});
   }
+  /* ---------- Sideways carousels (Work, AI news) ----------
+     Each track scrolls sideways with snap points; buttons marked
+     data-carousel="prev|next" data-target="<track id>" step one card, and the
+     arrow keys work when the track has focus. Every track also drifts slowly on
+     its own (~18 px/s), rests at the end and glides back to the start. It stops
+     where it is while the visitor hovers, touches or focuses it, pauses a few
+     seconds after the buttons, wheel or a swipe, and never runs while off screen,
+     in a hidden tab, with paused animations or with reduced motion. */
+  function carouselButtons(track) {
+    if (!track) return;
+    var max = track.scrollWidth - track.clientWidth - 2;
+    $$('[data-carousel][data-target="' + track.id + '"]').forEach(function (b) {
+      b.disabled = b.getAttribute('data-carousel') === 'prev' ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+    });
+  }
+  function carouselStep(track, dir) {
+    if (!track) return;
+    var card = track.firstElementChild;
+    var step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+    track.scrollBy({ left: dir * step, behavior: reducedMotion ? 'auto' : 'smooth' });
+  }
   document.addEventListener('click', function (ev) {
-    var b = ev.target.closest && ev.target.closest('[data-news]');
-    if (b && !b.disabled) scrollNews(b.getAttribute('data-news') === 'next' ? 1 : -1);
+    var b = ev.target.closest && ev.target.closest('[data-carousel]');
+    if (b && !b.disabled) carouselStep(document.getElementById(b.getAttribute('data-target')), b.getAttribute('data-carousel') === 'next' ? 1 : -1);
   });
   document.addEventListener('keydown', function (ev) {
-    if (ev.target && ev.target.id === 'fm-news-track' && (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft')) {
-      ev.preventDefault(); scrollNews(ev.key === 'ArrowRight' ? 1 : -1);
+    var tr = ev.target;
+    if (tr && tr.classList && tr.classList.contains('fm-carousel') && (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft')) {
+      ev.preventDefault(); carouselStep(tr, ev.key === 'ArrowRight' ? 1 : -1);
     }
   });
-  var newsTrack = $('#fm-news-track');
-  if (newsTrack) {
-    newsTrack.addEventListener('scroll', function () { window.requestAnimationFrame(updateNewsButtons); }, { passive: true });
-    window.addEventListener('resize', updateNewsButtons);
-  }
 
-  /* Slow autoscroll: drifts sideways at ~18 px/s, waits at the end and glides back.
-     Pauses where it is while the visitor hovers, touches, focuses or uses the arrows,
-     while the section is off screen or the tab is hidden, and never runs with paused
-     or reduced motion (card snapping is off while it drifts, so pausing never jumps). */
-  (function () {
-    if (!newsTrack) return;
+  function autoDrift(track) {
     var SPEED = 18, held = false, visible = false, resumeAt = 0, last = 0, pos = 0, waitUntil = 0;
     function canRun() {
       return visible && !held && !document.hidden && !state.paused && !reducedMotion &&
-        Date.now() >= resumeAt && newsTrack.scrollWidth > newsTrack.clientWidth + 4;
+        Date.now() >= resumeAt && track.scrollWidth > track.clientWidth + 4;
     }
     function hold(ms) { resumeAt = Date.now() + ms; }
     function tick(now) {
       var dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
       last = now;
       if (canRun()) {
-        var max = newsTrack.scrollWidth - newsTrack.clientWidth;
-        if (!newsTrack.classList.contains('is-auto')) { newsTrack.classList.add('is-auto'); pos = newsTrack.scrollLeft; }
+        var max = track.scrollWidth - track.clientWidth;
+        if (!track.classList.contains('is-auto')) { track.classList.add('is-auto'); pos = track.scrollLeft; }
         if (Date.now() < waitUntil) {
           // resting at an end
         } else if (pos >= max - 1) {
           waitUntil = Date.now() + 2500;
           setTimeout(function () {
             if (!canRun()) return;
-            newsTrack.scrollTo({ left: 0, behavior: 'smooth' });
+            track.scrollTo({ left: 0, behavior: 'smooth' });
             pos = 0; waitUntil = Date.now() + 2500;
           }, 2500);
         } else {
           pos = Math.min(max, pos + SPEED * dt);
-          newsTrack.scrollLeft = pos;
+          track.scrollLeft = pos;
         }
-      } else if (newsTrack.classList.contains('is-auto') && (state.paused || reducedMotion)) {
+      } else if (track.classList.contains('is-auto') && (state.paused || reducedMotion)) {
         // Motion is off: give the visitor card snapping back.
-        newsTrack.classList.remove('is-auto');
+        track.classList.remove('is-auto');
       }
       requestAnimationFrame(tick);
     }
     ['pointerenter', 'focusin', 'touchstart'].forEach(function (e) {
-      newsTrack.addEventListener(e, function () { held = true; }, { passive: true });
+      track.addEventListener(e, function () { held = true; }, { passive: true });
     });
     ['pointerleave', 'focusout'].forEach(function (e) {
-      newsTrack.addEventListener(e, function () { held = false; hold(1500); pos = newsTrack.scrollLeft; });
+      track.addEventListener(e, function () { held = false; hold(1500); pos = track.scrollLeft; });
     });
-    newsTrack.addEventListener('touchend', function () { held = false; hold(5000); pos = newsTrack.scrollLeft; }, { passive: true });
-    newsTrack.addEventListener('wheel', function () { hold(5000); pos = newsTrack.scrollLeft; }, { passive: true });
+    track.addEventListener('touchend', function () { held = false; hold(5000); pos = track.scrollLeft; }, { passive: true });
+    track.addEventListener('wheel', function () { hold(5000); pos = track.scrollLeft; }, { passive: true });
     document.addEventListener('click', function (ev) {
-      if (ev.target.closest && ev.target.closest('[data-news]')) { hold(6000); setTimeout(function () { pos = newsTrack.scrollLeft; }, 700); }
+      var b = ev.target.closest && ev.target.closest('[data-carousel]');
+      if (b && b.getAttribute('data-target') === track.id) { hold(6000); setTimeout(function () { pos = track.scrollLeft; }, 700); }
     });
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) pos = newsTrack.scrollLeft; }, { threshold: 0.3 }).observe(newsTrack);
+      new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) pos = track.scrollLeft; }, { threshold: 0.3 }).observe(track);
     } else { visible = true; }
     requestAnimationFrame(tick);
-  })();
+  }
+
+  $$('.fm-carousel').forEach(function (track) {
+    track.addEventListener('scroll', function () { window.requestAnimationFrame(function () { carouselButtons(track); }); }, { passive: true });
+    window.addEventListener('resize', function () { carouselButtons(track); });
+    carouselButtons(track);
+    autoDrift(track);
+  });
 
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {

@@ -95,7 +95,7 @@ const T = {
       a7: 'Most brand, web and automation sprints take from a few days to a few weeks, depending on the scope. You get a fixed timeline in the offer before anything starts.'
     },
     navWork: 'Work',
-    workLabel: 'Work', workTitle: 'Concept cases',
+    workLabel: 'Work', workTitle: 'Concept cases', workPrev: 'Previous case', workNext: 'Next case',
     workIntro: 'Concept projects that show how we approach a brief: the problem, the plan and what you would get. Client cases are added here as they launch.',
     caseTag: 'Concept', caseProblem: 'Problem', caseApproach: 'Approach', caseDeliver: 'You get',
     cases: [
@@ -211,7 +211,7 @@ const T = {
       a7: 'Useimmat brändi-, verkko- ja automaatiosprintit kestävät muutamasta päivästä muutamaan viikkoon laajuudesta riippuen. Saatte tarjouksessa kiinteän aikataulun ennen kuin mitään aloitetaan.'
     },
     navWork: 'Työt',
-    workLabel: 'Työt', workTitle: 'Konseptitapaukset',
+    workLabel: 'Työt', workTitle: 'Konseptitapaukset', workPrev: 'Edellinen tapaus', workNext: 'Seuraava tapaus',
     workIntro: 'Konseptiprojekteja, jotka näyttävät, miten tartumme toimeksiantoon: ongelma, suunnitelma ja mitä saisit. Asiakastapaukset lisätään tänne, kun ne julkaistaan.',
     caseTag: 'Konsepti', caseProblem: 'Ongelma', caseApproach: 'Ratkaisu', caseDeliver: 'Saat',
     cases: [
