@@ -365,6 +365,7 @@
         var box = el.closest('.fm-step') || el;
         box.style.setProperty('--p', started ? f2(k(t, CH[j], CH[j] + 9)) : 0);
         box.classList.toggle('is-on', started && j === ch);
+        box.classList.toggle('is-done', started && j < ch);
         el.setAttribute('aria-expanded', String(started ? j === ch : j === 0));
         if (started && j === ch) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
       });
