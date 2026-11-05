@@ -795,6 +795,32 @@
     autoDrift(track);
   });
 
+
+  /* ---------- Footer: the eye looks at the pointer; the wordmark rises in ---------- */
+  (function () {
+    var foot = $('.fm-footer'), eye = $('.fm-foot-eye'), pupil = $('.fm-foot-pupil');
+    if (!foot) return;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { if (e[0].isIntersecting) foot.classList.add('is-in'); }, { threshold: 0.2 }).observe(foot);
+    } else { foot.classList.add('is-in'); }
+    if (!eye || !pupil) return;
+    var raf = 0, px = 0, py = 0;
+    document.addEventListener('pointermove', function (ev) {
+      if (state.paused || reducedMotion) return;
+      px = ev.clientX; py = ev.clientY;
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0;
+        var r = eye.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > innerHeight + 200) return;   // only while the footer is near
+        var dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height / 2);
+        var d = Math.sqrt(dx * dx + dy * dy) || 1, k = Math.min(1, d / 240);
+        // Up to 9 units sideways and 5 up/down in the 64-unit eye.
+        pupil.setAttribute('transform', 'translate(' + (dx / d * 9 * k).toFixed(2) + ' ' + (dy / d * 5 * k).toFixed(2) + ')');
+      });
+    }, { passive: true });
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
