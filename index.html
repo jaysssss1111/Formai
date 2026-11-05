@@ -101,10 +101,12 @@
 </div>
 </section>
 
-<!-- TICKER -->
-<div class="fm-marquee" aria-hidden="true" style="width: 100%; border-top: 1px solid var(--line); padding: 28px 0; overflow: hidden;">
-<div class="fm-track" id="fm-ticker" style="display: flex; width: max-content;">
-
+<!-- WHAT WE MAKE: a slow strip of outlined tiles, like "Tools we build with" -->
+<div class="fm-marquee fm-make">
+<div class="fm-make-inner">
+<span class="fm-make-label" data-i18n="makeLabel"></span>
+<div class="fm-make-window"><ul class="fm-make-track" id="fm-ticker" data-i18n-aria-label="makeLabel"></ul><ul class="fm-make-track" id="fm-ticker2" aria-hidden="true"></ul></div>
+<p class="fm-make-cap" id="fm-make-cap" aria-live="polite"></p>
 </div>
 </div>
 

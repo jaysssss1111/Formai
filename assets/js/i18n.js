@@ -171,7 +171,9 @@ const T = {
     newsCtaText: 'Wondering what this means for your business?', newsCtaBtn: 'Get a free audit',
     newsHelp: 'How we help:', newsHelpData: 'your data and AI', newsShare: 'Share', newsCopied: 'Copied, with our take', newsNew: 'New', newsStampNew: ' · {k} new this week',
     newsTopics: { design: 'Design', code: 'Code', agents: 'Agents and automation', regulation: 'Regulation', search: 'Search' },
-    ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
+    ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days'],
+    makeLabel: 'What we make', makeHint: 'Point at one to see what it means.', makeHintTouch: 'Tap one to see the service.',
+    makeTips: ['AI runs through every step of how we work, and a person reviews everything.', '', '', '', '', '', '', '', '', 'Short sprints with working versions from the first days, so you can steer early.']
   },
   fi: {
     langLabel: 'Kieli', loading: 'Ladataan', home: 'formai, etusivu', navLabel: 'Päävalikko', menu: 'Valikko', skip: 'Siirry sisältöön', pause: 'Pysäytä animaatiot', play: 'Käynnistä animaatiot',navServices: 'Palvelut', navMethod: 'Menetelmä', navAudit: 'Auditointi', cta: 'Pyydä maksuton auditointi', cta2: 'Katso mitä teemme',
@@ -343,7 +345,9 @@ const T = {
     newsCtaText: 'Mietitkö, mitä tämä tarkoittaa yrityksellesi?', newsCtaBtn: 'Pyydä maksuton auditointi',
     newsHelp: 'Näin autamme:', newsHelpData: 'tietosi ja tekoäly', newsShare: 'Jaa', newsCopied: 'Kopioitu näkemyksemme kanssa', newsNew: 'Uusi', newsStampNew: ' · {k} uutta tällä viikolla',
     newsTopics: { design: 'Suunnittelu', code: 'Koodi', agents: 'Agentit ja automaatio', regulation: 'Sääntely', search: 'Haku' },
-    ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
+    ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä'],
+    makeLabel: 'Mitä teemme', makeHint: 'Osoita, niin näet, mitä se tarkoittaa.', makeHintTouch: 'Napauta, niin näet palvelun.',
+    makeTips: ['Tekoäly kulkee mukana jokaisessa työvaiheessa, ja ihminen tarkistaa kaiken.', '', '', '', '', '', '', '', '', 'Lyhyitä sprinttejä ja toimivia versioita ensimmäisistä päivistä alkaen, jotta voitte ohjata työtä ajoissa.']
   }
 };
 const LEGAL = {
