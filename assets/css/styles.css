@@ -1224,3 +1224,30 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   .fm-foot-row3{flex-direction:column;align-items:flex-start}
 }
 @media (max-width:640px){.fm-foot-col{gap:8px}.fm-foot-col ul{gap:0}.fm-foot-a{min-height:30px}.fm-foot-row1 .fm-foot-logo{min-height:36px}.fm-footer .fm-foot-nav{gap:0 18px}.fm-footer .fm-foot-nav .fm-textbtn{min-height:36px}}
+
+/* ---------- Footer motion ----------
+   1) Curtain: the page is a layer above the footer; the footer stays put at
+   the bottom of the screen and is uncovered as the page lifts off it. Only
+   where the whole footer fits on screen.
+   2) The four columns rise in one after another.
+   3) Links: a small black diamond slides in front and the link nudges right.
+   5) "Back to top": a diamond flies up before the page scrolls. */
+@media (min-width:641px) and (min-height:640px){
+  .fm-root main{position:relative;z-index:1;background:var(--surface);box-shadow:0 28px 40px -28px rgba(0,0,0,.55)}
+  .fm-footer{position:sticky;bottom:0;z-index:0}
+}
+.fm-motion .fm-foot-map > .fm-foot-col,.fm-motion .fm-foot-row3{opacity:0;transform:translateY(14px);transition:opacity .5s cubic-bezier(.2,.7,.2,1),transform .5s cubic-bezier(.2,.7,.2,1)}
+.fm-motion .fm-footer.is-in .fm-foot-map > .fm-foot-col,.fm-motion .fm-footer.is-in .fm-foot-row3{opacity:1;transform:none}
+.fm-motion .fm-footer.is-in .fm-foot-map > .fm-foot-col:nth-child(2){transition-delay:.08s}
+.fm-motion .fm-footer.is-in .fm-foot-map > .fm-foot-col:nth-child(3){transition-delay:.16s}
+.fm-motion .fm-footer.is-in .fm-foot-map > .fm-foot-col:nth-child(4){transition-delay:.24s}
+.fm-motion .fm-footer.is-in .fm-foot-row3{transition-delay:.32s}
+.fm-foot-a{position:relative;transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+.fm-foot-a::before{content:'';position:absolute;left:-14px;top:50%;width:7px;height:7px;margin-top:-3.5px;background:#000;transform:rotate(45deg) scale(0);transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+.fm-foot-a:hover,.fm-foot-a:focus-visible{transform:translateX(14px);text-decoration:none !important}
+.fm-foot-a:hover::before,.fm-foot-a:focus-visible::before{transform:rotate(45deg) scale(1)}
+.fm-foot-top-link{position:relative}
+.fm-foot-fly{position:absolute;right:2px;top:50%;width:8px;height:8px;margin-top:-4px;background:#000;transform:rotate(45deg);opacity:0;pointer-events:none}
+.fm-foot-top-link.is-go .fm-foot-fly{animation:fm-foot-fly .6s cubic-bezier(.5,0,.2,1) both}
+@keyframes fm-foot-fly{0%{opacity:0;transform:translateY(0) rotate(45deg) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-120px) rotate(225deg) scale(1)}}
+@media (prefers-reduced-motion: reduce){.fm-foot-a:hover,.fm-foot-a:focus-visible{transform:none}}
