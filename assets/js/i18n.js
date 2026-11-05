@@ -79,7 +79,11 @@ const T = {
       sample: 'SAMPLE AUDIT', sampleSite: 'yourshop.com / product page',
       f1: 'Buy button sits below the fold', f1x: 'Move it next to the price',
       f2: 'Nine fields before checkout', f2x: 'Ask for email and card only',
-      f3: 'Hero image loads in 4.2 s', f3x: 'Compress + lazy-load: 0.9 s'
+      f3: 'Hero image loads in 4.2 s', f3x: 'Compress + lazy-load: 0.9 s',
+      showFixed: 'Show it fixed', isFixed: 'Showing the page with all three fixes.', isBefore: 'Showing the page before the fixes.',
+      steps: ['Paste an address.', 'A designer and AI review it.', 'Three fixes in your inbox within 48 h.'],
+      get: 'Each fix comes with a screenshot, the reason and how to fix it. Make the changes yourself if you like. No strings attached.',
+      startPh: 'yourshop.com', startBtn: 'Get my free audit', more: 'Add details (optional)'
     },
     ci: {
       label: 'Write to us', nextTitle: 'What happens next', altTitle: 'Other ways to start',
@@ -223,7 +227,11 @@ const T = {
       sample: 'ESIMERKKIAUDITOINTI', sampleSite: 'kauppasi.fi / tuotesivu',
       f1: 'Ostopainike on taitteen alla', f1x: 'Siirrä se hinnan viereen',
       f2: 'Kassalla yhdeksän kenttää', f2x: 'Kysy vain sähköposti ja kortti',
-      f3: 'Pääkuva latautuu 4,2 s', f3x: 'Pakkaa ja viivästä: 0,9 s'
+      f3: 'Pääkuva latautuu 4,2 s', f3x: 'Pakkaa ja viivästä: 0,9 s',
+      showFixed: 'Näytä korjattuna', isFixed: 'Sivu kaikkine kolmine korjauksineen.', isBefore: 'Sivu ennen korjauksia.',
+      steps: ['Liitä osoite.', 'Suunnittelija ja tekoäly käyvät sen läpi.', 'Kolme korjausta sähköpostiisi 48 tunnissa.'],
+      get: 'Jokaisen korjauksen mukana tulee kuvakaappaus, perustelu ja ohje korjaukseen. Voit tehdä muutokset itse, jos haluat. Ei sitoumuksia.',
+      startPh: 'yrityksesi.fi', startBtn: 'Hae maksuton auditointi', more: 'Lisää tietoja (valinnainen)'
     },
     ci: {
       label: 'Kirjoita meille', nextTitle: 'Mitä seuraavaksi tapahtuu', altTitle: 'Muita tapoja aloittaa',
