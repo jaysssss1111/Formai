@@ -1013,3 +1013,29 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-faq-empty[hidden]{display:none}
 .fm-faq-empty p{margin:0;font-size:18px;line-height:1.4;font-weight:300}
 @media (max-width:640px){.fm-faq-top{display:none}}
+
+/* ---------- Contact: reply expectation, draft note, link, call me, fuller thank-you ---------- */
+.fm-ct-live{display:inline-flex;align-items:center;gap:10px;font-size:15px;line-height:1.4;color:var(--ink)}
+.fm-ct-live:empty{display:none}
+.fm-ct .fm-live-dot{border-color:var(--ink)}
+.fm-ct .fm-live-dot.is-on{background:var(--accent);border-color:var(--accent)}
+.fm-ct .fm-motion .fm-live-dot.is-on::after,.fm-motion .fm-ct .fm-live-dot.is-on::after{border-color:var(--accent)}
+.fm-ct-card .fm-live-dot{border-color:#141210}
+.fm-ct-card .fm-live-dot.is-on{background:#C85A20;border-color:#C85A20}
+.fm-ci-saved{text-transform:none;letter-spacing:0;font-family:'DM Sans',system-ui,sans-serif;font-size:13px}
+.fm-ci-saved[hidden]{display:none}
+.fm-ci-call{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0;border:0;background:transparent;color:var(--ink);cursor:pointer;font:inherit;font-size:15px}
+.fm-ci-box{width:18px;height:18px;border:1.5px solid var(--strong);box-sizing:border-box;position:relative}
+.fm-ci-call[aria-pressed="true"] .fm-ci-box{background:var(--ink);border-color:var(--ink)}
+.fm-ci-call[aria-pressed="true"] .fm-ci-box::after{content:'';position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--surface);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.fm-ci-call:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fm-ci-recap{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-left:2px solid #C85A20;background:var(--surface);width:100%;box-sizing:border-box}
+.fm-ci-recap span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fm-ci-recap p{margin:0;font-size:16px;line-height:1.5}
+.fm-ci-when{margin:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;line-height:1.5;color:var(--ink)}
+.fm-ci-wait{display:flex;flex-direction:column;gap:6px}
+.fm-ci-wait > span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.fm-ci-wait > div{display:flex;flex-wrap:wrap;gap:4px 24px}
+.fm-ct-card .fm-ct-altlink{font-size:16px}
+.fm-ci-when{display:block}
+.fm-ci-when .fm-live-dot{display:inline-block;margin:0 12px 0 2px;vertical-align:1px}
