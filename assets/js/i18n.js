@@ -99,6 +99,8 @@ const T = {
     navWork: 'Work',
     workLabel: 'Work', workTitle: 'Concept cases', workPrev: 'Previous case', workNext: 'Next case',
     workIntro: 'Concept projects that show how we approach a brief: the problem, the plan and what you would get. Client cases are added here as they launch.',
+    caseBefore: 'Before', caseAfter: 'After', caseCompare: 'Before and after: drag or use the arrow keys to compare',
+    caseCta: ['Get a free audit like this', 'Ask about a brand refresh', 'Book a 30-min call'],
     caseTag: 'Concept', caseProblem: 'Problem', caseApproach: 'Approach', caseDeliver: 'You get',
     cases: [
       { kind: 'Web shop', title: 'A Finnish outdoor gear shop', problem: 'Mobile visitors drop off between the product page and the checkout.', approach: 'An audit of the product page, a mobile layout with the buy button beside the price, and a checkout that asks only for what it needs.', deliver: ['Audit', 'Mobile UI', 'Checkout flow'], time: 'Planned sprint: 5 days' },
@@ -218,6 +220,8 @@ const T = {
     navWork: 'Työt',
     workLabel: 'Työt', workTitle: 'Konseptitapaukset', workPrev: 'Edellinen tapaus', workNext: 'Seuraava tapaus',
     workIntro: 'Konseptiprojekteja, jotka näyttävät, miten tartumme toimeksiantoon: ongelma, suunnitelma ja mitä saisit. Asiakastapaukset lisätään tänne, kun ne julkaistaan.',
+    caseBefore: 'Ennen', caseAfter: 'Jälkeen', caseCompare: 'Ennen ja jälkeen: vedä tai vertaa nuolinäppäimillä',
+    caseCta: ['Pyydä vastaava maksuton auditointi', 'Kysy brändin uudistuksesta', 'Varaa 30 minuutin puhelu'],
     caseTag: 'Konsepti', caseProblem: 'Ongelma', caseApproach: 'Ratkaisu', caseDeliver: 'Saat',
     cases: [
       { kind: 'Verkkokauppa', title: 'Suomalainen retkeilyvarustekauppa', problem: 'Mobiilikävijät putoavat pois tuotesivun ja kassan välillä.', approach: 'Tuotesivun auditointi, mobiiliasettelu, jossa ostopainike on hinnan vieressä, ja kassa, joka kysyy vain tarpeellisen.', deliver: ['Auditointi', 'Mobiili-UI', 'Kassapolku'], time: 'Suunniteltu sprintti: 5 päivää' },

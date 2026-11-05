@@ -590,3 +590,37 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-root .fm-orange .fm-svc-ask span{color:inherit !important}
 .fm-orange .fm-svc-ask:hover{background:#C85A20;border-color:#C85A20;color:#000}
 @media (max-width:900px){.fm-orange .fm-svc-panel{box-shadow:4px 4px 0 #000;margin-right:4px}}
+
+/* ---------- Work: before/after sliders, a next step per case, calmer carousel ----------
+   The "after" artwork is clipped to the right of --split; drag the artwork or
+   use the arrow keys on the handle. Horizontal drags on the artwork move the
+   split (touch-action: pan-y), so swiping between cases happens on the text. */
+.fm-ba{position:relative;padding:0;overflow:hidden;cursor:ew-resize;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.fm-ba-layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px 24px 20px;box-sizing:border-box}
+.fm-ba-layer svg{width:100%;height:100%;max-width:440px;display:block}
+.fm-ba-before{filter:saturate(.35)}
+.fm-ba-after{background:var(--art,var(--surface));clip-path:inset(0 0 0 var(--split,50%))}
+.fm-ba-tag{position:absolute;top:12px;font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1;padding:6px 8px;pointer-events:none}
+.fm-ba-tag-b{left:12px;background:var(--raised);color:var(--muted);border:1px solid var(--line)}
+.fm-ba-tag-a{right:12px;background:var(--brand);color:#000}
+.fm-ba-handle{position:absolute;top:0;bottom:0;left:var(--split,50%);width:44px;margin-left:-22px;display:flex;align-items:center;justify-content:center;outline:none}
+.fm-ba-handle::before{content:'';position:absolute;top:0;bottom:0;left:21px;width:2px;background:var(--ink)}
+.fm-ba-knob{position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:var(--ink);color:var(--surface);transition:transform .15s linear}
+.fm-ba:hover .fm-ba-knob,.fm-ba.is-drag .fm-ba-knob{transform:scale(1.08)}
+.fm-ba-handle:focus-visible .fm-ba-knob{outline:2px solid var(--accent);outline-offset:3px}
+.fm-case-foot{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.fm-case-cta{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid var(--ink);border-radius:0;background:var(--ink);color:var(--surface);cursor:pointer;text-decoration:none;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;transition:background-color .18s linear,color .18s linear,border-color .18s linear}
+.fm-case-cta:hover{background:var(--brand);border-color:var(--brand);color:#000}
+.fm-case-cta:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fm-work-count{display:block;line-height:44px;white-space:nowrap;padding:0 8px;font-family:'DM Mono',ui-monospace,monospace;font-size:13px;letter-spacing:.08em;color:var(--muted)}
+.fm-work-count span{color:var(--ink)}
+.fm-work-dots{display:flex;gap:8px;margin-top:-8px}
+.fm-work-dot{display:flex;align-items:center;width:56px;height:44px;padding:0;border:0;background:transparent;cursor:pointer}
+.fm-work-dot span{display:block;width:100%;height:2px;background:var(--line);transition:background-color .2s linear,height .2s linear}
+.fm-work-dot.is-on span{background:var(--brand);height:3px}
+.fm-work-dot:hover span{background:var(--strong)}
+.fm-work-dot.is-on:hover span{background:var(--brand)}
+.fm-work-dot:focus-visible{outline:2px solid var(--accent);outline-offset:-6px}
+.fm-work-track .fm-case:hover{transform:none}
+@media (max-width:640px){.fm-ba-layer{padding:28px 12px 12px}.fm-case-cta{width:100%;justify-content:space-between;letter-spacing:.08em;text-align:left;padding:10px 16px}}
+.fm-case-title{-webkit-hyphens:manual;hyphens:manual}

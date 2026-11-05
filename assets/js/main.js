@@ -792,7 +792,7 @@
     track.addEventListener('scroll', function () { window.requestAnimationFrame(function () { carouselButtons(track); }); }, { passive: true });
     window.addEventListener('resize', function () { carouselButtons(track); });
     carouselButtons(track);
-    autoDrift(track);
+    if (!track.hasAttribute('data-no-drift')) autoDrift(track);
   });
 
 
@@ -881,6 +881,91 @@
     // Going from phone to wide layout with nothing open: show the first service.
     var onChange = function () { if (svcWide.matches && !$('.fm-svc.is-on')) pickService($('.fm-svc'), false); };
     if (svcWide.addEventListener) svcWide.addEventListener('change', onChange); else svcWide.addListener(onChange);
+  })();
+
+  /* ---------- Work: before/after sliders, case counter and dots ----------
+     Drag anywhere on a case's artwork (or use the arrow keys on its handle) to
+     move the split between the old and the new design. The first time a case
+     comes into view the split sweeps once to show it can be moved. */
+  (function () {
+    function setSplit(ba, v) {
+      v = Math.max(0, Math.min(100, v));
+      ba.style.setProperty('--split', v + '%');
+      var h = ba.querySelector('.fm-ba-handle');
+      h.setAttribute('aria-valuenow', String(Math.round(v)));
+      h.setAttribute('aria-valuetext', Math.round(v) + '%');
+      ba._v = v;
+    }
+    $$('.fm-ba').forEach(function (ba) {
+      ba._v = 50;
+      var drag = false;
+      function fromX(x) { var r = ba.getBoundingClientRect(); setSplit(ba, (x - r.left) / r.width * 100); }
+      ba.addEventListener('pointerdown', function (ev) {
+        if (ev.button > 0) return;
+        drag = true; ba._touched = true; ba.classList.add('is-drag');
+        try { ba.setPointerCapture(ev.pointerId); } catch (e) {}
+        fromX(ev.clientX);
+      });
+      ba.addEventListener('pointermove', function (ev) { if (drag) fromX(ev.clientX); });
+      ['pointerup', 'pointercancel'].forEach(function (e) {
+        ba.addEventListener(e, function () { drag = false; ba.classList.remove('is-drag'); });
+      });
+      var h = ba.querySelector('.fm-ba-handle');
+      h.addEventListener('keydown', function (ev) {
+        var step = { ArrowLeft: -5, ArrowDown: -5, ArrowRight: 5, ArrowUp: 5, PageDown: -20, PageUp: 20 }[ev.key];
+        if (ev.key === 'Home') step = -100; else if (ev.key === 'End') step = 100;
+        if (step === undefined) return;
+        ev.preventDefault(); ev.stopPropagation(); ba._touched = true;
+        setSplit(ba, ba._v + step);
+      });
+    });
+    // One sweep (50 -> 22 -> 78 -> 50) the first time each case is in view.
+    function sweep(ba) {
+      if (ba._swept || ba._touched || state.paused || reducedMotion) return;
+      ba._swept = true;
+      var keys = [50, 22, 78, 50], dur = 2200, t0 = 0;
+      function ease(x) { return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; }
+      function frame(now) {
+        if (ba._touched) return;
+        if (!t0) t0 = now;
+        var p = Math.min(1, (now - t0) / dur), seg = Math.min(2, Math.floor(p * 3)), f = ease(p * 3 - seg);
+        setSplit(ba, keys[seg] + (keys[seg + 1] - keys[seg]) * f);
+        if (p < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) setTimeout(function () { if (e.target.getBoundingClientRect().right <= innerWidth + 1) sweep(e.target); }, 400); });
+      }, { threshold: 0.9 });
+      $$('.fm-ba').forEach(function (ba) { io.observe(ba); });
+    }
+
+    // Counter ("01 / 03") and dots follow the card that is in front.
+    var track = $('#fm-work-track'), cur = $('#fm-work-cur');
+    if (!track) return;
+    var cards = $$('.fm-case', track), dots = $$('[data-work-dot]');
+    function current() {
+      var max = track.scrollWidth - track.clientWidth;
+      if (track.scrollLeft >= max - 2) return cards.length - 1;
+      var best = 0, d = Infinity;
+      cards.forEach(function (c, k) { var x = Math.abs(c.offsetLeft - track.offsetLeft - track.scrollLeft); if (x < d) { d = x; best = k; } });
+      return best;
+    }
+    function update() {
+      var k = current();
+      if (cur) cur.textContent = ('0' + (k + 1)).slice(-2);
+      dots.forEach(function (b, j) { b.classList.toggle('is-on', j === k); if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+    }
+    track.addEventListener('scroll', function () { requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update);
+    dots.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var c = cards[Number(b.getAttribute('data-work-dot'))];
+        track.scrollTo({ left: c.offsetLeft - track.offsetLeft, behavior: reducedMotion ? 'auto' : 'smooth' });
+      });
+    });
+    update();
   })();
 
   /* ---------- full re-render (language / theme change) ---------- */
