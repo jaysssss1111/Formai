@@ -1203,6 +1203,39 @@
     }
   })();
 
+  /* ---------- Who we are: tool captions and the Helsinki clock ---------- */
+  function setToolCap(k) {
+    var cap = $('#fm-tools-cap'), tr = t();
+    if (!cap) return;
+    cap.textContent = k == null ? tr.toolsHint : tr.toolNames[k] + ': ' + tr.toolTips[k];
+    cap.classList.toggle('is-on', k != null);
+  }
+  (function () {
+    $$('.fm-tools-main [data-tool]').forEach(function (li) {
+      var k = Number(li.getAttribute('data-tool'));
+      li.addEventListener('pointerenter', function () { setToolCap(k); });
+      li.addEventListener('focus', function () { setToolCap(k); });
+      li.addEventListener('click', function () { setToolCap(k); });
+    });
+    // The copy in the second (decorative) track answers the pointer too.
+    $$('.fm-tools-track[aria-hidden="true"] .fm-tool').forEach(function (li, k) {
+      li.addEventListener('pointerenter', function () { setToolCap(k); });
+    });
+    var win = $('.fm-tools-window');
+    if (win) win.addEventListener('pointerleave', function () { setToolCap(null); });
+  })();
+  function renderLive() {
+    var el = $('#fm-live');
+    if (!el) return;
+    var h = helsinkiNow(), tr = t(), en = state.lang !== 'fi';
+    var wd = new Date(Date.UTC(h.y, h.m - 1, h.d)).getUTCDay(), min = h.h * 60 + h.mi;
+    var on = wd >= 1 && wd <= 5 && min >= 11 * 60 && min < 20 * 60;
+    var time = String(h.h).padStart(2, '0') + (en ? ':' : '.') + String(h.mi).padStart(2, '0');
+    el.innerHTML = '<span class="fm-live-dot' + (on ? ' is-on' : '') + '" aria-hidden="true"></span>' + esc((on ? tr.live.on : tr.live.off).replace('{t}', time));
+  }
+  renderLive();
+  setInterval(renderLive, 30000);
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -1210,6 +1243,8 @@
     renderBanner();
     renderContact();
     renderInline();
+    renderLive();
+    setToolCap(null);
     renderAudit();
     renderDoc();
     renderBooking();

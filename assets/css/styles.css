@@ -866,3 +866,32 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   .fm-au-start-row .fm-input{border-right:1px solid var(--strong)}
   .fm-au-start-row .fm-btn{justify-content:center}
 }
+
+/* ---------- Who we are: the working loop, tool captions, proof links, Helsinki clock ---------- */
+.fm-ab-top{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px 56px;align-items:center}
+.fm-live{display:inline-flex;align-items:center;gap:10px;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#000}
+.fm-live:empty{display:none}
+.fm-live-dot{position:relative;width:8px;height:8px;border:1.5px solid #000;transform:rotate(45deg)}
+.fm-live-dot.is-on{background:#000}
+.fm-motion .fm-live-dot.is-on::after{content:'';position:absolute;inset:-5px;border:1px solid #000;animation:fm-hero-ping 2s cubic-bezier(.2,.7,.2,1) infinite}
+.fm-ab-loop{display:flex;flex-direction:column;gap:12px}
+.fm-loop{width:100%;max-width:460px;height:auto;display:block;overflow:visible}
+.fm-loop-pkt{offset-path:path('M60 150 L230 52 L400 150 L230 248 Z');offset-rotate:0deg;offset-distance:12%}
+.fm-motion .fm-loop-pkt{animation:fm-loop-run 8s linear infinite}
+@keyframes fm-loop-run{from{offset-distance:0%}to{offset-distance:100%}}
+.fm-loop-review rect{transition:fill .2s linear}
+.fm-motion .fm-loop-review{animation:fm-loop-review 8s linear infinite}
+@keyframes fm-loop-review{0%,68%,86%,100%{filter:none}72%,82%{filter:drop-shadow(0 0 0 #000) drop-shadow(4px 4px 0 #EDE6D8)}}
+.fm-root .fm-orange .fm-ab-cap{margin:0;font-size:15px;line-height:1.55;font-weight:400;color:#000 !important;max-width:420px}
+.fm-tools-cap{margin:0;min-height:1.5em;font-size:15px;line-height:1.5;font-weight:400}
+.fm-root .fm-orange .fm-tools-cap{color:#000 !important;opacity:.75}
+.fm-root .fm-orange .fm-tools-cap.is-on{opacity:1}
+.fm-tool[tabindex]{cursor:default}
+.fm-tool[tabindex]:focus-visible{outline:2px solid #000;outline-offset:2px}
+.fm-tool:hover{background:#000;color:#C85A20}
+.fm-root .fm-orange .fm-tool:hover span{color:#C85A20 !important}
+.fm-tools-window:focus-within .fm-tools-track{animation-play-state:paused}
+.fm-pr-link{margin-top:4px;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:40px;color:#000;text-decoration:none;border-bottom:1px solid #000;font-size:15px;font-weight:400}
+.fm-pr-link svg{transition:transform .18s linear}
+.fm-pr-link:hover svg{transform:translateX(3px)}
+@media (max-width:900px){.fm-ab-top{grid-template-columns:1fr}.fm-loop{max-width:400px}}
