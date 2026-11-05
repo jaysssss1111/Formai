@@ -103,6 +103,7 @@ const T = {
       { kind: 'Legacy brand', title: 'A 60-year-old family bakery', problem: 'A trusted name with a dated identity and orders taken only by phone.', approach: 'Refresh the mark without losing its shape, build a small design system, and add online pre-orders that go straight to each bakery.', deliver: ['Identity refresh', 'Design system', 'Order automation'], time: 'Planned sprint: 3 weeks' },
       { kind: 'Startup', title: 'A B2B software company before its seed round', problem: 'A working product without a brand, and a support inbox that takes the founders’ time.', approach: 'Identity and landing page in one sprint, then an AI assistant that answers routine support questions from the product documentation.', deliver: ['Identity', 'Landing page', 'AI assistant'], time: 'Planned sprint: 2 weeks' }
     ],
+    toolsLabel: 'Tools we build with',
     aboutLabel: 'Who we are', aboutTitle: 'A small studio with a large toolset',
     aboutP: 'formai is a design and development studio based in Finland. Designers and developers work side by side with AI agents, so one small team can deliver brand, product, software and automation without handing the work between agencies.',
     aboutFacts: ['Based in Finland', 'English and Finnish', 'People + AI agents'],
@@ -219,6 +220,7 @@ const T = {
       { kind: 'Perinteinen brändi', title: '60-vuotias perheleipomo', problem: 'Luotettu nimi, vanhentunut ilme ja tilaukset vain puhelimitse.', approach: 'Merkin uudistus sen muotoa menettämättä, pieni design-järjestelmä ja verkon ennakkotilaukset suoraan kuhunkin leipomoon.', deliver: ['Ilmeen uudistus', 'Design-järjestelmä', 'Tilausautomaatio'], time: 'Suunniteltu sprintti: 3 viikkoa' },
       { kind: 'Startup', title: 'B2B-ohjelmistoyritys ennen siemenkierrosta', problem: 'Toimiva tuote ilman brändiä ja tukisähköposti, joka vie perustajien ajan.', approach: 'Identiteetti ja laskeutumissivu yhdessä sprintissä, sitten tekoälyavustaja, joka vastaa tavallisiin tukikysymyksiin tuotedokumentaation pohjalta.', deliver: ['Identiteetti', 'Laskeutumissivu', 'Tekoälyavustaja'], time: 'Suunniteltu sprintti: 2 viikkoa' }
     ],
+    toolsLabel: 'Työkalut, joilla rakennamme',
     aboutLabel: 'Keitä olemme', aboutTitle: 'Pieni studio, iso työkalupakki',
     aboutP: 'formai on suomalainen suunnittelu- ja kehitysstudio. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi pieni tiimi pystyy toimittamaan brändin, tuotteen, ohjelmiston ja automaation ilman, että työ siirtyy toimistolta toiselle.',
     aboutFacts: ['Suomesta', 'Suomeksi ja englanniksi', 'Ihmiset + tekoälyagentit'],

@@ -32,6 +32,10 @@ Julkaisuajo kirjoittaa sivun tekstit valmiiksi HTML:ään skriptillä `tools/pre
 
 `.github/workflows/pages.yml` julkaisee sivuston GitHub Pagesiin aina, kun `main`-haaraan pusketaan. Ota käyttöön kerran: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
+## Työkalut-nauha
+
+"Keitä olemme" -osion nauha näyttää työkalut, joilla rakennamme. Anthropicin, Claude Coden, GitHubin ja Vercelin merkit ovat Simple Icons -kirjastosta (CC0). Merkit ovat omistajiensa tavaramerkkejä, ja niitä käytetään vain kertomaan, mitä työkaluja käytämme. OpenAI:lle, Codexille ja Antigravitylle ei ole saatavilla vapaata merkkiä, joten niistä näytetään vain nimi. Nauhaa muokataan tiedostossa `index.html` (luokka `fm-tools`).
+
 ## Tekoälyuutiset
 
 Uutiskaruselli täyttyy tiedostosta `assets/data/news.json`.

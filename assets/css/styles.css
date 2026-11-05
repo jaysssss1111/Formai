@@ -498,3 +498,18 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-root .fm-orange h2,.fm-root .fm-orange h3{text-shadow:none}
 .fm-orange .fm-col:hover{border-top-color:#EDE6D8 !important}
 .fm-orange :focus-visible{outline-color:#000 !important}
+
+/* ---------- Who we are: a slow running strip of the tools we build with ----------
+   Black outlined 44px tiles like the footer's social buttons. Two copies of the
+   row loop seamlessly; hover pauses it; it stands still with paused or reduced
+   motion. Brand marks from Simple Icons (CC0); names stand in where no mark is
+   available. */
+.fm-tools{display:flex;flex-direction:column;gap:16px}
+.fm-tools-label{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#000}
+.fm-tools-window{display:flex;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.fm-tools-track{flex:none;display:flex;gap:12px;margin:0;padding:0 12px 0 0;list-style:none}
+.fm-tool{flex:none;display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 14px;box-sizing:border-box;border:1px solid #000;color:#000;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.fm-tool svg{flex:none;display:block}
+@keyframes fm-tools-run{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.fm-motion .fm-tools-track{animation:fm-tools-run 32s linear infinite}
+.fm-tools-window:hover .fm-tools-track{animation-play-state:paused}
