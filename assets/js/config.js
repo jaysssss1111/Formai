@@ -20,6 +20,16 @@ window.FM_CONFIG = {
     linkedin: '',   // e.g. https://www.linkedin.com/company/formai
     facebook: ''    // e.g. https://www.facebook.com/formai
   },
+  // Who we are: a short note from the founder and the people in the studio.
+  // Both stay hidden on the site until filled in. Photos go in assets/img/
+  // (square, at least 240 x 240 px); leave photo empty to show initials.
+  team: {
+    note: { en: '', fi: '' },   // 3-4 sentences in your own voice, e.g. why you started formai
+    noteBy: '',                 // the name under the note, e.g. 'Jay, founder'
+    people: [
+      // { name: 'First Last', role: { en: 'Brand and interface design', fi: 'Brändi- ja käyttöliittymäsuunnittelu' }, photo: 'assets/img/first.jpg' }
+    ]
+  },
   supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
   supabaseKey: 'sb_publishable_K04nYpPk4CcktUmZktxd0A_pw_bAEnM' // publishable key, safe to publish
 };

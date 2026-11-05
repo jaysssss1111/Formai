@@ -1500,6 +1500,40 @@
     if (to >= 0) { ev.preventDefault(); pickSeg(to, true); }
   });
 
+  /* ---------- Who we are: the clickable loop, the founder's note and the team ---------- */
+  (function () {
+    var wrap = $('.fm-ab-loop'), cap = $('#fm-loop-cap');
+    if (!wrap || !cap) return;
+    var on = '';
+    function show(k) {
+      on = on === k ? '' : k;
+      $$('.fm-loop-btn', wrap).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-loop') === on)); });
+      wrap.classList.toggle('is-held', !!on);
+      wrap.setAttribute('data-step', on);
+      cap.textContent = on ? t().loop.steps[on] : t().loop.cap;
+    }
+    $$('.fm-loop-btn', wrap).forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-loop')); }); });
+    document.addEventListener('fm:lang', function () { var k = on; on = ''; if (k) show(k); });
+  })();
+  function renderTeam() {
+    var host = $('#fm-team'), tr = t(), T = (window.FM_CONFIG || {}).team || {};
+    if (!host) return;
+    var note = T.note && (T.note[state.lang] || T.note.en), people = (T.people || []).filter(function (p) { return p && p.name; });
+    if (!note && !people.length) { host.hidden = true; host.innerHTML = ''; return; }
+    host.hidden = false;
+    var safe = function (u) { return /^(assets\/|https:\/\/)/.test(String(u || '')) ? u : ''; };
+    host.innerHTML = (note ? '<figure class="fm-note"><span class="fm-team-label">' + esc(tr.noteLabel) + '</span><blockquote>' + esc(note) + '</blockquote>' +
+        (T.noteBy ? '<figcaption>' + esc(T.noteBy) + '</figcaption>' : '') + '</figure>' : '') +
+      (people.length ? '<div class="fm-people"><span class="fm-team-label">' + esc(tr.teamLabel) + '</span><ul>' + people.map(function (p) {
+        var role = p.role && (typeof p.role === 'string' ? p.role : (p.role[state.lang] || p.role.en)) || '';
+        var ini = p.name.split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
+        var ph = safe(p.photo);
+        return '<li>' + (ph ? '<img src="' + esc(ph) + '" alt="" width="72" height="72" loading="lazy">' : '<span class="fm-ini" aria-hidden="true">' + esc(ini) + '</span>') +
+          '<span><strong>' + esc(p.name) + '</strong>' + (role ? '<em>' + esc(role) + '</em>' : '') + '</span></li>';
+      }).join('') + '</ul></div>' : '');
+  }
+  renderTeam();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -1509,6 +1543,7 @@
     renderInline();
     renderLive();
     setToolCap(null);
+    renderTeam();
     renderFaqTools();
     renderAudit();
     renderDoc();
