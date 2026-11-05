@@ -1249,3 +1249,7 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-foot-top-link.is-go .fm-foot-fly{animation:fm-foot-fly .6s cubic-bezier(.5,0,.2,1) both}
 @keyframes fm-foot-fly{0%{opacity:0;transform:translateY(0) rotate(45deg) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-120px) rotate(225deg) scale(1)}}
 @media (prefers-reduced-motion: reduce){.fm-foot-a:hover,.fm-foot-a:focus-visible{transform:none}}
+/* Footer social icons: a larger mark inside each frame. */
+.fm-social{width:48px;height:48px}
+.fm-social svg{width:30px !important;height:30px !important}
+@media (max-width:640px){.fm-social{width:52px;height:52px}.fm-social svg{width:32px !important;height:32px !important}}
