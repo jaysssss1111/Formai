@@ -70,7 +70,7 @@
     draft: { prefs: !!(consent && consent.prefs), analytics: !!(consent && consent.analytics), marketing: !!(consent && consent.marketing) },
     dialog: '',
     contactOpen: false,
-    au: { open: false, sent: false, tried: false, sending: false, sendError: false, kind: -1, data: { url: '', email: '', name: '', company: '', note: '' } },
+    au: { open: false, sent: false, tried: false, sending: false, sendError: false, kind: -1, more: false, data: { url: '', email: '', name: '', company: '', note: '' } },
     cf: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
     ci: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', message: '' } },
     bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '', sending: false, sendError: false },
@@ -95,6 +95,10 @@
     $$('[data-i18n-aria-label]').forEach(function (el) {
       var v = get(tr, el.getAttribute('data-i18n-aria-label'));
       if (typeof v === 'string') el.setAttribute('aria-label', v);
+    });
+    $$('[data-i18n-placeholder]').forEach(function (el) {
+      var v = get(tr, el.getAttribute('data-i18n-placeholder'));
+      if (typeof v === 'string') el.setAttribute('placeholder', v);
     });
     $$('[data-list]').forEach(function (el) {
       var list = get(tr, el.getAttribute('data-list')) || [];
@@ -477,9 +481,13 @@
           return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="pickAuditKind" data-i="' + i + '">' + esc(k) + '</button>';
         }).join('') + '</div></fieldset>' +
         field('fm-au-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: a.data.email, err: e.email }) +
+        '<button type="button" class="fm-au-more" data-action="auMore" aria-expanded="' + !!a.more + '" aria-controls="fm-au-extra">' +
+        '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6 H11 M6 1 V11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' + esc(A.more) + '</button>' +
+        '<div id="fm-au-extra" class="fm-au-extra"' + (a.more ? '' : ' hidden') + '>' +
         field('fm-au-name', cf.name, { key: 'name', ac: 'name', value: a.data.name }) +
         field('fm-au-company', cf.company, { key: 'company', ac: 'organization', value: a.data.company }) +
         field('fm-au-note', A.note, { key: 'note', textarea: true, rows: 3, hint: A.noteHint, value: a.data.note, style: 'min-height: 96px;' }) +
+        '</div>' +
         privacyLine() +
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (a.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(A.send, a.sending) + '</button></div></form>';
@@ -494,7 +502,7 @@
     opener = document.activeElement;
     state.au.open = true; state.au.sent = false; state.au.tried = false; state.au.sendError = false;
     renderAudit();
-    var u = $('#fm-au-url'); if (u) u.focus(); else { var d = $('#fm-audit-root .fm-dlg'); if (d) d.focus(); }
+    var u = $(String(state.au.data.url).trim() ? '#fm-au-email' : '#fm-au-url'); if (u) u.focus(); else { var d = $('#fm-audit-root .fm-dlg'); if (d) d.focus(); }
   }
   function closeAudit() {
     state.au.open = false;
@@ -1155,6 +1163,46 @@
     fromHash();
   })();
 
+  /* ---------- Audit: interactive sample ----------
+     Hovering or focusing a fix lights up its marker on the page (and the
+     other way round); "Show it fixed" swaps the page for the fixed one. The
+     first time the card is in view it shows the fixed page once by itself. */
+  (function () {
+    var card = $('#fm-sa');
+    if (!card) return;
+    var toggle = card.querySelector('[data-sa-toggle]'), stateEl = card.querySelector('.fm-sa-state'), touched = false;
+    function hot(n) {
+      if (n) card.setAttribute('data-hot', n); else card.removeAttribute('data-hot');
+      $$('.fm-sa-fix', card).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-fix') === String(n))); });
+    }
+    function setFixed(on) {
+      card.classList.toggle('is-fixed', on);
+      toggle.setAttribute('aria-pressed', String(on));
+      if (stateEl) stateEl.textContent = on ? t().au.isFixed : t().au.isBefore;
+    }
+    $$('.fm-sa-fix', card).forEach(function (b) {
+      var n = b.getAttribute('data-fix');
+      b.addEventListener('pointerenter', function () { hot(n); });
+      b.addEventListener('focus', function () { hot(n); });
+      // Touch screens have no hover: a tap lights the fix up.
+      b.addEventListener('click', function () { touched = true; hot(n); });
+    });
+    $$('.fm-sa-pin', card).forEach(function (g) { g.addEventListener('pointerenter', function () { hot(g.getAttribute('data-fix')); }); });
+    card.addEventListener('pointerleave', function () { hot(''); });
+    card.addEventListener('focusout', function (ev) { if (!card.contains(ev.relatedTarget)) hot(''); });
+    toggle.addEventListener('click', function () { touched = true; setFixed(!card.classList.contains('is-fixed')); });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting) return;
+        io.disconnect();
+        if (state.paused || reducedMotion) return;
+        setTimeout(function () { if (!touched) setFixed(true); }, 1800);
+        setTimeout(function () { if (!touched) setFixed(false); }, 5600);
+      }, { threshold: 0.6 });
+      io.observe(card);
+    }
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -1214,6 +1262,10 @@
       });
     },
     closeContact: closeContact,
+    auMore: function () {
+      state.au.more = !state.au.more; renderAudit();
+      var f = $(state.au.more ? '#fm-au-name' : '#fm-audit-root .fm-au-more'); if (f) f.focus();
+    },
     ciStarter: function (el) {
       // Fill the message box with the starter, or add it on a new line after what is there.
       var C = t().ci, x = C.starters[Number(el.getAttribute('data-i'))], d = state.ci.data;
@@ -1320,6 +1372,13 @@
     else if (ev.target.id === 'fm-ci-form') { ev.preventDefault(); submitInline(); }
     else if (ev.target.id === 'fm-bk-form') { ev.preventDefault(); submitBooking(); }
     else if (ev.target.id === 'fm-au-form') { ev.preventDefault(); submitAudit(); }
+    else if (ev.target.id === 'fm-au-start') {
+      // 1) The one-field start: carry the address into the audit dialog.
+      ev.preventDefault();
+      var v = String(($('#fm-au-start-url') || {}).value || '').trim();
+      if (v) state.au.data.url = v;
+      openAudit();
+    }
   });
 
   document.addEventListener('keydown', function (ev) {
