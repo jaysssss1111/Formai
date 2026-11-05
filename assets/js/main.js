@@ -72,6 +72,7 @@
     contactOpen: false,
     au: { open: false, sent: false, tried: false, sending: false, sendError: false, kind: -1, data: { url: '', email: '', name: '', company: '', note: '' } },
     cf: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
+    ci: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', message: '' } },
     bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '', sending: false, sendError: false },
     ready: false
   };
@@ -324,6 +325,77 @@
       '<button type="button" class="fm-mode" data-action="closeContact" aria-label="' + esc(tr.ck.close) + '" style="' + BTN_SQ + '">' + ICON_CLOSE + '</button></div>' +
       body + '</div></div>';
   }
+  /* ---------- Contact section: the form in the page ----------
+     Name, email and message, with message starters that fill the box. Sends
+     to the same address as the contact dialog. */
+  function ciErrors() {
+    var tr = t().cf, f = state.ci.data;
+    return {
+      name: String(f.name).trim() ? '' : tr.errName,
+      email: EMAIL_RE.test(String(f.email).trim()) ? '' : tr.errEmail,
+      message: String(f.message).trim().length >= 10 ? '' : tr.errMessage
+    };
+  }
+  function renderInline() {
+    var host = $('#fm-ci-root');
+    if (!host) return;
+    var tr = t(), cf = tr.cf, C = tr.ci, c = state.ci;
+    if (c.sent) {
+      host.innerHTML = '<div role="status" class="fm-ci-done" tabindex="-1">' + EYE_DRAW +
+        '<h3 style="margin: 0; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h3>' +
+        '<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.thanksText) + '</p>' +
+        '<button type="button" class="fm-btn fm-ck-btn" data-action="ciAgain" style="flex: none;">' + esc(C.again) + '</button></div>';
+      return;
+    }
+    var e = c.tried ? ciErrors() : { name: '', email: '', message: '' };
+    var hasErr = !!(e.name || e.email || e.message);
+    var msg = String(c.data.message).trim();
+    host.innerHTML =
+      '<h3 class="fm-ci-title">' + esc(C.formTitle) + '</h3>' +
+      (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox() : '') +
+      '<form id="fm-ci-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
+      '<div class="fm-ci-row">' +
+      field('fm-ci-name', cf.name, { key: 'name', required: true, ac: 'name', value: c.data.name, err: e.name }) +
+      field('fm-ci-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: c.data.email, err: e.email }) +
+      '</div>' +
+      '<div class="fm-ci-starters" role="group" aria-label="' + esc(C.startersLabel) + '"><span>' + esc(C.startersLabel) + '</span><div>' +
+      C.starters.map(function (x, k) {
+        var on = msg.indexOf(x) !== -1;
+        return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="ciStarter" data-i="' + k + '">' + esc(x) + '</button>';
+      }).join('') + '</div></div>' +
+      field('fm-ci-message', cf.message, { key: 'message', required: true, textarea: true, rows: 4, hint: cf.messageHint, value: c.data.message, err: e.message }) +
+      privacyLine() +
+      '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
+      '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
+  }
+  function submitInline() {
+    var c = state.ci, e = ciErrors();
+    if (e.name || e.email || e.message) {
+      c.tried = true; renderInline();
+      var first = $('#fm-ci-root [aria-invalid="true"]'); if (first) first.focus();
+      return;
+    }
+    if (c.sending) return;
+    var d = c.data;
+    var done = function () {
+      state.ci = { sent: true, tried: false, sending: false, sendError: false, data: { name: '', email: '', message: '' } };
+      renderInline();
+      var s2 = $('#fm-ci-root .fm-ci-done'); if (s2) s2.focus();
+    };
+    if (isBot($('#fm-ci-form'))) { done(); return; }
+    var payload = {
+      _subject: 'formai: message from ' + String(d.name).trim(),
+      name: String(d.name).trim(), email: String(d.email).trim(),
+      message: String(d.message).trim(),
+      source: 'contact section', language: state.lang
+    };
+    c.sending = true; c.sendError = false; renderInline();
+    postForm((window.FM_CONFIG || {}).contactEndpoint, payload).then(done, function () {
+      c.sending = false; c.sendError = true; renderInline();
+      var a = $('#fm-ci-root [role="alert"]'); if (a) a.scrollIntoView({ block: 'nearest' });
+    });
+  }
+
   function openContact() {
     opener = document.activeElement;
     state.contactOpen = true;
@@ -1072,6 +1144,7 @@
     applyChrome();
     renderBanner();
     renderContact();
+    renderInline();
     renderAudit();
     renderDoc();
     renderBooking();
@@ -1124,6 +1197,15 @@
       });
     },
     closeContact: closeContact,
+    ciStarter: function (el) {
+      // Fill the message box with the starter, or add it on a new line after what is there.
+      var C = t().ci, x = C.starters[Number(el.getAttribute('data-i'))], d = state.ci.data;
+      var cur = String(d.message).trim();
+      if (cur.indexOf(x) === -1) d.message = (!cur || C.starters.indexOf(cur) !== -1) ? x + ' ' : cur + '\n' + x + ' ';
+      renderInline();
+      var m = $('#fm-ci-message'); if (m) { m.focus(); m.setSelectionRange(m.value.length, m.value.length); }
+    },
+    ciAgain: function () { state.ci.sent = false; renderInline(); var n = $('#fm-ci-name'); if (n) n.focus(); },
     pickService: function (el) { pickService(el.closest('.fm-svc'), true); },
     askService: function (el) {
       // Open the contact form with this service already chosen as the interest.
@@ -1196,12 +1278,14 @@
     var el = ev.target, key = el.getAttribute && el.getAttribute('data-field');
     if (!key) return;
     if (el.closest('#fm-cf-form')) state.cf.data[key] = el.value;
+    else if (el.closest('#fm-ci-form')) state.ci.data[key] = el.value;
     else if (el.closest('#fm-bk-form')) state.bk.data[key] = el.value;
     else if (el.closest('#fm-au-form')) state.au.data[key] = el.value;
   });
 
   document.addEventListener('submit', function (ev) {
     if (ev.target.id === 'fm-cf-form') { ev.preventDefault(); submitContact(); }
+    else if (ev.target.id === 'fm-ci-form') { ev.preventDefault(); submitInline(); }
     else if (ev.target.id === 'fm-bk-form') { ev.preventDefault(); submitBooking(); }
     else if (ev.target.id === 'fm-au-form') { ev.preventDefault(); submitAudit(); }
   });
