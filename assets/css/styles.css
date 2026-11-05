@@ -988,3 +988,28 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-news-share.is-done{border-color:var(--brand);color:var(--accent)}
 .fm-news-help:focus-visible,.fm-news-share:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (max-width:640px){.fm-news-row .fm-news-actions{padding-left:100px}.fm-news-card .fm-news-actions{padding:12px 20px 14px}}
+
+/* ---------- FAQ: search, topic chips, open all, most asked ---------- */
+.fm-faq{border-top:0}
+.fm-faq-tools{display:flex;flex-direction:column;gap:14px;padding-bottom:20px;border-bottom:1px solid var(--strong)}
+.fm-faq-search{position:relative;display:flex;align-items:center}
+.fm-faq-search svg{position:absolute;left:14px;color:var(--muted);pointer-events:none}
+.fm-faq-search .fm-input{width:100%;height:50px;padding-left:42px;font-size:16px}
+.fm-faq-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.fm-faq-groups{display:flex;flex-wrap:wrap;gap:8px}
+.fm-faq-chip{text-transform:none;letter-spacing:0;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:38px}
+.fm-faq-chip span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;color:var(--muted);margin-left:4px}
+.fm-faq-chip.is-on span{color:inherit;opacity:.8}
+.fm-faq-all{min-height:38px;padding:0;border:0;border-bottom:1px solid var(--strong);background:transparent;color:var(--ink);cursor:pointer;font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.fm-faq-all[hidden]{display:none}
+.fm-faq-all:hover{border-bottom-color:var(--accent)}
+.fm-faq-all:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fm-faq-count{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fm-faq-item[hidden]{display:none}
+.fm-faq-item summary mark{background:color-mix(in srgb,var(--brand) 28%,transparent);color:inherit;padding:0 1px}
+.fm-faq-item summary > span:first-child{flex:1 1 auto}
+.fm-faq-top{flex:none;margin-left:auto;padding:4px 7px;border:1px solid var(--strong);font-family:'DM Mono',ui-monospace,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);line-height:1}
+.fm-faq-empty{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:24px 0;border-bottom:1px solid var(--line)}
+.fm-faq-empty[hidden]{display:none}
+.fm-faq-empty p{margin:0;font-size:18px;line-height:1.4;font-weight:300}
+@media (max-width:640px){.fm-faq-top{display:none}}
