@@ -12,6 +12,8 @@ assets/js/i18n.js       Kaikki tekstit englanniksi ja suomeksi
 assets/js/main.js       Toiminnallisuus: latausanimaatio, teema, kieli, mobiilivalikko,
                         evästesuostumus, tietosuoja- ja evästeseloste, yhteydenottolomake, ajanvarauskalenteri
 assets/js/film.js       Method-osion animaatio (audit → sprint → ship), tekstit i18n.js:ssä kohdassa `film`
+                        Vaiheiden tekstit: `m1`–`m3` (otsikko), `m1f`–`m3f` (faktarivi), `m1p`–`m3p` (kuvaus),
+                        `m1ai`–`m3ai` ja `m1pe`–`m3pe` (mitä tekoäly / ihmiset tekevät) ja `meCta` (painikkeet)
 assets/fonts/           DM Sans ja DM Mono (omalla palvelimella, ei Google Fontsia)
 assets/logos/           Sanamerkki ja silmämerkki (cream/charcoal)
 brand/                  Alkuperäinen brändiohje (BRAND.md), design-tokenit (tokens.json) ja lähdekomponentti (Main.dc.html)
