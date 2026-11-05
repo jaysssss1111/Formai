@@ -126,6 +126,10 @@ const T = {
       a11: 'Startups, studios and established brands, from founders working alone to teams with their own designers and developers. The sprint is sized to what you need, not to your headcount.'
     },
     faqAct: { cost: 'Start with the free audit', time: 'Book a 30-min call', audit: 'Request the free audit', data: 'Read the privacy notice', after: 'Ask about upkeep' },
+    faqUi: { search: 'Search the questions', searchLabel: 'Search questions', groupsLabel: 'Show questions about', all: 'All',
+      groups: { price: 'Price and time', work: 'Working together', ai: 'AI and data', after: 'After launch' },
+      openAll: 'Open all', closeAll: 'Close all', top: 'Most asked', none: 'No answer for “{q}” yet.', ask: 'Ask us this',
+      count: '{n} questions', count1: '1 question', askPrefix: 'Question: ' },
     faqAskTitle: 'Didn’t find your answer?', faqAskText: 'Ask us directly. We reply by email.', faqAskBtn: 'Ask a question',
     navWork: 'Work',
     workLabel: 'Work', workTitle: 'Concept cases', workPrev: 'Previous case', workNext: 'Next case',
@@ -287,6 +291,10 @@ const T = {
       a11: 'Startupien, studioiden ja vakiintuneiden brändien kanssa, yksin toimivista perustajista tiimeihin, joilla on omat suunnittelijat ja kehittäjät. Sprintti mitoitetaan tarpeen mukaan, ei henkilöstön koon.'
     },
     faqAct: { cost: 'Aloita maksuttomalla auditoinnilla', time: 'Varaa 30 minuutin puhelu', audit: 'Pyydä maksuton auditointi', data: 'Lue tietosuojaseloste', after: 'Kysy ylläpidosta' },
+    faqUi: { search: 'Hae kysymyksistä', searchLabel: 'Hae kysymyksiä', groupsLabel: 'Näytä kysymykset aiheesta', all: 'Kaikki',
+      groups: { price: 'Hinta ja aika', work: 'Yhteistyö', ai: 'Tekoäly ja data', after: 'Julkaisun jälkeen' },
+      openAll: 'Avaa kaikki', closeAll: 'Sulje kaikki', top: 'Kysytyimpiä', none: 'Kysymykseen ”{q}” ei vielä ole vastausta.', ask: 'Kysy meiltä',
+      count: '{n} kysymystä', count1: '1 kysymys', askPrefix: 'Kysymys: ' },
     faqAskTitle: 'Etkö löytänyt vastausta?', faqAskText: 'Kysy meiltä suoraan. Vastaamme sähköpostilla.', faqAskBtn: 'Esitä kysymys',
     navWork: 'Työt',
     workLabel: 'Työt', workTitle: 'Konseptitapaukset', workPrev: 'Edellinen tapaus', workNext: 'Seuraava tapaus',

@@ -1210,6 +1210,106 @@
     update();
   })();
 
+  /* ---------- FAQ: search, topic groups, open all ----------
+     Typing filters the questions (question and answer text) and marks the
+     match in the question; a topic chip narrows the list too. With no match,
+     "Ask us this" carries the visitor's words into the contact form. */
+  var faqState = { q: '', group: '' };
+  var FAQ_STOP = ['do', 'you', 'the', 'and', 'what', 'how', 'does', 'can', 'our', 'your', 'is', 'are', 'we', 'it', 'of', 'to', 'for', 'a', 'an', 'in', 'on', 'mita', 'miten', 'onko', 'voiko', 'te', 'teidan', 'me', 'ja', 'on', 'kuinka', 'paljonko', 'much', 'many', 'any', 'with', 'about', 'would', 'will', 'should', 'there', 'me', 'my', 'if', 'be', 'get', 'sign', 'kanssa', 'jos', 'ole', 'olla'];
+  // Extra search words per question, in both languages (Finnish word endings change).
+  var FAQ_KEYS = {
+    'faq-cost': 'price prices pricing cost costs budget quote offer fee rate hinta hinnat hinnoittelu budjetti maksaa maksu kustannus kulut tarjous',
+    'faq-time': 'time how long duration timeline schedule weeks days deadline fast aika kesto kestää kauanko aikataulu viikko viikot päivä päivät nopeasti',
+    'faq-audit': 'audit free review fixes check auditointi maksuton ilmainen korjaus korjaukset tarkistus',
+    'faq-ownership': 'own owner ownership code files rights ip copyright source omistus omistaa oikeudet tiedostot koodi lähdekoodi',
+    'faq-ai': 'ai artificial intelligence agents chatgpt claude automation tekoäly agentit automaatio',
+    'faq-data': 'data privacy gdpr security confidential personal nda secret tietosuoja tietoturva luottamuksellinen henkilötiedot salassapito',
+    'faq-revisions': 'revisions revision changes feedback rounds edits korjauskierros korjauskierrokset muutos muutokset palaute',
+    'faq-after-launch': 'maintenance support upkeep after launch updates hosting ylläpito tuki päivitys päivitykset julkaisu',
+    'faq-team': 'team tools figma github integrate existing developers designers in-house tiimi työkalut integraatio kehittäjät suunnittelijat',
+    'faq-languages': 'language languages finnish english swedish kieli kielet suomi suomeksi englanti englanniksi',
+    'faq-size': 'size small startup enterprise company companies sme koko pieni yritys yritykset startup pk-yritys'
+  };
+  function faqNorm(v) { return String(v || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function renderFaqTools() {
+    var host = $('#fm-faq-groups'), tr = t(), U = tr.faqUi;
+    if (!host || !U) return;
+    var items = $$('.fm-faq-item[data-group]'), counts = {};
+    items.forEach(function (d) { var g = d.getAttribute('data-group'); counts[g] = (counts[g] || 0) + 1; });
+    var chip = function (g, label, n) {
+      var on = faqState.group === g;
+      return '<button type="button" class="fm-chip fm-faq-chip' + (on ? ' is-on' : '') + '" data-faq-group="' + g + '" aria-pressed="' + on + '">' + esc(label) + ' <span>' + n + '</span></button>';
+    };
+    host.innerHTML = chip('', U.all, items.length) + Object.keys(U.groups).filter(function (g) { return counts[g]; }).map(function (g) { return chip(g, U.groups[g], counts[g]); }).join('');
+    filterFaq();
+  }
+  function filterFaq() {
+    var tr = t(), U = tr.faqUi, q = faqNorm(faqState.q).trim(), shown = 0;
+    if (!U) return;
+    $$('.fm-faq-item[data-group]').forEach(function (d) {
+      var qSpan = d.querySelector('summary [data-i18n^="faq.q"]');
+      var qText = get(tr, qSpan.getAttribute('data-i18n')) || '';
+      var aEl = d.querySelector('[data-i18n^="faq.a"]'), aText = aEl ? get(tr, aEl.getAttribute('data-i18n')) || '' : '';
+      var okG = !faqState.group || d.getAttribute('data-group') === faqState.group;
+      // Every meaningful word of the search must appear somewhere in the question, answer or its search words.
+      var hay = faqNorm(qText + ' ' + aText + ' ' + (FAQ_KEYS[d.id] || ''));
+      var words = q.split(/[^a-z0-9\u00c0-\u024f-]+/).filter(function (w) { return w.length > 1 && FAQ_STOP.indexOf(w) === -1; });
+      // Words match from their start ("own" finds "owns"); a Finnish ending on the search word is
+      // allowed ("koodin" finds "koodi"), and a plural s is dropped ("NDAs" finds "NDA").
+      var toks = hay.split(/[^a-z0-9\u00c0-\u024f]+/).filter(Boolean);
+      var has = function (w) {
+        var ws = w.length > 3 && /s$/.test(w) ? [w, w.slice(0, -1)] : [w];
+        return toks.some(function (tk) {
+          return ws.some(function (x) { return tk.indexOf(x) === 0 || (x.length >= 5 && tk.length >= 4 && x.indexOf(tk) === 0 && x.length - tk.length <= 3); });
+        });
+      };
+      var okQ = !q || (words.length ? words.every(has) : hay.indexOf(q) !== -1);
+      d.hidden = !(okG && okQ);
+      if (!d.hidden) shown++;
+      // Mark the match in the question (accent-insensitive, original letters kept).
+      var at = q ? faqNorm(qText).indexOf(q) : -1;
+      if (at >= 0) qSpan.innerHTML = esc(qText.slice(0, at)) + '<mark>' + esc(qText.slice(at, at + q.length)) + '</mark>' + esc(qText.slice(at + q.length));
+      else qSpan.textContent = qText;
+    });
+    var cnt = $('#fm-faq-count'); if (cnt) cnt.textContent = shown === 1 ? U.count1 : U.count.replace('{n}', shown);
+    var empty = $('#fm-faq-empty'), none = $('#fm-faq-none');
+    if (empty) { empty.hidden = shown > 0; if (none) none.textContent = U.none.replace('{q}', faqState.q.trim()); }
+    var all = $('#fm-faq-all');
+    if (all) {
+      var vis = $$('.fm-faq-item[data-group]').filter(function (d) { return !d.hidden; });
+      var allOpen = vis.length && vis.every(function (d) { return d.open; });
+      all.setAttribute('aria-pressed', String(!!allOpen));
+      all.querySelector('span').textContent = allOpen ? U.closeAll : U.openAll;
+      all.hidden = !vis.length;
+    }
+  }
+  (function () {
+    var input = $('#fm-faq-q');
+    if (!input) return;
+    input.addEventListener('input', function () { faqState.q = input.value; filterFaq(); });
+    document.addEventListener('click', function (ev) {
+      var g = ev.target.closest && ev.target.closest('[data-faq-group]');
+      if (g) { faqState.group = g.getAttribute('data-faq-group'); renderFaqTools(); var again = $('[data-faq-group="' + faqState.group + '"]'); if (again) again.focus(); return; }
+      if (ev.target.closest && ev.target.closest('#fm-faq-all')) {
+        var vis = $$('.fm-faq-item[data-group]').filter(function (d) { return !d.hidden; });
+        var open = !vis.every(function (d) { return d.open; });
+        vis.forEach(function (d) { d.open = open; });
+        filterFaq();
+        return;
+      }
+      if (ev.target.closest && ev.target.closest('[data-faq-ask]')) {
+        // The visitor's question goes into the contact form at the end of the page.
+        state.ci.sent = false;
+        state.ci.data.message = t().faqUi.askPrefix + faqState.q.trim() + '\n';
+        renderInline();
+        var ct = $('#contact'); if (ct) ct.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+        var n = $('#fm-ci-name'); if (n) setTimeout(function () { n.focus({ preventScroll: true }); }, reducedMotion ? 0 : 600);
+      }
+    });
+    $$('.fm-faq-item[data-group]').forEach(function (d) { d.addEventListener('toggle', filterFaq); });
+    renderFaqTools();
+  })();
+
   /* ---------- FAQ: a link per answer ----------
      Opening a question puts its address (#faq-cost etc.) in the URL without
      scrolling, so it can be shared; arriving with such an address opens that
@@ -1316,6 +1416,7 @@
     renderInline();
     renderLive();
     setToolCap(null);
+    renderFaqTools();
     renderAudit();
     renderDoc();
     renderBooking();
