@@ -256,10 +256,15 @@ const LEGAL = {
       legendOpen: 'Free times', legendSel: 'Selected', tzNote: 'Finnish time', unavailable: 'no free times',
       pickDay: 'Select a day in the calendar to see its free times.',
       slotsFor: 'Free times', cont: 'Continue', back: 'Back to times', selected: 'Selected time',
-      topic: 'What would you like to talk about?', confirm: 'Confirm booking',
+      topic: 'What would you like to talk about?', confirm: 'Send booking request',
       taken: 'booked', takenNotice: 'Someone just booked that time. Please pick another one.',
-      noneYet: 'No time selected', doneTitle: 'Booked',
-      doneText: 'We will confirm the booking and send the meeting details by email.', again: 'Book another time'
+      noneYet: 'No time selected', doneTitle: 'Request sent',
+      doneText: 'We will confirm the time by email within one working day and send the meeting link.', again: 'Book another time',
+      quickLabel: 'Next free times', today: 'Today', tomorrow: 'Tomorrow', stripTitle: 'Pick a day',
+      callLabel: 'The call', callTitle: 'Thirty minutes, free',
+      callPoints: ['We look at one screen, page or workflow of yours together.', 'You leave with three concrete next steps, whether or not we work together.', 'No sales pitch, and nothing to prepare.'],
+      callMeta: ['Video call, link sent by email', 'Confirmed by email within one working day'],
+      callPick: 'Pick a day in the calendar, or take one of the next free times above.'
     },
     cf: {
       open: 'Send us a message', label: 'Contact', title: 'Tell us what slows you down',
@@ -336,10 +341,15 @@ const LEGAL = {
       legendOpen: 'Vapaita aikoja', legendSel: 'Valittu', tzNote: 'Suomen aikaa', unavailable: 'ei vapaita aikoja',
       pickDay: 'Valitse kalenterista päivä, niin näet sen vapaat ajat.',
       slotsFor: 'Vapaat ajat', cont: 'Jatka', back: 'Takaisin aikoihin', selected: 'Valittu aika',
-      topic: 'Mistä haluaisit puhua?', confirm: 'Vahvista varaus',
+      topic: 'Mistä haluaisit puhua?', confirm: 'Lähetä varauspyyntö',
       taken: 'varattu', takenNotice: 'Joku ehti juuri varata tämän ajan. Valitse toinen aika.',
-      noneYet: 'Aikaa ei ole valittu', doneTitle: 'Varattu',
-      doneText: 'Vahvistamme varauksen ja lähetämme tapaamisen tiedot sähköpostilla.', again: 'Varaa toinen aika'
+      noneYet: 'Aikaa ei ole valittu', doneTitle: 'Pyyntö lähetetty',
+      doneText: 'Vahvistamme ajan sähköpostilla yhden arkipäivän kuluessa ja lähetämme tapaamislinkin.', again: 'Varaa toinen aika',
+      quickLabel: 'Seuraavat vapaat ajat', today: 'Tänään', tomorrow: 'Huomenna', stripTitle: 'Valitse päivä',
+      callLabel: 'Puhelu', callTitle: 'Puoli tuntia, maksutta',
+      callPoints: ['Katsomme yhdessä yhtä näkymääsi, sivuasi tai työnkulkuasi.', 'Saat kolme konkreettista seuraavaa askelta, teimmepä yhteistyötä tai emme.', 'Ei myyntipuhetta, eikä mitään tarvitse valmistella.'],
+      callMeta: ['Videopuhelu, linkki sähköpostiin', 'Vahvistamme sähköpostilla yhden arkipäivän kuluessa'],
+      callPick: 'Valitse päivä kalenterista tai ota jokin yllä olevista seuraavista vapaista ajoista.'
     },
     cf: {
       open: 'Lähetä meille viesti', label: 'Yhteydenotto', title: 'Kerro, mikä teitä hidastaa',
