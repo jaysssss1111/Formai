@@ -821,6 +821,16 @@
     }, { passive: true });
   })();
 
+  /* ---------- Footer social links from config.js ---------- */
+  (function () {
+    var social = (window.FM_CONFIG || {}).social || {};
+    $$('.fm-social').forEach(function (el) {
+      var url = social[el.getAttribute('data-social')];
+      if (url && /^https:\/\//.test(url)) el.setAttribute('href', url);
+      else { el.removeAttribute('href'); el.setAttribute('aria-disabled', 'true'); }
+    });
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();

@@ -458,7 +458,7 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
    orange. Same in both themes. */
 .fm-footer{position:relative;overflow:hidden;background:#C85A20;color:#000;
   --ink:#000;--muted:#000;--strong:#000;--line:rgba(0,0,0,.28);--accent:#000;--surface:#C85A20;--raised:#C85A20;--on-accent:#C85A20}
-.fm-foot-top{width:100%;max-width:1200px;margin:0 auto;padding:40px 40px 8px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+.fm-foot-top{width:100%;max-width:1200px;margin:0 auto;padding:40px;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
 .fm-foot-id{display:flex;align-items:center;gap:16px}
 .fm-foot-eye{width:56px;height:56px;display:block;overflow:visible}
 .fm-foot-nav{display:flex;flex-wrap:wrap;align-items:center;gap:0 24px}
@@ -468,28 +468,23 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 .fm-footer .fm-pause{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;border:1px solid #000;border-radius:0;background:transparent;color:#000;cursor:pointer;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;transition:background-color .18s linear,color .18s linear}
 .fm-footer .fm-pause:hover{background:#000;color:#C85A20}
 .fm-footer :focus-visible{outline:2px solid #000 !important;outline-offset:2px}
-.fm-foot-mark-wrap{width:100%;max-width:1200px;margin:0 auto;padding:24px 40px 0;box-sizing:border-box;line-height:0}
-.fm-foot-mark{display:block;width:100%;height:auto;margin-bottom:-1.2%}
-.fm-foot-form,.fm-foot-ai{transform-box:fill-box}
-@media (max-width:640px){.fm-foot-top,.fm-foot-mark-wrap{padding-left:20px;padding-right:20px}}
+@media (max-width:640px){.fm-foot-top{padding-left:20px;padding-right:20px}}
 
-/* The wordmark rises out of the footer edge as the footer scrolls into view:
-   "form" first, then "ai". Scroll-driven where supported, otherwise a one-off
-   rise when the footer appears (class set by main.js). */
-@keyframes fm-foot-rise{from{transform:translateY(70%);opacity:.0}to{transform:none;opacity:1}}
-@supports (animation-timeline: view()){
-  /* Finishes once the wordmark is fully on screen, which also works at the very bottom of the page. */
-  .fm-motion .fm-foot-mark-wrap{view-timeline:--fm-foot block}
-  .fm-motion .fm-foot-form{animation:fm-foot-rise linear both;animation-timeline:--fm-foot;animation-range:entry 0% entry 80%}
-  .fm-motion .fm-foot-ai{animation:fm-foot-rise linear both;animation-timeline:--fm-foot;animation-range:entry 20% entry 100%}
-}
-@supports not (animation-timeline: view()){
-  .fm-motion .fm-footer:not(.is-in) .fm-foot-form,.fm-motion .fm-footer:not(.is-in) .fm-foot-ai{transform:translateY(70%);opacity:0}
-  .fm-motion .fm-foot-form,.fm-motion .fm-foot-ai{transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .9s linear}
-  .fm-motion .fm-foot-ai{transition-delay:.15s}
-}
 /* The eye blinks now and then; its pupil follows the pointer (main.js). */
 @keyframes fm-foot-blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
 .fm-foot-eye-lid{transform-box:fill-box;transform-origin:center}
 .fm-motion .fm-foot-eye-lid{animation:fm-foot-blink 6s linear infinite}
 .fm-foot-pupil{transition:transform .12s linear}
+
+/* Footer logo (nav size) and social links: black outlines on the orange. */
+.fm-foot-logo{display:flex;align-items:center;min-height:44px}
+.fm-foot-year{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;color:#000}
+.fm-socials{display:flex;align-items:center;gap:8px}
+.fm-social{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid #000;color:#000;transition:background-color .18s linear,color .18s linear}
+a.fm-social[href]:hover{background:#000;color:#C85A20}
+.fm-social:not([href]){cursor:default}
+/* Footer layout: logo | socials on top, legal links | studio + pause below. */
+.fm-footer .fm-foot-top{display:grid;grid-template-columns:1fr auto;grid-template-areas:"id social" "nav end";align-items:center;gap:28px 32px}
+.fm-foot-id{grid-area:id}.fm-socials{grid-area:social;justify-self:end}.fm-foot-nav{grid-area:nav}.fm-foot-end{grid-area:end;justify-content:flex-end}
+@media (max-width:760px){.fm-footer .fm-foot-top{grid-template-columns:1fr;grid-template-areas:"id" "social" "nav" "end"}.fm-foot-end{justify-content:flex-start}}
+@media (max-width:760px){.fm-socials{justify-self:start}}
