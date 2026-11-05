@@ -357,13 +357,15 @@
         if (j === ch) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       });
     }
-    // The Method step columns above act as the film's chapter menu.
+    // The Method steps beside the film act as its chapter menu.
     var steps = document.querySelector('.fm-method-steps');
     if (steps) {
       steps.classList.toggle('is-live', started);
       Array.prototype.forEach.call(steps.querySelectorAll('[data-method-step]'), function (el, j) {
-        el.style.setProperty('--p', started ? f2(k(t, CH[j], CH[j] + 9)) : 0);
-        el.classList.toggle('is-on', started && j === ch);
+        var box = el.closest('.fm-step') || el;
+        box.style.setProperty('--p', started ? f2(k(t, CH[j], CH[j] + 9)) : 0);
+        box.classList.toggle('is-on', started && j === ch);
+        el.setAttribute('aria-expanded', String(started ? j === ch : j === 0));
         if (started && j === ch) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
       });
     }
