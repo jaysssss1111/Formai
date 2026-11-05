@@ -1568,12 +1568,40 @@
       // Each language has its own address so search engines can index both.
       var path = location.pathname.replace(/index\.html$/, '');
       path = lang === 'fi' ? path.replace(/\/?$/, '/') + 'fi/' : path.replace(/fi\/$/, '');
-      location.assign(path + location.hash);
+      // Keep the visitor's place: remember the section in view and how far into
+      // it they are, open the other page without the #part (which would make the
+      // browser scroll down from the top), and restore the spot there at once.
+      var secs = $$('main > section[id], main > [id]'), at = null;
+      for (var i = 0; i < secs.length; i++) { var r = secs[i].getBoundingClientRect(); if (r.bottom > 1) { at = { id: secs[i].id, off: Math.round(-r.top) }; break; } }
+      // Past the last section (in the footer) the spot is simply the end of the page.
+      SS.set('fm-lang-pos', JSON.stringify({ id: at && window.scrollY > 0 ? at.id : '', off: at ? at.off : 0, end: !at && window.scrollY > 0, hash: location.hash, t: Date.now() }));
+      location.assign(path);
       return;
     }
     state.lang = lang;
     renderAll();
   }
+  (function () {
+    // Arriving from the language switch: back to the same spot, without scrolling there.
+    var pos = null;
+    try { pos = JSON.parse(SS.get('fm-lang-pos') || 'null'); } catch (e) {}
+    if (!pos || Date.now() - pos.t > 15000) return;
+    SS.set('fm-lang-pos', '');
+    var html = document.documentElement, was = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    function place() {
+      var el = pos.id && document.getElementById(pos.id);
+      window.scrollTo(0, pos.end ? document.documentElement.scrollHeight : el ? Math.max(0, el.getBoundingClientRect().top + window.scrollY + pos.off) : 0);
+    }
+    place();
+    requestAnimationFrame(place);
+    addEventListener('load', place);
+    setTimeout(function () {
+      place();
+      html.style.scrollBehavior = was;
+      if (pos.hash && history.replaceState) history.replaceState(null, '', location.pathname + location.search + pos.hash);
+    }, 400);
+  })();
 
   /* ---------- actions ---------- */
   var actions = {
