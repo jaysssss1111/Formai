@@ -848,8 +848,13 @@
       var b = el.querySelector('.fm-svc-tab'); if (b) b.setAttribute('aria-expanded', String(on));
     });
     if (fromClick && !close && !wasOn && !svcWide.matches) {
-      var r = item.getBoundingClientRect();
-      if (r.top < 64) window.scrollTo({ top: window.scrollY + r.top - 80, behavior: reducedMotion ? 'auto' : 'smooth' });
+      // Closing the service above shifts this one up; bring the opened service's
+      // top back to the top of the screen so the whole card can be read downwards.
+      var tab = item.querySelector('.fm-svc-tab');
+      requestAnimationFrame(function () {
+        var top = tab.getBoundingClientRect().top;
+        if (Math.abs(top - 12) > 4) window.scrollTo({ top: window.scrollY + top - 12, behavior: reducedMotion ? 'auto' : 'smooth' });
+      });
     }
   }
   (function () {
