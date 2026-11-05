@@ -1042,6 +1042,30 @@
     update();
   })();
 
+  /* ---------- FAQ: a link per answer ----------
+     Opening a question puts its address (#faq-cost etc.) in the URL without
+     scrolling, so it can be shared; arriving with such an address opens that
+     answer and scrolls to it. */
+  (function () {
+    var items = $$('.fm-faq-item[id]');
+    items.forEach(function (d) {
+      d.addEventListener('toggle', function () {
+        if (d.open && history.replaceState) history.replaceState(null, '', '#' + d.id);
+      });
+    });
+    function fromHash() {
+      var id = decodeURIComponent(location.hash.slice(1));
+      if (!/^faq-/.test(id)) return;
+      var d = document.getElementById(id);
+      if (!d || d.tagName !== 'DETAILS') return;
+      d.open = true;
+      // After the page has settled (fonts, news), so the answer lands where intended.
+      setTimeout(function () { d.scrollIntoView({ block: 'start', behavior: reducedMotion ? 'auto' : 'smooth' }); }, 400);
+    }
+    window.addEventListener('hashchange', fromHash);
+    fromHash();
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
