@@ -44,6 +44,15 @@ window.FM_CONFIG = {
     //     does: { en: ['AI agents and workflows', 'Connecting the tools you use', 'Launch films and social cuts'], fi: ['Tekoälyagentit ja työnkulut', 'Käyttämienne työkalujen yhdistäminen', 'Lanseerausvideot ja someleikkeet'] } }
     people: []
   },
+  // Company details shown in the footer (required on a Finnish business site).
+  // PLACEHOLDERS: replace every value with the real details before launch.
+  company: {
+    name: 'formai Oy',
+    businessId: '0000000-0',          // Y-tunnus
+    street: 'Esimerkkikatu 1',
+    city: '00100 Helsinki',
+    email: 'hello@example.com'
+  },
   supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
   supabaseKey: 'sb_publishable_K04nYpPk4CcktUmZktxd0A_pw_bAEnM' // publishable key, safe to publish
 };
