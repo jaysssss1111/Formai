@@ -573,3 +573,20 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   .fm-svc:nth-child(1) .fm-svc-h{grid-row:1}.fm-svc:nth-child(2) .fm-svc-h{grid-row:2}.fm-svc:nth-child(3) .fm-svc-h{grid-row:3}
   .fm-svc:nth-child(4) .fm-svc-h{grid-row:4}.fm-svc:nth-child(5) .fm-svc-h{grid-row:5}.fm-svc:nth-child(6) .fm-svc-h{grid-row:6}
 }
+
+/* ---------- Services on brand orange ----------
+   Same band as Who we are and the footer: the list, labels, numbers, rules and
+   the selected-service underline are black on #C85A20 (4.9:1). The chosen
+   service's panel is a cream card in both themes, so the animations and the
+   text inside keep their own light palette. */
+.fm-orange .fm-svc-tab::before{background:#000}
+.fm-orange .fm-svc-tab:hover{background:rgba(0,0,0,.06)}
+.fm-orange .fm-svc-panel{--surface:#EDE6D8;--raised:#F5F0E6;--ink:#141210;--muted:#3F3931;--line:#D2C9B7;--strong:#8A8173;--accent:#A8461A;--on-accent:#EDE6D8;--art:#E3DAC8;
+  color:#141210;border:1px solid #000;box-shadow:6px 6px 0 #000}
+.fm-root .fm-orange .fm-svc-panel p,.fm-root .fm-orange .fm-svc-panel span{color:#141210 !important}
+.fm-orange .fm-svc-panel .fm-tags span{border-color:#8A8173 !important}
+.fm-orange .fm-svc-panel :focus-visible{outline-color:#141210 !important}
+.fm-orange .fm-svc-ask{background:#141210;border-color:#141210;color:#EDE6D8}
+.fm-root .fm-orange .fm-svc-ask span{color:inherit !important}
+.fm-orange .fm-svc-ask:hover{background:#C85A20;border-color:#C85A20;color:#000}
+@media (max-width:900px){.fm-orange .fm-svc-panel{box-shadow:4px 4px 0 #000;margin-right:4px}}
