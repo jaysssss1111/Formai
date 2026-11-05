@@ -831,6 +831,53 @@
     });
   })();
 
+  /* ---------- Services picker ----------
+     Wide screens: the list on the left picks which service the panel on the
+     right shows (click, keyboard, or a short hover). Narrow screens: the same
+     buttons open one service at a time, like an accordion. */
+  var svcWide = window.matchMedia('(min-width: 901px)'), svcHover = 0;
+  function pickService(item, fromClick) {
+    clearTimeout(svcHover);
+    if (!item) return;
+    var wasOn = item.classList.contains('is-on');
+    // On phones a second tap closes the open service; on wide screens one is always shown.
+    var close = fromClick && wasOn && !svcWide.matches;
+    $$('.fm-svc').forEach(function (el) {
+      var on = el === item && !close;
+      el.classList.toggle('is-on', on);
+      var b = el.querySelector('.fm-svc-tab'); if (b) b.setAttribute('aria-expanded', String(on));
+    });
+    if (fromClick && !close && !wasOn && !svcWide.matches) {
+      var r = item.getBoundingClientRect();
+      if (r.top < 64) window.scrollTo({ top: window.scrollY + r.top - 80, behavior: reducedMotion ? 'auto' : 'smooth' });
+    }
+  }
+  (function () {
+    $$('.fm-svc-tab').forEach(function (b) {
+      b.addEventListener('pointerenter', function (ev) {
+        if (ev.pointerType !== 'mouse' || !svcWide.matches) return;
+        clearTimeout(svcHover);
+        svcHover = setTimeout(function () { pickService(b.closest('.fm-svc'), false); }, 140);
+      });
+      b.addEventListener('pointerleave', function () { clearTimeout(svcHover); });
+      // Arrow keys move between services in the list.
+      b.addEventListener('keydown', function (ev) {
+        var tabs = $$('.fm-svc-tab'), k = tabs.indexOf(b), to = -1;
+        if (ev.key === 'ArrowDown' || ev.key === 'ArrowRight') to = (k + 1) % tabs.length;
+        else if (ev.key === 'ArrowUp' || ev.key === 'ArrowLeft') to = (k + tabs.length - 1) % tabs.length;
+        else if (ev.key === 'Home') to = 0;
+        else if (ev.key === 'End') to = tabs.length - 1;
+        if (to < 0) return;
+        ev.preventDefault();
+        tabs[to].focus();
+        if (svcWide.matches) pickService(tabs[to].closest('.fm-svc'), false);
+      });
+    });
+    // Going from phone to wide layout with nothing open: show the first service.
+    var onChange = function () { if (svcWide.matches && !$('.fm-svc.is-on')) pickService($('.fm-svc'), false); };
+    if (svcWide.addEventListener) svcWide.addEventListener('change', onChange); else svcWide.addListener(onChange);
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -889,6 +936,14 @@
       });
     },
     closeContact: closeContact,
+    pickService: function (el) { pickService(el.closest('.fm-svc'), true); },
+    askService: function (el) {
+      // Open the contact form with this service already chosen as the interest.
+      var i = Number(el.getAttribute('data-i'));
+      state.cf.interests = [];
+      state.cf.interests[i] = true;
+      openContact();
+    },
     flipCard: function (el) {
       // Show the service name on orange in place of the animation; click again to flip back.
       var on = el.classList.toggle('is-flipped');

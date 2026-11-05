@@ -530,3 +530,46 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-step:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
 .fm-step-facts{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);line-height:1.6}
 @media (min-width:761px){.fm-film-chapters{display:none}.fm-film-time{margin-left:auto}}
+
+/* ---------- Services: a picker in place of six cards ----------
+   Wide screens: numbered list on the left, one large panel on the right with the
+   chosen service's animation, text, tags and an "Ask about this" button that
+   opens the contact form with the service pre-selected. The six panels share one
+   grid cell and cross-fade. Narrow screens: an accordion, one open at a time. */
+.fm-svcs{display:flex;flex-direction:column;border-top:1px solid var(--strong)}
+.fm-svc{display:contents}
+.fm-svc-h{margin:0;font:inherit}
+.fm-svc-tab{display:flex;align-items:center;gap:20px;width:100%;min-height:72px;padding:18px 4px;box-sizing:border-box;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);text-align:left;cursor:pointer;font:inherit;position:relative}
+.fm-svc-tab::before{content:'';position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--brand);transform:scaleX(0);transform-origin:0 50%;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.fm-svc.is-on .fm-svc-tab::before{transform:scaleX(1)}
+.fm-svc-tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.fm-svc-num{flex:none;width:28px;font-family:'DM Mono',ui-monospace,monospace;font-size:13px;color:var(--accent)}
+.fm-svc-name{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}
+.fm-svc-title{font-size:clamp(26px,2.6vw,34px);line-height:1.1;font-weight:300;letter-spacing:-.02em;transition:transform .2s linear}
+.fm-svc-label{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fm-svc-arrow{flex:none;display:flex;color:var(--muted);opacity:0;transform:translateX(-6px);transition:opacity .2s linear,transform .2s linear}
+.fm-svc-tab:hover .fm-svc-title,.fm-svc.is-on .fm-svc-title{transform:translateX(6px)}
+.fm-svc-tab:hover .fm-svc-arrow,.fm-svc.is-on .fm-svc-arrow{opacity:1;transform:none;color:var(--accent)}
+.fm-svc-panel{display:none;flex-direction:column;background:var(--raised);border:1px solid var(--line)}
+.fm-svc.is-on .fm-svc-panel{display:flex}
+.fm-root .fm-svc-art{background-color:var(--art);border-bottom:1px solid var(--line);aspect-ratio:5/3;overflow:hidden}
+.fm-svc-body{display:flex;flex-direction:column;gap:20px;padding:28px 32px 32px}
+.fm-svc-ask{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:1px solid var(--accent);border-radius:0;background:transparent;color:var(--accent);cursor:pointer;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;transition:background-color .18s linear,color .18s linear}
+.fm-svc-ask:hover{background:var(--accent);color:var(--on-accent)}
+.fm-svc-ask:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (max-width:900px){
+  .fm-svc-panel{margin:4px 0 20px}
+  .fm-svc-body{padding:24px 20px 24px}
+  .fm-svc-arrow{opacity:1;transform:rotate(90deg);transition:transform .2s linear}
+  .fm-svc.is-on .fm-svc-arrow{transform:rotate(-90deg)}
+  .fm-svc-tab:hover .fm-svc-title,.fm-svc.is-on .fm-svc-title{transform:none}
+}
+@media (min-width:901px){
+  .fm-svcs{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-rows:repeat(6,auto) 1fr;column-gap:48px;border-top:0}
+  .fm-svc-h{grid-column:1}
+  .fm-svc:first-child .fm-svc-h{border-top:1px solid var(--strong)}
+  .fm-svc-panel{display:flex;grid-column:2;grid-row:1 / -1;align-self:start;opacity:0;visibility:hidden;transition:opacity .25s linear,visibility 0s linear .25s}
+  .fm-svc.is-on .fm-svc-panel{opacity:1;visibility:visible;transition:opacity .25s linear,visibility 0s}
+  .fm-svc:nth-child(1) .fm-svc-h{grid-row:1}.fm-svc:nth-child(2) .fm-svc-h{grid-row:2}.fm-svc:nth-child(3) .fm-svc-h{grid-row:3}
+  .fm-svc:nth-child(4) .fm-svc-h{grid-row:4}.fm-svc:nth-child(5) .fm-svc-h{grid-row:5}.fm-svc:nth-child(6) .fm-svc-h{grid-row:6}
+}
