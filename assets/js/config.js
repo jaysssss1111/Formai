@@ -28,20 +28,21 @@ window.FM_CONFIG = {
     noteBy: '',                 // the name under the note, e.g. 'Jay, founder'
     // Add each person's name and a photo (assets/img/…, square) when ready.
     // Until a name is set, the card shows the role as its title.
-    people: [
-      { name: '', photo: '',
-        role: { en: 'Brand and interface design', fi: 'Brändi- ja käyttöliittymäsuunnittelu' },
-        line: { en: 'Shapes how a company looks and how its product feels to use.', fi: 'Muotoilee, miltä yritys näyttää ja miltä sen tuote tuntuu käyttää.' },
-        does: { en: ['Identity and design systems', 'Websites and app screens', 'Clickable prototypes'], fi: ['Identiteetti ja design-järjestelmät', 'Verkkosivut ja sovellusnäkymät', 'Klikattavat prototyypit'] } },
-      { name: '', photo: '',
-        role: { en: 'Development and AI', fi: 'Kehitys ja tekoäly' },
-        line: { en: 'Builds what we design and the AI features inside it, tested before it ships.', fi: 'Rakentaa sen, minkä suunnittelemme, ja sen sisällä toimivat tekoälyominaisuudet, testattuina ennen julkaisua.' },
-        does: { en: ['Web apps and integrations', 'AI assistants and smart search', 'Code review of agent output'], fi: ['Verkkosovellukset ja integraatiot', 'Tekoälyavustajat ja älykäs haku', 'Agenttien tuottaman koodin tarkistus'] } },
-      { name: '', photo: '',
-        role: { en: 'Automation and motion', fi: 'Automaatio ja liike' },
-        line: { en: 'Takes repetitive work off your team and makes the films that launch the work.', fi: 'Vie toistuvan työn tiimiltänne ja tekee videot, joilla työ lanseerataan.' },
-        does: { en: ['AI agents and workflows', 'Connecting the tools you use', 'Launch films and social cuts'], fi: ['Tekoälyagentit ja työnkulut', 'Käyttämienne työkalujen yhdistäminen', 'Lanseerausvideot ja someleikkeet'] } }
-    ]
+    // Hidden for now. To bring the three staff cards back, move these entries
+    // back inside people: [ … ] (remove the // in front of each line).
+    //   { name: '', photo: '',
+    //     role: { en: 'Brand and interface design', fi: 'Brändi- ja käyttöliittymäsuunnittelu' },
+    //     line: { en: 'Shapes how a company looks and how its product feels to use.', fi: 'Muotoilee, miltä yritys näyttää ja miltä sen tuote tuntuu käyttää.' },
+    //     does: { en: ['Identity and design systems', 'Websites and app screens', 'Clickable prototypes'], fi: ['Identiteetti ja design-järjestelmät', 'Verkkosivut ja sovellusnäkymät', 'Klikattavat prototyypit'] } },
+    //   { name: '', photo: '',
+    //     role: { en: 'Development and AI', fi: 'Kehitys ja tekoäly' },
+    //     line: { en: 'Builds what we design and the AI features inside it, tested before it ships.', fi: 'Rakentaa sen, minkä suunnittelemme, ja sen sisällä toimivat tekoälyominaisuudet, testattuina ennen julkaisua.' },
+    //     does: { en: ['Web apps and integrations', 'AI assistants and smart search', 'Code review of agent output'], fi: ['Verkkosovellukset ja integraatiot', 'Tekoälyavustajat ja älykäs haku', 'Agenttien tuottaman koodin tarkistus'] } },
+    //   { name: '', photo: '',
+    //     role: { en: 'Automation and motion', fi: 'Automaatio ja liike' },
+    //     line: { en: 'Takes repetitive work off your team and makes the films that launch the work.', fi: 'Vie toistuvan työn tiimiltänne ja tekee videot, joilla työ lanseerataan.' },
+    //     does: { en: ['AI agents and workflows', 'Connecting the tools you use', 'Launch films and social cuts'], fi: ['Tekoälyagentit ja työnkulut', 'Käyttämienne työkalujen yhdistäminen', 'Lanseerausvideot ja someleikkeet'] } }
+    people: []
   },
   supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
   supabaseKey: 'sb_publishable_K04nYpPk4CcktUmZktxd0A_pw_bAEnM' // publishable key, safe to publish
