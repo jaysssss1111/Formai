@@ -143,15 +143,17 @@
 
 <!-- SERVICES -->
 <section id="services" class="fm-gridbg" style="width: 100%; border-top: 1px solid var(--line);">
-<div class="fm-gridbg-fx" data-grid-fx="ripple" data-grid-avoid=".fm-card" aria-hidden="true"></div>
+<div class="fm-gridbg-fx" data-grid-fx="ripple" data-grid-avoid=".fm-svc-tab,.fm-svc-panel" aria-hidden="true"></div>
 <div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 96px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 64px;">
 <div class="fm-reveal" style="display: flex; flex-direction: column; gap: 16px;">
 <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="servicesLabel"></span>
 <h2 style="margin: 0; font-size: clamp(36px, 4.5vw, 56px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;" data-i18n="servicesTitle"></h2>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 24px;">
-<article class="fm-card fm-reveal" data-action="flipCard" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
-<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);" role="button" tabindex="0" aria-pressed="false" data-i18n-aria-label="s1Label">
+<div class="fm-svcs fm-reveal">
+<div class="fm-svc is-on" data-svc="0">
+<h3 class="fm-svc-h"><button type="button" class="fm-svc-tab" id="fm-svc-tab-1" aria-expanded="true" aria-controls="fm-svc-panel-1" data-action="pickService"><span class="fm-svc-num">01</span><span class="fm-svc-name"><span class="fm-svc-title" data-i18n="s1"></span><span class="fm-svc-label" data-i18n="s1Label"></span></span><span class="fm-svc-arrow"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span></button></h3>
+<div class="fm-svc-panel" id="fm-svc-panel-1" role="region" aria-labelledby="fm-svc-tab-1">
+<div class="fm-art fm-svc-art">
 <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <g style="fill: none; stroke: var(--line); stroke-width: 1;">
 <path d="M40 0 V240 M80 0 V240 M120 0 V240 M160 0 V240 M200 0 V240 M240 0 V240 M280 0 V240 M320 0 V240 M360 0 V240 M0 40 H400 M0 80 H400 M0 120 H400 M0 160 H400 M0 200 H400"></path>
@@ -168,17 +170,20 @@
 <text x="24" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);" data-i18n="artMark"></text>
 <text x="376" y="22" text-anchor="end" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">Ø 160</text>
 </svg>
-<div class="fm-art-flip" aria-hidden="true"><span data-i18n="s1Label"></span></div>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s1Label"></span>
+<div class="fm-svc-body">
 <div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
-<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s1"></h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s1p"></p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags1">
+<p style="margin: 0; font-size: 17px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s1p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;" class="fm-tags" data-list="tags1">
 </div>
-</article>
-<article class="fm-card fm-reveal" data-action="flipCard" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
-<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);" role="button" tabindex="0" aria-pressed="false" data-i18n-aria-label="s2Label">
+<button type="button" class="fm-svc-ask" data-action="askService" data-i="0" aria-describedby="fm-svc-tab-1"><span data-i18n="svcAsk"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+</div>
+<div class="fm-svc" data-svc="1">
+<h3 class="fm-svc-h"><button type="button" class="fm-svc-tab" id="fm-svc-tab-2" aria-expanded="false" aria-controls="fm-svc-panel-2" data-action="pickService"><span class="fm-svc-num">02</span><span class="fm-svc-name"><span class="fm-svc-title" data-i18n="s2"></span><span class="fm-svc-label" data-i18n="s2Label"></span></span><span class="fm-svc-arrow"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span></button></h3>
+<div class="fm-svc-panel" id="fm-svc-panel-2" role="region" aria-labelledby="fm-svc-tab-2">
+<div class="fm-art fm-svc-art">
 <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <rect x="60" y="28" width="280" height="196" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
 <path d="M60 48 H340" style="stroke: var(--strong); stroke-width: 1;"></path>
@@ -203,17 +208,20 @@
 </g>
 <text x="24" y="20" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);" data-i18n="artScreen"></text>
 </svg>
-<div class="fm-art-flip" aria-hidden="true"><span data-i18n="s2Label"></span></div>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s2Label"></span>
+<div class="fm-svc-body">
 <div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
-<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s2"></h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s2p"></p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags2">
+<p style="margin: 0; font-size: 17px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s2p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;" class="fm-tags" data-list="tags2">
 </div>
-</article>
-<article class="fm-card fm-reveal" data-action="flipCard" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
-<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);" role="button" tabindex="0" aria-pressed="false" data-i18n-aria-label="s3Label">
+<button type="button" class="fm-svc-ask" data-action="askService" data-i="1" aria-describedby="fm-svc-tab-2"><span data-i18n="svcAsk"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+</div>
+<div class="fm-svc" data-svc="2">
+<h3 class="fm-svc-h"><button type="button" class="fm-svc-tab" id="fm-svc-tab-3" aria-expanded="false" aria-controls="fm-svc-panel-3" data-action="pickService"><span class="fm-svc-num">03</span><span class="fm-svc-name"><span class="fm-svc-title" data-i18n="s3"></span><span class="fm-svc-label" data-i18n="s3Label"></span></span><span class="fm-svc-arrow"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span></button></h3>
+<div class="fm-svc-panel" id="fm-svc-panel-3" role="region" aria-labelledby="fm-svc-tab-3">
+<div class="fm-art fm-svc-art">
 <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <g class="fm-strip">
 <g style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;">
@@ -246,17 +254,20 @@
 <text x="40" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">00:00:12:04</text>
 <text x="360" y="226" text-anchor="end" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);">24 FPS</text>
 </svg>
-<div class="fm-art-flip" aria-hidden="true"><span data-i18n="s3Label"></span></div>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s3Label"></span>
+<div class="fm-svc-body">
 <div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
-<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s3"></h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s3p"></p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags3">
+<p style="margin: 0; font-size: 17px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s3p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;" class="fm-tags" data-list="tags3">
 </div>
-</article>
-<article class="fm-card fm-reveal" data-action="flipCard" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
-<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);" role="button" tabindex="0" aria-pressed="false" data-i18n-aria-label="s4Label">
+<button type="button" class="fm-svc-ask" data-action="askService" data-i="2" aria-describedby="fm-svc-tab-3"><span data-i18n="svcAsk"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+</div>
+<div class="fm-svc" data-svc="3">
+<h3 class="fm-svc-h"><button type="button" class="fm-svc-tab" id="fm-svc-tab-4" aria-expanded="false" aria-controls="fm-svc-panel-4" data-action="pickService"><span class="fm-svc-num">04</span><span class="fm-svc-name"><span class="fm-svc-title" data-i18n="s4"></span><span class="fm-svc-label" data-i18n="s4Label"></span></span><span class="fm-svc-arrow"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span></button></h3>
+<div class="fm-svc-panel" id="fm-svc-panel-4" role="region" aria-labelledby="fm-svc-tab-4">
+<div class="fm-art fm-svc-art">
 <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <rect x="40" y="24" width="320" height="200" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
 <path d="M40 44 H360 M76 44 V196 M40 196 H360" style="fill: none; stroke: var(--line); stroke-width: 1;"></path>
@@ -284,17 +295,20 @@
 <text x="70" y="212" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; fill: var(--ink);" data-i18n="artBuild"></text>
 </g>
 </svg>
-<div class="fm-art-flip" aria-hidden="true"><span data-i18n="s4Label"></span></div>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s4Label"></span>
+<div class="fm-svc-body">
 <div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
-<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s4"></h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s4p"></p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags4">
+<p style="margin: 0; font-size: 17px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s4p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;" class="fm-tags" data-list="tags4">
 </div>
-</article>
-<article class="fm-card fm-reveal" data-action="flipCard" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
-<div class="fm-art fm-art-auto" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; border-bottom: 1px solid var(--line);" role="button" tabindex="0" aria-pressed="false" data-i18n-aria-label="s5Label">
+<button type="button" class="fm-svc-ask" data-action="askService" data-i="3" aria-describedby="fm-svc-tab-4"><span data-i18n="svcAsk"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+</div>
+<div class="fm-svc" data-svc="4">
+<h3 class="fm-svc-h"><button type="button" class="fm-svc-tab" id="fm-svc-tab-5" aria-expanded="false" aria-controls="fm-svc-panel-5" data-action="pickService"><span class="fm-svc-num">05</span><span class="fm-svc-name"><span class="fm-svc-title" data-i18n="s5"></span><span class="fm-svc-label" data-i18n="s5Label"></span></span><span class="fm-svc-arrow"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span></button></h3>
+<div class="fm-svc-panel" id="fm-svc-panel-5" role="region" aria-labelledby="fm-svc-tab-5">
+<div class="fm-art fm-svc-art">
 <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <path d="M80 80 H180 M200 100 V160 M220 180 H320" style="fill: none; stroke: var(--strong); stroke-width: 1.5;"></path>
 <path class="fm-ants" d="M80 80 H180 M200 100 V160 M220 180 H320" style="fill: none; stroke: var(--brand); stroke-width: 1.5; stroke-dasharray: 2 6;"></path>
@@ -330,17 +344,20 @@
 <text x="24" y="226" data-i18n="artFlow"></text>
 </g>
 </svg>
-<div class="fm-art-flip" aria-hidden="true"><span data-i18n="s5Label"></span></div>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s5Label"></span>
+<div class="fm-svc-body">
 <div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
-<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s5"></h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s5p"></p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags5">
+<p style="margin: 0; font-size: 17px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s5p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;" class="fm-tags" data-list="tags5">
 </div>
-</article>
-<article class="fm-card fm-reveal" data-action="flipCard" style="flex: 1 1 320px; min-width: 0; box-sizing: border-box; background: var(--raised); border: 1px solid var(--line); padding: 32px; display: flex; flex-direction: column; gap: 20px;">
-<div class="fm-art" style="margin: -32px -32px 4px; height: 240px; overflow: hidden; background: var(--surface); border-bottom: 1px solid var(--line);" role="button" tabindex="0" aria-pressed="false" data-i18n-aria-label="s6Label">
+<button type="button" class="fm-svc-ask" data-action="askService" data-i="4" aria-describedby="fm-svc-tab-5"><span data-i18n="svcAsk"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+</div>
+<div class="fm-svc" data-svc="5">
+<h3 class="fm-svc-h"><button type="button" class="fm-svc-tab" id="fm-svc-tab-6" aria-expanded="false" aria-controls="fm-svc-panel-6" data-action="pickService"><span class="fm-svc-num">06</span><span class="fm-svc-name"><span class="fm-svc-title" data-i18n="s6"></span><span class="fm-svc-label" data-i18n="s6Label"></span></span><span class="fm-svc-arrow"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span></button></h3>
+<div class="fm-svc-panel" id="fm-svc-panel-6" role="region" aria-labelledby="fm-svc-tab-6">
+<div class="fm-art fm-svc-art">
 <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
 <text x="24" y="22" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted);" data-i18n="artAi"></text>
 <rect x="40" y="34" width="320" height="38" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>
@@ -369,15 +386,16 @@
 </g>
 <text class="fm-fade" x="24" y="226" style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.12em; fill: var(--muted); animation-delay: 3.5s" data-i18n="artAnswer"></text>
 </svg>
-<div class="fm-art-flip" aria-hidden="true"><span data-i18n="s6Label"></span></div>
 </div>
-<span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);" data-i18n="s6Label"></span>
+<div class="fm-svc-body">
 <div class="fm-rule" style="width: 32px; height: 2px; background: var(--brand);"></div>
-<h3 style="margin: 0; font-size: 32px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;" data-i18n="s6"></h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s6p"></p>
-<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto;" class="fm-tags" data-list="tags6">
+<p style="margin: 0; font-size: 17px; line-height: 1.6; font-weight: 300; color: var(--muted);" data-i18n="s6p"></p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;" class="fm-tags" data-list="tags6">
 </div>
-</article>
+<button type="button" class="fm-svc-ask" data-action="askService" data-i="5" aria-describedby="fm-svc-tab-6"><span data-i18n="svcAsk"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
+</div>
+</div>
 </div>
 </div>
 </section>
