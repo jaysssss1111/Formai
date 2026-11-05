@@ -98,7 +98,11 @@ const T = {
       altBook: 'Prefer to talk? Book a 30-min call', altAudit: 'Want proof first? Get a free audit',
       formTitle: 'Start with a short note', startersLabel: 'Not sure how to start? Pick one:',
       starters: ['Mobile visitors drop off before checkout.', 'Our brand looks dated next to competitors.', 'Our team answers the same support questions every day.', 'We have an idea and need a working prototype.'],
-      again: 'Send another message'
+      again: 'Send another message',
+      liveOn: 'We are working now: expect a reply today.', liveOff: 'We reply on the next working day.',
+      saved: 'Draft saved on this device', link: 'Link to the page or file', linkHint: 'A page, prototype or shared file, if you have one.',
+      call: 'Call me instead', phone: 'Phone number', youWrote: 'You wrote', callNote: 'We will call you at {p}.',
+      wait: 'While you wait', waitAudit: 'Get a free audit', waitBook: 'Book a 30-min call'
     },
     faqLabel: 'Questions', faqTitle: 'Before you ask',
     faq: {
@@ -263,7 +267,11 @@ const T = {
       altBook: 'Haluatko mieluummin puhua? Varaa 30 minuutin puhelu', altAudit: 'Haluatko ensin näytön? Pyydä maksuton auditointi',
       formTitle: 'Aloita lyhyellä viestillä', startersLabel: 'Etkö tiedä, miten aloittaa? Valitse yksi:',
       starters: ['Mobiilikävijät putoavat pois ennen kassaa.', 'Brändimme näyttää vanhentuneelta kilpailijoihin verrattuna.', 'Tiimimme vastaa joka päivä samoihin tukikysymyksiin.', 'Meillä on idea, ja tarvitsemme toimivan prototyypin.'],
-      again: 'Lähetä uusi viesti'
+      again: 'Lähetä uusi viesti',
+      liveOn: 'Olemme töissä nyt: vastaamme vielä tänään.', liveOff: 'Vastaamme seuraavana arkipäivänä.',
+      saved: 'Luonnos tallennettu tälle laitteelle', link: 'Linkki sivuun tai tiedostoon', linkHint: 'Sivu, prototyyppi tai jaettu tiedosto, jos sellainen on.',
+      call: 'Soittakaa mieluummin', phone: 'Puhelinnumero', youWrote: 'Kirjoitit', callNote: 'Soitamme numeroon {p}.',
+      wait: 'Sillä välin', waitAudit: 'Pyydä maksuton auditointi', waitBook: 'Varaa 30 minuutin puhelu'
     },
     faqLabel: 'Kysymykset', faqTitle: 'Ennen kuin kysyt',
     faq: {
@@ -398,7 +406,8 @@ const LEGAL = {
         { name: 'fm-seen', purpose: 'Shows the loading animation only once per visit', type: 'Session storage', duration: 'Until you close the tab', category: 'Strictly necessary' },
         { name: 'fm-mode', purpose: 'Remembers the light or dark theme', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
         { name: 'fm-lang', purpose: 'Remembers your language', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
-        { name: 'fm-paused', purpose: 'Remembers whether animations are paused', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' }
+        { name: 'fm-paused', purpose: 'Remembers whether animations are paused', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
+        { name: 'fm-ci-draft', purpose: 'Keeps an unsent contact message on your device', type: 'Local storage', duration: 'Until you send the message, clear it or withdraw consent', category: 'Preferences' }
       ],
       b: [
         { h: 'Third parties', ps: ['Fonts are hosted on our own server, so no data is sent to third parties when the page opens.', 'We do not currently use analytics or marketing cookies. If we add them, we will update this list and ask for your consent before anything is stored.'] },
@@ -410,7 +419,7 @@ const LEGAL = {
       title: 'Privacy notice', updated: 'Last updated: [DATE]',
       a: [
         { h: '1. Controller', ps: ['[COMPANY NAME], business ID [BUSINESS ID]', '[STREET ADDRESS], [POSTCODE AND CITY], Finland', 'Contact for privacy matters: [NAME], [YOUR EMAIL]'] },
-        { h: '2. What data we process', ps: ['When you contact us: your name, email address, company and the content of your message.', 'When you use the site: your cookie choices and the preference data listed in the cookie policy. Our hosting provider may log technical data such as your IP address for security. [CHECK WITH YOUR HOSTING PROVIDER]', 'For design audits and business outreach: publicly available work contact details of company representatives, such as name, job title and work email.'] },
+        { h: '2. What data we process', ps: ['When you contact us: your name, email address, company, the content of your message and, if you give them, a link and a phone number.', 'When you use the site: your cookie choices and the preference data listed in the cookie policy. Our hosting provider may log technical data such as your IP address for security. [CHECK WITH YOUR HOSTING PROVIDER]', 'For design audits and business outreach: publicly available work contact details of company representatives, such as name, job title and work email.'] },
         { h: '3. Purpose and legal basis', ps: ['Answering enquiries and preparing offers: steps prior to entering a contract (GDPR Art. 6(1)(b)) and our legitimate interest (Art. 6(1)(f)).', 'Business outreach and unsolicited audits: our legitimate interest in offering our services to companies (Art. 6(1)(f)). You can object at any time and we will stop.', 'Preference and analytics storage: your consent (Art. 6(1)(a)). Strictly necessary storage: our legitimate interest in a working website.'] },
         { h: '4. How long we keep data', ps: ['Enquiries and business contact data: up to 24 months from the last contact, unless a customer relationship begins. [CHECK]', 'Cookies and local storage: as listed in the cookie policy.'] },
         { h: '5. Recipients and transfers', ps: ['We do not sell your data. Service providers process data on our behalf: Formspree (form delivery, United States), Supabase (booked meeting times only, no names or emails), GitHub Pages (hosting, United States), [EMAIL PROVIDER]. If data is transferred outside the EU or EEA, we use the European Commission’s standard contractual clauses or another lawful transfer mechanism.'] },
@@ -486,7 +495,8 @@ const LEGAL = {
         { name: 'fm-seen', purpose: 'Näyttää latausanimaation vain kerran käynnin aikana', type: 'Istuntotallennus', duration: 'Kunnes suljet välilehden', category: 'Välttämätön' },
         { name: 'fm-mode', purpose: 'Muistaa vaalean tai tumman teeman', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
         { name: 'fm-lang', purpose: 'Muistaa kielivalintasi', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
-        { name: 'fm-paused', purpose: 'Muistaa, onko animaatiot pysäytetty', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' }
+        { name: 'fm-paused', purpose: 'Muistaa, onko animaatiot pysäytetty', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
+        { name: 'fm-ci-draft', purpose: 'Säilyttää lähettämättömän yhteydenottoviestin laitteellasi', type: 'Paikallinen tallennustila', duration: 'Kunnes lähetät viestin, tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' }
       ],
       b: [
         { h: 'Kolmannet osapuolet', ps: ['Fontit ladataan omalta palvelimeltamme, joten sivun avautuessa tietoja ei välity kolmansille osapuolille.', 'Emme tällä hetkellä käytä analytiikka- tai markkinointievästeitä. Jos otamme niitä käyttöön, päivitämme tämän luettelon ja pyydämme suostumuksesi ennen kuin mitään tallennetaan.'] },
@@ -498,7 +508,7 @@ const LEGAL = {
       title: 'Tietosuojaseloste', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
       a: [
         { h: '1. Rekisterinpitäjä', ps: ['[YRITYKSEN NIMI], Y-tunnus [Y-TUNNUS]', '[KATUOSOITE], [POSTINUMERO JA -TOIMIPAIKKA]', 'Yhteyshenkilö tietosuoja-asioissa: [NIMI], [SÄHKÖPOSTIOSOITTEESI]'] },
-        { h: '2. Mitä tietoja käsittelemme', ps: ['Kun otat meihin yhteyttä: nimesi, sähköpostiosoitteesi, yrityksesi ja viestisi sisältö.', 'Kun käytät sivustoa: evästevalintasi ja evästekäytännössä luetellut asetustiedot. Palveluntarjoajamme voi tallentaa teknisiä tietoja, kuten IP-osoitteen, tietoturvan vuoksi. [TARKISTA PALVELUNTARJOAJALTASI]', 'Design-auditointeja ja yritysyhteydenottoja varten: yritysten edustajien julkisesti saatavilla olevat työyhteystiedot, kuten nimi, tehtävänimike ja työsähköposti.'] },
+        { h: '2. Mitä tietoja käsittelemme', ps: ['Kun otat meihin yhteyttä: nimesi, sähköpostiosoitteesi, yrityksesi, viestisi sisältö sekä antamasi linkki ja puhelinnumero.', 'Kun käytät sivustoa: evästevalintasi ja evästekäytännössä luetellut asetustiedot. Palveluntarjoajamme voi tallentaa teknisiä tietoja, kuten IP-osoitteen, tietoturvan vuoksi. [TARKISTA PALVELUNTARJOAJALTASI]', 'Design-auditointeja ja yritysyhteydenottoja varten: yritysten edustajien julkisesti saatavilla olevat työyhteystiedot, kuten nimi, tehtävänimike ja työsähköposti.'] },
         { h: '3. Käsittelyn tarkoitus ja oikeusperuste', ps: ['Yhteydenottoihin vastaaminen ja tarjousten laatiminen: sopimusta edeltävät toimenpiteet (tietosuoja-asetuksen 6 artiklan 1 kohdan b alakohta) ja oikeutettu etumme (f alakohta).', 'Yritysyhteydenotot ja pyytämättömät auditoinnit: oikeutettu etumme tarjota palveluitamme yrityksille (f alakohta). Voit vastustaa käsittelyä milloin tahansa, ja lopetamme sen.', 'Asetus- ja analytiikkatiedot: suostumuksesi (a alakohta). Välttämättömät tallennukset: oikeutettu etumme toimivaan verkkosivustoon.'] },
         { h: '4. Säilytysaika', ps: ['Yhteydenotto- ja yritysyhteystiedot: enintään 24 kuukautta viimeisestä yhteydenotosta, ellei asiakassuhde ala. [TARKISTA]', 'Evästeet ja paikallinen tallennustila: evästekäytännön mukaisesti.'] },
         { h: '5. Tietojen vastaanottajat ja siirrot', ps: ['Emme myy tietojasi. Puolestamme tietoja käsittelevät palveluntarjoajat: Formspree (lomakkeiden välitys, Yhdysvallat), Supabase (vain varatut tapaamisajat, ei nimiä eikä sähköposteja), GitHub Pages (sivuston ylläpito, Yhdysvallat), [SÄHKÖPOSTIPALVELU]. Jos tietoja siirretään EU:n tai ETA:n ulkopuolelle, käytämme Euroopan komission vakiosopimuslausekkeita tai muuta lainmukaista siirtoperustetta.'] },

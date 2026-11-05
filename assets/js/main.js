@@ -72,7 +72,7 @@
     contactOpen: false,
     au: { open: false, sent: false, tried: false, sending: false, sendError: false, kind: -1, more: false, data: { url: '', email: '', name: '', company: '', note: '' } },
     cf: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
-    ci: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', message: '' } },
+    ci: { sent: false, tried: false, sending: false, sendError: false, call: false, recap: '', data: { name: '', email: '', message: '', link: '', phone: '' } },
     bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '', sending: false, sendError: false },
     ready: false
   };
@@ -148,7 +148,7 @@
     if (prefs) {
       save('fm-mode', state.mode); save('fm-lang', state.lang); save('fm-paused', state.paused ? '1' : '0');
     } else {
-      ['fm-mode', 'fm-lang', 'fm-paused'].forEach(LS.del);
+      ['fm-mode', 'fm-lang', 'fm-paused', 'fm-ci-draft'].forEach(LS.del);
     }
     state.bannerOpen = false;
     state.draft = { prefs: prefs, analytics: an, marketing: mk };
@@ -332,6 +332,24 @@
   /* ---------- Contact section: the form in the page ----------
      Name, email and message, with message starters that fill the box. Sends
      to the same address as the contact dialog. */
+  var CI_DRAFT = 'fm-ci-draft', ciSaveT = 0;
+  function ciLoadDraft() {
+    if (!allowPrefs) return;
+    try {
+      var d = JSON.parse(LS.get(CI_DRAFT) || 'null');
+      if (d && typeof d === 'object') ['name', 'email', 'message', 'link', 'phone'].forEach(function (k) { if (typeof d[k] === 'string') state.ci.data[k] = d[k]; });
+      if (d && d.call) state.ci.call = true;
+    } catch (e) {}
+  }
+  function ciSaveDraft() {
+    clearTimeout(ciSaveT);
+    ciSaveT = setTimeout(function () {
+      if (!allowPrefs) return;
+      var d = state.ci.data, any = ['name', 'email', 'message', 'link', 'phone'].some(function (k) { return String(d[k] || '').trim(); });
+      if (any) LS.set(CI_DRAFT, JSON.stringify(Object.assign({ call: state.ci.call }, d))); else LS.del(CI_DRAFT);
+      var n = $('#fm-ci-saved'); if (n) n.hidden = !any;
+    }, 400);
+  }
   function ciErrors() {
     var tr = t().cf, f = state.ci.data;
     return {
@@ -340,14 +358,22 @@
       message: String(f.message).trim().length >= 10 ? '' : tr.errMessage
     };
   }
+  var ciDraftLoaded = false;
   function renderInline() {
+    if (!ciDraftLoaded) { ciDraftLoaded = true; ciLoadDraft(); }
     var host = $('#fm-ci-root');
     if (!host) return;
     var tr = t(), cf = tr.cf, C = tr.ci, c = state.ci;
     if (c.sent) {
+      var AR = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>';
       host.innerHTML = '<div role="status" class="fm-ci-done" tabindex="-1">' + EYE_DRAW +
         '<h3 style="margin: 0; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h3>' +
-        '<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.thanksText) + '</p>' +
+        (c.recap ? '<div class="fm-ci-recap"><span>' + esc(C.youWrote) + '</span><p>' + esc(c.recap) + '</p></div>' : '') +
+        '<p class="fm-ci-when"><span class="fm-live-dot' + (liveOn ? ' is-on' : '') + '" aria-hidden="true"></span>' + esc(liveOn ? C.liveOn : C.liveOff) +
+        (c.recapPhone ? ' ' + esc(C.callNote.replace('{p}', c.recapPhone)) : '') + '</p>' +
+        '<div class="fm-ci-wait"><span>' + esc(C.wait) + '</span><div>' +
+        '<button type="button" class="fm-ct-altlink" data-action="openAudit"><span>' + esc(C.waitAudit) + '</span> ' + AR + '</button>' +
+        '<a class="fm-ct-altlink" href="#book"><span>' + esc(C.waitBook) + '</span> ' + AR + '</a></div></div>' +
         '<button type="button" class="fm-btn fm-ck-btn" data-action="ciAgain" style="flex: none;">' + esc(C.again) + '</button></div>';
       return;
     }
@@ -368,8 +394,12 @@
         return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="ciStarter" data-i="' + k + '">' + esc(x) + '</button>';
       }).join('') + '</div></div>' +
       field('fm-ci-message', cf.message, { key: 'message', required: true, textarea: true, rows: 4, hint: cf.messageHint, value: c.data.message, err: e.message }) +
+      field('fm-ci-link', C.link, { key: 'link', type: 'url', ac: 'url', hint: C.linkHint, value: c.data.link }) +
+      '<button type="button" class="fm-ci-call" data-action="ciCall" aria-pressed="' + !!c.call + '"><span class="fm-ci-box" aria-hidden="true"></span>' + esc(C.call) + '</button>' +
+      (c.call ? field('fm-ci-phone', C.phone, { key: 'phone', type: 'tel', ac: 'tel', value: c.data.phone }) : '') +
       privacyLine() +
-      '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
+      '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) +
+      '<span class="fm-ci-saved" id="fm-ci-saved"' + (allowPrefs && String(c.data.message || c.data.name || '').trim() ? '' : ' hidden') + '> · ' + esc(C.saved) + '</span></span>' +
       '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
   }
   function submitInline() {
@@ -382,7 +412,11 @@
     if (c.sending) return;
     var d = c.data;
     var done = function () {
-      state.ci = { sent: true, tried: false, sending: false, sendError: false, data: { name: '', email: '', message: '' } };
+      var first = String(d.message).trim().split('\n')[0];
+      state.ci = { sent: true, tried: false, sending: false, sendError: false, call: false,
+        recap: first.length > 120 ? first.slice(0, 117) + '…' : first, recapPhone: c.call ? String(d.phone).trim() : '',
+        data: { name: '', email: '', message: '', link: '', phone: '' } };
+      LS.del(CI_DRAFT);
       renderInline();
       var s2 = $('#fm-ci-root .fm-ci-done'); if (s2) s2.focus();
     };
@@ -391,6 +425,8 @@
       _subject: 'formai: message from ' + String(d.name).trim(),
       name: String(d.name).trim(), email: String(d.email).trim(),
       message: String(d.message).trim(),
+      link: String(d.link || '').trim(),
+      prefers_call: c.call ? 'yes' : 'no', phone: c.call ? String(d.phone || '').trim() : '',
       source: 'contact section', language: state.lang
     };
     c.sending = true; c.sendError = false; renderInline();
@@ -1403,7 +1439,11 @@
     var on = wd >= 1 && wd <= 5 && min >= 11 * 60 && min < 20 * 60;
     var time = String(h.h).padStart(2, '0') + (en ? ':' : '.') + String(h.mi).padStart(2, '0');
     el.innerHTML = '<span class="fm-live-dot' + (on ? ' is-on' : '') + '" aria-hidden="true"></span>' + esc((on ? tr.live.on : tr.live.off).replace('{t}', time));
+    liveOn = on;
+    var ct = $('#fm-ct-live');
+    if (ct && tr.ci) ct.innerHTML = '<span class="fm-live-dot' + (on ? ' is-on' : '') + '" aria-hidden="true"></span>' + esc(on ? tr.ci.liveOn : tr.ci.liveOff);
   }
+  var liveOn = false;
   renderLive();
   setInterval(renderLive, 30000);
 
@@ -1480,6 +1520,10 @@
       if (cur.indexOf(x) === -1) d.message = (!cur || C.starters.indexOf(cur) !== -1) ? x + ' ' : cur + '\n' + x + ' ';
       renderInline();
       var m = $('#fm-ci-message'); if (m) { m.focus(); m.setSelectionRange(m.value.length, m.value.length); }
+    },
+    ciCall: function () {
+      state.ci.call = !state.ci.call; renderInline(); ciSaveDraft();
+      var f = $(state.ci.call ? '#fm-ci-phone' : '#fm-ci-root .fm-ci-call'); if (f) f.focus();
     },
     ciAgain: function () { state.ci.sent = false; renderInline(); var n = $('#fm-ci-name'); if (n) n.focus(); },
     pickService: function (el) { pickService(el.closest('.fm-svc'), true); },
@@ -1574,7 +1618,7 @@
     var el = ev.target, key = el.getAttribute && el.getAttribute('data-field');
     if (!key) return;
     if (el.closest('#fm-cf-form')) state.cf.data[key] = el.value;
-    else if (el.closest('#fm-ci-form')) state.ci.data[key] = el.value;
+    else if (el.closest('#fm-ci-form')) { state.ci.data[key] = el.value; ciSaveDraft(); }
     else if (el.closest('#fm-bk-form')) state.bk.data[key] = el.value;
     else if (el.closest('#fm-au-form')) state.au.data[key] = el.value;
   });
