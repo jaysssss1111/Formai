@@ -917,6 +917,23 @@
   document.addEventListener('click', function (ev) {
     var c = ev.target.closest && ev.target.closest('[data-news-topic]');
     if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; renderNews(); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
+    var sh = ev.target.closest && ev.target.closest('[data-news-share]');
+    if (sh) {
+      // Share the article with our "For you" line: the share sheet where there is one, else copy both.
+      var url = sh.getAttribute('data-news-share'), it = (news || []).filter(function (x) { return x.url === url; })[0] || {};
+      var tr = t(), tk = it.take && (it.take[state.lang] || it.take.en);
+      var text = (tk ? tr.newsTake + ': ' + tk + ' (formai)' : it.title || '');
+      if (navigator.share) { navigator.share({ title: it.title, text: text, url: url }).catch(function () {}); return; }
+      var done = function () {
+        var lab = sh.querySelector('span'); if (!lab) return;
+        lab.textContent = tr.newsCopied; sh.classList.add('is-done');
+        setTimeout(function () { lab.textContent = tr.newsShare; sh.classList.remove('is-done'); }, 2200);
+      };
+      var all = text + '\n' + url;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(all).then(done, function () { window.prompt('', all); });
+      else window.prompt('', all);
+      return;
+    }
     var m = ev.target.closest && ev.target.closest('[data-news-more]');
     if (m) {
       state.newsAll = !state.newsAll; renderNews();

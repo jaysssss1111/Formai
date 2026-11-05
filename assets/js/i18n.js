@@ -158,6 +158,7 @@ const T = {
     newsRead: 'Read on', newsNote: '', newsTake: 'For you', newsAll: 'All', newsFilter: 'Filter articles by topic',
     newsMore: 'Show all {n} articles', newsLess: 'Show fewer', newsStamp: 'Updated weekly · latest {d} · {n} articles',
     newsCtaText: 'Wondering what this means for your business?', newsCtaBtn: 'Get a free audit',
+    newsHelp: 'How we help:', newsHelpData: 'your data and AI', newsShare: 'Share', newsCopied: 'Copied, with our take', newsNew: 'New', newsStampNew: ' · {k} new this week',
     newsTopics: { design: 'Design', code: 'Code', agents: 'Agents and automation', regulation: 'Regulation', search: 'Search' },
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
   },
@@ -318,6 +319,7 @@ const T = {
     newsRead: 'Lue:', newsNote: 'Artikkelit ovat englanniksi.', newsTake: 'Sinulle', newsAll: 'Kaikki', newsFilter: 'Suodata artikkeleita aiheen mukaan',
     newsMore: 'Näytä kaikki {n} artikkelia', newsLess: 'Näytä vähemmän', newsStamp: 'Päivittyy viikoittain · uusin {d} · {n} artikkelia',
     newsCtaText: 'Mietitkö, mitä tämä tarkoittaa yrityksellesi?', newsCtaBtn: 'Pyydä maksuton auditointi',
+    newsHelp: 'Näin autamme:', newsHelpData: 'tietosi ja tekoäly', newsShare: 'Jaa', newsCopied: 'Kopioitu näkemyksemme kanssa', newsNew: 'Uusi', newsStampNew: ' · {k} uutta tällä viikolla',
     newsTopics: { design: 'Suunnittelu', code: 'Koodi', agents: 'Agentit ja automaatio', regulation: 'Sääntely', search: 'Haku' },
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
   }
