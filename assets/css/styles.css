@@ -1073,3 +1073,6 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   .fm-hero-start .fm-input{border-right:1px solid var(--strong)}
   .fm-hero-start .fm-btn{justify-content:center}
 }
+
+/* Hero: no background grid and no rolling squares; the headline and artwork carry it. */
+.fm-hero::before{display:none}
