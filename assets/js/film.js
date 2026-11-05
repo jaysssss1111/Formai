@@ -357,6 +357,16 @@
         if (j === ch) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       });
     }
+    // The Method step columns above act as the film's chapter menu.
+    var steps = document.querySelector('.fm-method-steps');
+    if (steps) {
+      steps.classList.toggle('is-live', started);
+      Array.prototype.forEach.call(steps.querySelectorAll('[data-method-step]'), function (el, j) {
+        el.style.setProperty('--p', started ? f2(k(t, CH[j], CH[j] + 9)) : 0);
+        el.classList.toggle('is-on', started && j === ch);
+        if (started && j === ch) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
+      });
+    }
     refs.time.textContent = mmss(t) + ' / ' + mmss(DUR);
     var ended = t >= DUR;
     var stateName = playing ? 'playing' : ended ? 'ended' : 'paused';
@@ -419,6 +429,22 @@
       seek(CH[Number(el.getAttribute('data-i'))]);
       play();
     }
+  });
+
+  // Clicking or pressing Enter/Space on a Method step plays that chapter.
+  function playStep(el) {
+    userPaused = false;
+    pause();
+    seek(CH[Number(el.getAttribute('data-method-step'))]);
+    play();
+  }
+  document.addEventListener('click', function (ev) {
+    var el = ev.target.closest && ev.target.closest('[data-method-step]');
+    if (el) playStep(el);
+  });
+  document.addEventListener('keydown', function (ev) {
+    var el = ev.target;
+    if (el && el.hasAttribute && el.hasAttribute('data-method-step') && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); playStep(el); }
   });
 
   document.addEventListener('fm:lang', function () { build(); draw(); });
