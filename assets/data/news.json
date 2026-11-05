@@ -7,7 +7,11 @@
     "summary": "When a developer gives an AI agent a coding task, the agent does more than answer once. It plans, generates code, runs tests, and repeats the process to correct errors. A single task can use 10 to 50 times more tokens…",
     "topic": "code",
     "manual": true,
-    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/iStock-2297734847.jpg?resize=1200,600"
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/iStock-2297734847.jpg?resize=1200,600",
+    "take": {
+      "en": "Budget AI coding by features that ship, not by token prices: one agent task can use 10 to 50 times the tokens of a single answer.",
+      "fi": "Budjetoi tekoälykoodaus valmiiden ominaisuuksien mukaan, ei token-hinnan: yksi agenttitehtävä voi kuluttaa 10–50 kertaa yhden vastauksen verran."
+    }
   },
   {
     "title": "What AI has changed in Design Systems, and what is still up to us",
@@ -17,7 +21,11 @@
     "summary": "You’ve probably read, or even written, one of those LinkedIn posts about someone building a complete Design System in 20 minutes with Claude. Or in 15 minutes with Gemini. Or… you get the idea. Those posts made me…",
     "topic": "design",
     "manual": true,
-    "image": "https://cdn-images-1.medium.com/max/1024/1*er_HyzWo0FVdfLtEexv7KQ.jpeg"
+    "image": "https://cdn-images-1.medium.com/max/1024/1*er_HyzWo0FVdfLtEexv7KQ.jpeg",
+    "take": {
+      "en": "AI can draft a design system in minutes, but deciding what your brand stands for is still a human job. Keep someone owning it.",
+      "fi": "Tekoäly luonnostelee design-järjestelmän minuuteissa, mutta sen päättäminen, mitä brändisi edustaa, on yhä ihmisen työtä. Pidä sille omistaja."
+    }
   },
   {
     "title": "Everyone is building AI agents. Who’s designing the stop button?",
@@ -27,7 +35,11 @@
     "summary": "In September 2025, researchers at Thinking Machines Lab ran the same prompt through a language model 1,000 times. They set the temperature to zero, a setting that should, in theory, make token selection deterministic…",
     "topic": "agents",
     "manual": true,
-    "image": "https://cdn-images-1.medium.com/max/1024/1*4xb0tuwC90tLWJBgYVaomg.png"
+    "image": "https://cdn-images-1.medium.com/max/1024/1*4xb0tuwC90tLWJBgYVaomg.png",
+    "take": {
+      "en": "Before an agent acts for your customers, design how people pause, correct and undo it. The same prompt does not always give the same answer.",
+      "fi": "Ennen kuin agentti toimii asiakkaidesi puolesta, suunnittele, miten ihminen voi pysäyttää, korjata ja perua sen. Sama kehote ei aina tuota samaa vastausta."
+    }
   },
   {
     "title": "What I learned teaching AI prototyping at university",
@@ -37,7 +49,11 @@
     "summary": "I teach digital prototyping to fashion design undergraduates and master’s students at UPM’s Fashion School. My course focuses on exploring app concepts that can enrich the fashion experience. Past project ideas ranged…",
     "topic": "design",
     "manual": true,
-    "image": "https://cdn-images-1.medium.com/max/1024/1*_aggjPMjQBpRc_sWKZZ7zA.png"
+    "image": "https://cdn-images-1.medium.com/max/1024/1*_aggjPMjQBpRc_sWKZZ7zA.png",
+    "take": {
+      "en": "Clickable AI prototypes are now quick enough to test an idea with real users in days, before you commit to building it.",
+      "fi": "Klikattavat tekoälyprototyypit syntyvät nyt niin nopeasti, että idean voi testata oikeilla käyttäjillä päivissä ennen kuin siihen sitoudutaan."
+    }
   },
   {
     "title": "Creating AI value with enterprise context",
@@ -47,7 +63,11 @@
     "summary": "Across a business, any number of AI platforms, systems, and tools may be at work simultaneously—for example, AI-powered customer platforms, conversational assistants, and workflow and process automation tools. Each one…",
     "topic": "agents",
     "manual": true,
-    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR2026_CovSocial1200_1028-e1793220807248.png?resize=1200,600"
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR2026_CovSocial1200_1028-e1793220807248.png?resize=1200,600",
+    "take": {
+      "en": "AI tools work better when they share what your company knows. Map where your data lives before adding another assistant.",
+      "fi": "Tekoälytyökalut toimivat paremmin, kun ne jakavat yrityksesi tiedon. Kartoita, missä tietosi ovat, ennen kuin lisäät uuden avustajan."
+    }
   },
   {
     "title": "Securing the agentic enterprise with data lineage",
@@ -56,7 +76,11 @@
     "date": "2026-11-04",
     "summary": "A sales representative asks an AI agent for customer pricing, and the agent pulls data from multiple sources: restricted pricing systems, internal communications, and archived quotes. The output looks accurate to the…",
     "topic": "agents",
-    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR2026_CyberhavenV1COV1200SocialCards.png?resize=1200,600"
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR2026_CyberhavenV1COV1200SocialCards.png?resize=1200,600",
+    "take": {
+      "en": "If an agent can read restricted data, it can repeat it. Check what each agent can see before it answers customers or staff.",
+      "fi": "Jos agentti näkee rajattua tietoa, se voi myös toistaa sitä. Tarkista, mitä kukin agentti näkee, ennen kuin se vastaa asiakkaille tai henkilöstölle."
+    }
   },
   {
     "title": "Meta acquires AI coding startup Conductor",
@@ -65,6 +89,10 @@
     "date": "2026-11-04",
     "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
     "topic": "code",
-    "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653"
+    "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653",
+    "take": {
+      "en": "Teams of coding agents working in parallel are becoming normal. A small team can build more, but someone still has to review the work.",
+      "fi": "Rinnakkain työskentelevät koodausagentit yleistyvät. Pieni tiimi voi rakentaa enemmän, mutta jonkun on yhä tarkistettava työ."
+    }
   }
 ]

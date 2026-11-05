@@ -46,11 +46,14 @@ function render(lang) {
     return Array.isArray(list) ? open + list.map((t) => `<span style="${TAG}">${esc(t)}</span>`).join('') + close : m;
   });
 
-  // News carousel: cards in the HTML, data inline so the page needs no extra request.
+  // AI news: lead story, list, filters and stamp in the HTML, data inline so the page needs no extra request.
   if (NEWS.length) {
     html = html.replace('<section id="news" class="fm-grain" hidden', '<section id="news" class="fm-grain"');
-    html = html.replace('<div class="fm-news-track" id="fm-news-track" role="list" tabindex="0" data-i18n-aria-label="newsLabel" aria-label="' + esc(tr.newsLabel) + '"></div>',
-      '<div class="fm-news-track" id="fm-news-track" role="list" tabindex="0" data-i18n-aria-label="newsLabel" aria-label="' + esc(tr.newsLabel) + '">' + ctx.window.FM_NEWS_UI.cards(NEWS, tr, lang) + '</div>');
+    const UI = ctx.window.FM_NEWS_UI;
+    html = html.replace('<div class="fm-news-grid" id="fm-news-root"></div>', '<div class="fm-news-grid" id="fm-news-root">' + UI.layout(NEWS, tr, lang, {}) + '</div>');
+    html = html.replace('<div class="fm-news-filters fm-reveal" id="fm-news-filters" role="group"></div>',
+      '<div class="fm-news-filters fm-reveal" id="fm-news-filters" role="group" aria-label="' + esc(tr.newsFilter) + '">' + UI.filters(NEWS, tr, '') + '</div>');
+    html = html.replace('<span class="fm-news-stamp" id="fm-news-stamp"></span>', '<span class="fm-news-stamp" id="fm-news-stamp">' + esc(UI.stamp(NEWS, tr, lang)) + '</span>');
   }
   html = html.replace('<script src="assets/js/news.js', '<script>window.FM_NEWS=' + JSON.stringify(NEWS).replace(/</g, '\\u003c') + ';</script>\n<script src="assets/js/news.js');
 
