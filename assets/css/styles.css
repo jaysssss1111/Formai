@@ -951,3 +951,17 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-me-grid #fm-film > .fm-film-script{order:2;margin-top:8px}
 .fm-timeline .fm-step.is-done .fm-step-head::before{background:var(--brand);border-color:var(--brand)}
 .fm-me-grid .fm-film-svg{width:100%;height:clamp(240px,36vw,440px)}
+
+/* ---------- Book: the visitor's own time, topic chips ---------- */
+.fm-bk-local{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.fm-bk-pick.is-sel .fm-bk-local{color:var(--surface)}
+.fm-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.fm-slot-local{font-size:10px;letter-spacing:0;color:var(--muted);line-height:1}
+.fm-slot.is-sel .fm-slot-local{color:var(--on-accent);opacity:.85}
+.fm-bk-tzline{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fm-bk-localline{display:block;margin-top:2px;font-size:13px;line-height:1.4;font-weight:300;color:var(--muted)}
+.fm-bk-topics{margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.fm-bk-topics legend{padding:0;margin-bottom:4px}
+.fm-bk-topics-hint{font-size:14px;color:var(--muted)}
+.fm-bk-topics > div{display:flex;flex-wrap:wrap;gap:8px}
+.fm-bk-topics .fm-chip{text-transform:none;letter-spacing:0;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;min-height:40px}
