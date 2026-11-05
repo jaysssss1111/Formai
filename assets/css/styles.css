@@ -1076,3 +1076,45 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 
 /* Hero headline: two short sentences, the second on its own line. */
 .fm-h1-line{display:block}
+
+/* ---------- Who we work with: "Which one are you?" ----------
+   Three large tabs over one panel: the signs that it is you, what the first
+   sprint usually is, the matching case, and a next step that says who you are. */
+.fm-seg{display:flex;flex-direction:column}
+.fm-seg-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--strong);border-bottom:0}
+.fm-seg-tab{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ico name" "ico line";gap:4px 16px;align-items:start;padding:22px 24px;border:0;border-right:1px solid var(--strong);border-bottom:1px solid var(--strong);background:transparent;color:var(--ink);text-align:left;cursor:pointer;font:inherit;position:relative;transition:background-color .2s linear}
+.fm-seg-tab:last-child{border-right:0}
+.fm-seg-tab::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--brand);transform:scaleX(0);transform-origin:0 50%;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.fm-seg-tab.is-on{background:var(--raised);border-bottom-color:transparent}
+.fm-seg-tab.is-on::after{transform:none}
+.fm-seg-tab:hover:not(.is-on){background:color-mix(in srgb,var(--raised) 50%,transparent)}
+.fm-seg-tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.fm-seg-ico{grid-area:ico;display:flex;width:44px;height:44px}
+.fm-seg-ico svg{width:44px !important;height:44px !important}
+.fm-seg-name{grid-area:name;font-size:clamp(22px,2.2vw,28px);line-height:1.15;font-weight:300;letter-spacing:-0.02em}
+.fm-seg-line{grid-area:line;font-size:14px;line-height:1.5;font-weight:300;color:var(--muted)}
+.fm-seg-panel{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,5fr) auto;gap:24px 40px;padding:32px;border:1px solid var(--strong);border-top:0;background:var(--raised)}
+.fm-seg-panel[hidden]{display:none}
+.fm-motion .fm-seg-panel:not([hidden]){animation:fm-faq-in .3s cubic-bezier(.2,.7,.2,1) both}
+.fm-seg-col{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.fm-seg-k{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.fm-seg-signs{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.fm-seg-signs li{position:relative;padding-left:22px;font-size:16px;line-height:1.5}
+.fm-seg-signs li::before{content:'';position:absolute;left:2px;top:.6em;width:7px;height:7px;background:var(--brand);transform:rotate(45deg)}
+.fm-seg-first{margin:0;font-size:16px;line-height:1.55;font-weight:300}
+.fm-seg-time{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:5px 8px;border:1px solid var(--strong)}
+.fm-seg-link{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0;border:0;border-bottom:1px solid var(--strong);background:transparent;color:var(--ink);cursor:pointer;text-decoration:none;font:inherit;font-size:15px}
+.fm-seg-link:hover{border-bottom-color:var(--accent)}
+.fm-seg-link svg{color:var(--accent)}
+.fm-seg-go{justify-content:flex-end}
+.fm-seg-cta{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;white-space:nowrap;border:1px solid var(--ink);border-radius:0;background:var(--ink);color:var(--surface);cursor:pointer;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;transition:background-color .18s linear,border-color .18s linear,color .18s linear}
+.fm-seg-cta:hover{background:var(--brand);border-color:var(--brand);color:#000}
+.fm-seg-cta:focus-visible,.fm-seg-link:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media (max-width:900px){
+  .fm-seg-panel{grid-template-columns:1fr;padding:24px 20px}
+  .fm-seg-go{justify-content:flex-start}
+  .fm-seg-tab{grid-template-columns:1fr;grid-template-areas:"ico" "name";padding:16px 12px;gap:8px}
+  .fm-seg-line{display:none}
+  .fm-seg-ico,.fm-seg-ico svg{width:34px !important;height:34px !important}
+  .fm-seg-name{font-size:18px}
+}

@@ -1218,7 +1218,8 @@
     var cards = $$('.fm-case', track), dots = $$('[data-work-dot]');
     function current() {
       var max = track.scrollWidth - track.clientWidth;
-      if (track.scrollLeft >= max - 2) return cards.length - 1;
+      // At the end of the track the last cards cannot reach the left edge: keep the one a dot asked for.
+      if (track.scrollLeft >= max - 2) return track._want != null ? track._want : cards.length - 1;
       var best = 0, d = Infinity;
       cards.forEach(function (c, k) { var x = Math.abs(c.offsetLeft - track.offsetLeft - track.scrollLeft); if (x < d) { d = x; best = k; } });
       return best;
@@ -1229,10 +1230,13 @@
       dots.forEach(function (b, j) { b.classList.toggle('is-on', j === k); if (j === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
     }
     track.addEventListener('scroll', function () { requestAnimationFrame(update); }, { passive: true });
+    ['wheel', 'touchstart', 'pointerdown'].forEach(function (e) { track.addEventListener(e, function () { track._want = null; }, { passive: true }); });
+    $$('[data-carousel][data-target="fm-work-track"]').forEach(function (btn) { btn.addEventListener('click', function () { track._want = null; }); });
     window.addEventListener('resize', update);
     dots.forEach(function (b) {
       b.addEventListener('click', function () {
-        var c = cards[Number(b.getAttribute('data-work-dot'))];
+        track._want = Number(b.getAttribute('data-work-dot'));
+        var c = cards[track._want];
         track.scrollTo({ left: c.offsetLeft - track.offsetLeft, behavior: reducedMotion ? 'auto' : 'smooth' });
       });
     });
@@ -1454,6 +1458,47 @@
     track.innerHTML = '<div class="fm-hs-set">' + html + '</div><div class="fm-hs-set" aria-hidden="true">' + html.replace(/<button /g, '<button tabindex="-1" ') + '</div>';
     applyText();
   })();
+
+  /* ---------- Who we work with: a picker of three kinds of team ---------- */
+  function pickSeg(k, focus) {
+    $$('.fm-seg-tab').forEach(function (b, j) {
+      var on = j === k;
+      b.classList.toggle('is-on', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1;
+      if (on && focus) b.focus();
+    });
+    $$('.fm-seg-panel').forEach(function (p, j) { p.hidden = j !== k; });
+  }
+  document.addEventListener('click', function (ev) {
+    var tab = ev.target.closest && ev.target.closest('.fm-seg-tab');
+    if (tab) { pickSeg(Number(tab.getAttribute('data-seg'))); return; }
+    var cs = ev.target.closest && ev.target.closest('[data-seg-case]');
+    if (cs) {
+      // Open the matching concept case in Work.
+      var dot = $('[data-work-dot="' + cs.getAttribute('data-seg-case') + '"]'), w = $('#work');
+      if (w) w.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      if (dot) setTimeout(function () { dot.click(); }, reducedMotion ? 0 : 500);
+      return;
+    }
+    var talk = ev.target.closest && ev.target.closest('[data-seg-talk]');
+    if (talk) {
+      // The contact form at the end of the page, with the message already started.
+      var seg = t().seg[Number(talk.getAttribute('data-seg-talk'))];
+      state.ci.sent = false;
+      if (!String(state.ci.data.message).trim()) state.ci.data.message = seg.msg;
+      renderInline();
+      var ct = $('#contact'); if (ct) ct.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(function () { var m = $('#fm-ci-message'); if (m) { m.focus({ preventScroll: true }); m.setSelectionRange(m.value.length, m.value.length); } }, reducedMotion ? 0 : 600);
+    }
+  });
+  document.addEventListener('keydown', function (ev) {
+    var tab = ev.target.closest && ev.target.closest('.fm-seg-tab');
+    if (!tab) return;
+    var k = Number(tab.getAttribute('data-seg')), to = -1;
+    if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') to = (k + 1) % 3;
+    else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') to = (k + 2) % 3;
+    else if (ev.key === 'Home') to = 0; else if (ev.key === 'End') to = 2;
+    if (to >= 0) { ev.preventDefault(); pickSeg(to, true); }
+  });
 
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
