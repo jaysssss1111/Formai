@@ -1073,11 +1073,12 @@
     var any = false;
     $$('.fm-social').forEach(function (el) {
       var url = social[el.getAttribute('data-social')];
-      // An icon shows only once its profile address is set, so there are no dead buttons.
-      if (url && /^https:\/\//.test(url)) { el.setAttribute('href', url); el.hidden = false; any = true; }
-      else { el.removeAttribute('href'); el.hidden = true; }
+      // All icons show; an icon becomes a link once its profile address is set.
+      el.hidden = false;
+      if (url && /^https:\/\//.test(url)) { el.setAttribute('href', url); el.removeAttribute('aria-disabled'); any = true; }
+      else { el.removeAttribute('href'); el.setAttribute('aria-disabled', 'true'); }
     });
-    var nav = $('.fm-socials'); if (nav) nav.hidden = !any;
+    var nav = $('.fm-socials'); if (nav) nav.hidden = false;
   })();
 
   /* ---------- Services picker ----------
@@ -1539,9 +1540,13 @@
       var top = Math.max(foot.getBoundingClientRect().top, main.getBoundingClientRect().bottom);
       if (innerHeight - top > Math.min(foot.offsetHeight, innerHeight) * 0.3) foot.classList.add('is-in');
     }
+    // Curtain: the footer stays put under the page. When it is taller than the
+    // screen (phones) it is pinned by that overflow, so its top shows as the page
+    // lifts off and the rest scrolls into view after.
+    function pin() { foot.style.setProperty('--foot-pin', Math.min(0, innerHeight - foot.offsetHeight) + 'px'); }
     addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(check); }, { passive: true });
-    addEventListener('resize', check);
-    check();
+    addEventListener('resize', function () { pin(); check(); });
+    pin(); check();
     var link = $('[data-foot-top]');
     if (link) link.addEventListener('click', function (ev) {
       if (state.paused || reducedMotion) return;
