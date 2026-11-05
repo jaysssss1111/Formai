@@ -1471,11 +1471,11 @@
           var typ = setInterval(function () {
             m++; el.textContent = to.slice(0, m);
             if (m >= to.length) { clearInterval(typ); k = (k + 1) % list.length; busy = false; }
-          }, 70);
+          }, 95);
         }
-      }, 40);
+      }, 55);
     }
-    setInterval(step, 2800);
+    setInterval(step, 5200);
     document.addEventListener('fm:lang', function () { k = 0; });
   })();
   (function () {
