@@ -543,8 +543,68 @@
     return M.longDate(ms) + ', ' + M.slotRange(min) + ' (' + M.B.tzNote + ')';
   }
 
+  var bkNarrow = window.matchMedia('(max-width: 780px)');
+  function dayId(ms) { return new Date(ms).toISOString().slice(0, 10); }
+  function openDays(M) {
+    var out = [];
+    for (var ms = M.todayUTC; ms <= M.maxUTC; ms += DAY) if (M.isOpen(ms)) out.push(ms);
+    return out;
+  }
+  // The first free time of each of the next n open days.
+  function nextFree(M, n) {
+    return openDays(M).slice(0, n).map(function (ms) {
+      var m = M.freeSlots(ms).filter(function (x) { return !M.isTaken(ms, x); })[0];
+      return { ms: ms, date: dayId(ms), min: m };
+    });
+  }
+  function renderQuick() {
+    var host = $('#fm-bk-quick');
+    if (!host) return;
+    var M = calModel(), B = M.B, b = state.bk;
+    var picks = nextFree(M, 3);
+    if (!picks.length || b.step === 'done') { host.innerHTML = ''; return; }
+    host.innerHTML = '<span class="fm-bk-quick-label">' + esc(B.quickLabel) + '</span>' +
+      '<div class="fm-bk-quick-row">' + picks.map(function (p) {
+        var day = p.ms === M.todayUTC ? B.today : p.ms === M.todayUTC + DAY ? B.tomorrow : capFirst(M.fmt({ weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(p.ms)));
+        var sel = b.date === p.date && b.slot === String(p.min);
+        return '<button type="button" class="fm-bk-pick' + (sel ? ' is-sel' : '') + '" data-action="quickSlot" data-date="' + p.date + '" data-slot="' + p.min + '" aria-pressed="' + sel + '"' +
+          ' aria-label="' + esc(capFirst(M.longDate(p.ms)) + ', ' + M.slotRange(p.min) + ' (' + B.tzNote + ')') + '">' +
+          '<span class="fm-bk-pick-day">' + esc(day) + '</span><span class="fm-bk-pick-time">' + esc(M.hhmm(p.min)) + '</span>' + ICON_ARROW + '</button>';
+      }).join('') + '</div>';
+  }
+  function renderStrip(M) {
+    var B = M.B, b = state.bk;
+    var days = openDays(M);
+    $('#fm-cal').innerHTML =
+      '<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">' +
+      '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.stripTitle) + '</h3>' +
+      '<span style="' + MONO + ' font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">' + esc(B.tzNote) + '</span></div>' +
+      '<div class="fm-daystrip" role="group" aria-label="' + esc(B.stripTitle) + '">' + days.map(function (ms) {
+        var id = dayId(ms), sel = id === b.date, d = new Date(ms);
+        return '<button type="button" class="fm-sday' + (sel ? ' is-sel' : '') + (ms === M.todayUTC ? ' is-today' : '') + '" data-action="pickDay" data-date="' + id + '" aria-pressed="' + sel + '" aria-label="' + esc(capFirst(M.longDate(ms))) + '">' +
+          '<span class="fm-sday-wd">' + esc(B.weekdays[(d.getUTCDay() + 6) % 7]) + '</span>' +
+          '<span class="fm-sday-d">' + d.getUTCDate() + '</span>' +
+          '<span class="fm-sday-m">' + esc(M.fmt({ month: 'short' }).format(d).replace('.', '')) + '</span></button>';
+      }).join('') + '</div>';
+    var strip = $('#fm-cal .fm-daystrip'), on = strip && strip.querySelector('.is-sel');
+    if (on) strip.scrollLeft = Math.max(0, on.offsetLeft - strip.offsetLeft - 16);
+  }
+  // Phones: bring the times or the form into view after a choice above them.
+  function bkReveal() {
+    if (!bkNarrow.matches) return;
+    var p = $('#fm-bk-panel'); if (!p) return;
+    var r = p.getBoundingClientRect();
+    if (r.top < 0 || r.top > innerHeight * 0.55) window.scrollTo({ top: window.scrollY + r.top - 12, behavior: reducedMotion ? 'auto' : 'smooth' });
+  }
+  (function () {
+    var re = function () { if ($('#fm-cal')) renderCalendar(); };
+    if (bkNarrow.addEventListener) bkNarrow.addEventListener('change', re); else bkNarrow.addListener(re);
+  })();
+
   function renderCalendar() {
     var M = calModel(), B = M.B, b = state.bk;
+    renderQuick();
+    if (bkNarrow.matches) { renderStrip(M); return; }
     var first = Date.UTC(M.hel.y, M.hel.m - 1 + b.calOff, 1);
     var fd = new Date(first);
     var cy = fd.getUTCFullYear(), cm = fd.getUTCMonth();
@@ -587,9 +647,12 @@
     var html = '';
     var step = b.step === 'done' ? 'done' : b.step === 'details' ? 'details' : b.date ? 'slots' : 'none';
     if (step === 'none') {
-      html = '<div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">' +
-        '<svg width="56" height="56" viewBox="0 0 64 64" aria-hidden="true"><path d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" style="fill: none; stroke: var(--strong); stroke-width: 2.5; stroke-linejoin: miter;"></path><path d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path></svg>' +
-        '<p style="margin: 0; max-width: 300px; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.pickDay) + '</p></div>';
+      html = '<div class="fm-bk-call">' +
+        '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="' + LABEL + ' color: var(--accent);">' + esc(B.callLabel) + '</span>' +
+        '<h3 style="margin: 0; font-size: clamp(26px, 2.6vw, 32px); line-height: 1.1; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.callTitle) + '</h3></div>' +
+        '<ul class="fm-bk-points">' + B.callPoints.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        '<div class="fm-bk-meta">' + B.callMeta.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' +
+        '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.callPick) + '</p></div>';
     } else if (step === 'slots') {
       var ms = Date.parse(b.date + 'T00:00:00Z');
       var selMin = b.slot ? Number(b.slot) : null;
@@ -604,7 +667,7 @@
           }
           return '<button type="button" class="fm-slot' + (sel ? ' is-sel' : '') + '" aria-pressed="' + sel + '" aria-label="' + esc(M.slotRange(m)) + '" data-action="pickSlot" data-slot="' + id + '">' + esc(M.hhmm(m)) + '</button>';
         }).join('') + '</div>' +
-        '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: auto;">' +
+        '<div class="fm-bk-foot" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: auto;">' +
         '<span aria-live="polite" style="font-size: 15px; line-height: 1.4; font-weight: 400;">' + esc(b.slot && selMin != null ? M.slotRange(selMin) : B.noneYet) + '</span>' +
         '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="toDetails"' + (b.slot ? '' : ' disabled') + ' style="flex: none;">' + esc(B.cont) + ' ' + ICON_ARROW + '</button></div>';
     } else if (step === 'details') {
@@ -618,8 +681,6 @@
         '<form id="fm-bk-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
         field('fm-bk-name', cf.name, { key: 'name', required: true, ac: 'name', value: f.name, err: eName ? cf.errName : '' }) +
         field('fm-bk-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: f.email, err: eEmail ? cf.errEmail : '' }) +
-        field('fm-bk-company', cf.company, { key: 'company', ac: 'organization', value: f.company }) +
-        interestPicker(b.interests, 'bk') +
         field('fm-bk-topic', B.topic, { key: 'topic', textarea: true, rows: 3, value: f.topic, style: 'min-height: 96px;' }) +
         privacyLine() +
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;"' + (b.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(B.confirm, b.sending) + '</button></form>';
@@ -631,6 +692,7 @@
         '<button type="button" class="fm-btn fm-ck-btn" data-action="bkAgain" style="flex: none;">' + esc(B.again) + '</button></div>';
     }
     $('#fm-bk-panel').innerHTML = html;
+    renderQuick();
   }
   function renderBooking() { renderCalendar(); renderPanel(); }
 
@@ -1048,11 +1110,23 @@
     },
     calPrev: function () { state.bk.calOff = Math.max(0, state.bk.calOff - 1); renderCalendar(); },
     calNext: function () { state.bk.calOff += 1; renderCalendar(); },
+    quickSlot: function (el) {
+      var b = state.bk, M = calModel();
+      b.date = el.getAttribute('data-date'); b.slot = el.getAttribute('data-slot');
+      b.step = 'details'; b.tried = false; b.takenNotice = false;
+      var d = new Date(Date.parse(b.date + 'T00:00:00Z'));
+      b.calOff = (d.getUTCFullYear() - M.hel.y) * 12 + d.getUTCMonth() - (M.hel.m - 1);
+      loadTaken();
+      renderBooking();
+      var n = $('#fm-bk-name'); if (n) n.focus({ preventScroll: bkNarrow.matches });
+      bkReveal();
+    },
     pickDay: function (el) {
       var b = state.bk; b.date = el.getAttribute('data-date'); b.slot = ''; b.step = 'slots'; b.takenNotice = false;
       loadTaken();
       renderBooking();
-      var again = $('#fm-cal [data-date="' + b.date + '"]'); if (again) again.focus();
+      var again = $('#fm-cal [data-date="' + b.date + '"]'); if (again) again.focus({ preventScroll: true });
+      bkReveal();
     },
     pickSlot: function (el) {
       state.bk.slot = el.getAttribute('data-slot'); state.bk.takenNotice = false;
@@ -1062,7 +1136,8 @@
     toDetails: function () {
       if (!state.bk.slot) return;
       state.bk.step = 'details'; state.bk.tried = false; renderPanel();
-      var n = $('#fm-bk-name'); if (n) n.focus();
+      var n = $('#fm-bk-name'); if (n) n.focus({ preventScroll: bkNarrow.matches });
+      bkReveal();
     },
     bkBack: function () { state.bk.step = 'slots'; renderPanel(); },
     bkAgain: function () { var b = state.bk; b.step = ''; b.date = ''; b.slot = ''; b.doneSummary = ''; renderBooking(); }

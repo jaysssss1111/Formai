@@ -624,3 +624,40 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-work-track .fm-case:hover{transform:none}
 @media (max-width:640px){.fm-ba-layer{padding:28px 12px 12px}.fm-case-cta{width:100%;justify-content:space-between;letter-spacing:.08em;text-align:left;padding:10px 16px}}
 .fm-case-title{-webkit-hyphens:manual;hyphens:manual}
+
+/* ---------- Book: quick picks, what the call is, a day strip on phones ---------- */
+.fm-bk-quick{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px}
+.fm-bk-quick:empty{display:none}
+.fm-bk-quick-label{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fm-bk-quick-row{display:flex;flex-wrap:wrap;gap:8px}
+.fm-bk-pick{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 16px;border:1px solid var(--strong);border-radius:0;background:var(--raised);color:var(--ink);cursor:pointer;font:inherit;transition:background-color .18s linear,color .18s linear,border-color .18s linear}
+.fm-bk-pick-day{font-size:15px;font-weight:400}
+.fm-bk-pick-time{font-family:'DM Mono',ui-monospace,monospace;font-size:14px;color:var(--accent)}
+.fm-bk-pick svg{color:var(--muted);transition:transform .18s linear}
+.fm-bk-pick:hover{border-color:var(--ink)}
+.fm-bk-pick:hover svg{transform:translateX(3px);color:var(--ink)}
+.fm-bk-pick.is-sel{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.fm-bk-pick.is-sel .fm-bk-pick-time,.fm-bk-pick.is-sel svg{color:var(--surface)}
+.fm-bk-pick:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fm-bk-call{flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.fm-bk-points{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px}
+.fm-bk-points li{position:relative;padding-left:24px;font-size:16px;line-height:1.55;font-weight:300}
+.fm-bk-points li::before{content:'';position:absolute;left:2px;top:.62em;width:8px;height:8px;background:var(--brand);transform:rotate(45deg)}
+.fm-bk-meta{display:flex;flex-wrap:wrap;gap:8px}
+.fm-bk-meta span{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;line-height:1.3;padding:8px 10px;border:1px solid var(--line);color:var(--muted)}
+.fm-daystrip{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;margin:0 -20px;padding:2px 20px 10px;scrollbar-width:none}
+.fm-daystrip::-webkit-scrollbar{display:none}
+.fm-sday{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:64px;height:84px;padding:0;border:1px solid var(--strong);border-radius:0;background:transparent;color:var(--ink);cursor:pointer;scroll-snap-align:start}
+.fm-sday-wd,.fm-sday-m{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fm-sday-d{font-family:'DM Mono',ui-monospace,monospace;font-size:22px;line-height:1}
+.fm-sday.is-today{border-top:2px solid var(--brand)}
+.fm-sday.is-sel{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.fm-sday.is-sel span{color:var(--surface)}
+.fm-sday:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:780px){
+  .fm-bk-quick{flex-direction:column;align-items:stretch}
+  .fm-bk-quick-row{flex-direction:column}
+  .fm-bk-pick{justify-content:space-between}
+  .fm-bk-pick-day{margin-right:auto}
+  .fm-bk-foot{position:sticky;bottom:0;z-index:2;background:var(--raised);margin:0 -20px -20px;padding:12px 20px calc(12px + env(safe-area-inset-bottom)) !important;box-shadow:0 -8px 16px -12px rgba(0,0,0,.35)}
+}
