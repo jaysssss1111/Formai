@@ -629,15 +629,32 @@
       return { ms: ms, date: dayId(ms), min: m };
     });
   }
+  function quickDay(M, p) {
+    var B = M.B;
+    return p.ms === M.todayUTC ? B.today : p.ms === M.todayUTC + DAY ? B.tomorrow : capFirst(M.fmt({ weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(p.ms)));
+  }
+  // Hero: "Next free call: Tomorrow 11:00", one click picks it in the booking form.
+  function renderHeroNext(M, picks) {
+    var el = $('#fm-hero-next');
+    if (!el) return;
+    var p = picks[0];
+    if (!p) { el.hidden = true; return; }
+    el.hidden = false;
+    el.setAttribute('data-date', p.date); el.setAttribute('data-slot', String(p.min));
+    el.setAttribute('data-action', 'heroNext');
+    el.innerHTML = '<span class="fm-hero-dot" aria-hidden="true"></span><span>' + esc(t().heroNext.replace('{t}', quickDay(M, p) + ' ' + M.hhmm(p.min))) + '</span>' + ICON_ARROW;
+    el.setAttribute('aria-label', t().heroNext.replace('{t}', capFirst(M.longDate(p.ms)) + ', ' + M.slotRange(p.min) + ' (' + M.B.tzNote + ')'));
+  }
   function renderQuick() {
     var host = $('#fm-bk-quick');
     if (!host) return;
     var M = calModel(), B = M.B, b = state.bk;
     var picks = nextFree(M, 3);
+    renderHeroNext(M, picks);
     if (!picks.length || b.step === 'done') { host.innerHTML = ''; return; }
     host.innerHTML = '<span class="fm-bk-quick-label">' + esc(B.quickLabel) + '</span>' +
       '<div class="fm-bk-quick-row">' + picks.map(function (p) {
-        var day = p.ms === M.todayUTC ? B.today : p.ms === M.todayUTC + DAY ? B.tomorrow : capFirst(M.fmt({ weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(p.ms)));
+        var day = quickDay(M, p);
         var sel = b.date === p.date && b.slot === String(p.min);
         return '<button type="button" class="fm-bk-pick' + (sel ? ' is-sel' : '') + '" data-action="quickSlot" data-date="' + p.date + '" data-slot="' + p.min + '" aria-pressed="' + sel + '"' +
           ' aria-label="' + esc(capFirst(M.longDate(p.ms)) + ', ' + M.slotRange(p.min) + ' (' + B.tzNote + ')') + '">' +
@@ -1228,6 +1245,21 @@
     },
     calPrev: function () { state.bk.calOff = Math.max(0, state.bk.calOff - 1); renderCalendar(); },
     calNext: function () { state.bk.calOff += 1; renderCalendar(); },
+    heroNext: function (el, ev) {
+      if (ev) ev.preventDefault();
+      actions.quickSlot(el);
+      var bk = $('#book');
+      if (bk && !bkNarrow.matches) bk.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    },
+    heroService: function (el) {
+      // A hero tile opens that service in the Services picker.
+      var item = $$('.fm-svc')[Number(el.getAttribute('data-i'))];
+      if (!item) return;
+      pickService(item, false);
+      var sec = $('#services');
+      if (sec) sec.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+      var tab = item.querySelector('.fm-svc-tab'); if (tab) setTimeout(function () { tab.focus({ preventScroll: true }); }, reducedMotion ? 0 : 500);
+    },
     quickSlot: function (el) {
       var b = state.bk, M = calModel();
       b.date = el.getAttribute('data-date'); b.slot = el.getAttribute('data-slot');
