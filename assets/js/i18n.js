@@ -5,9 +5,7 @@ const T = {
     langLabel: 'Language', loading: 'Loading', home: 'formai, home', navLabel: 'Main', menu: 'Menu', skip: 'Skip to content', pause: 'Pause animations', play: 'Play animations',navServices: 'Services', navMethod: 'Method', navAudit: 'Audit', cta: 'Get a free audit', cta2: 'See what we make',
     heroNote: 'Free · 3 fixes in 48 h · no call needed', heroNext: 'Next free call: {t}',
     heroTiles: ['Identity: see the service', 'Interfaces: see the service', 'Film: see the service', 'Development: see the service', 'Automation: see the service', 'Intelligence: see the service'],
-    eyebrow: 'AI-native studio', h1: 'built', h2: 'at machine', h3: 'pace.',
-    heroWords: ['Brands', 'Websites', 'Software', 'Automations', 'AI products'],
-    heroH1: 'Brands, websites, software, automations and AI products, built at machine pace.',
+    eyebrow: 'AI-native studio', h1: 'From brand to product.', h2: 'Built to', h3: 'ship.',
     heroTrust: ['Based in Finland', 'You own every file', 'A person reviews everything'],
     heroP: 'Brand, product, software and automation for startups, studios and legacy brands. AI runs through every step of how we work, so you get in days what agencies quote in weeks.',
     methodLabel: 'Method', methodTitle: 'From first look to launch',
@@ -172,16 +170,12 @@ const T = {
     newsHelp: 'How we help:', newsHelpData: 'your data and AI', newsShare: 'Share', newsCopied: 'Copied, with our take', newsNew: 'New', newsStampNew: ' · {k} new this week',
     newsTopics: { design: 'Design', code: 'Code', agents: 'Agents and automation', regulation: 'Regulation', search: 'Search' },
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days'],
-    makeLabel: 'What we make', makeHint: 'Point at one to see what it means.', makeHintTouch: 'Tap one to see the service.',
-    makeTips: ['AI runs through every step of how we work, and a person reviews everything.', '', '', '', '', '', '', '', '', 'Short sprints with working versions from the first days, so you can steer early.']
   },
   fi: {
     langLabel: 'Kieli', loading: 'Ladataan', home: 'formai, etusivu', navLabel: 'Päävalikko', menu: 'Valikko', skip: 'Siirry sisältöön', pause: 'Pysäytä animaatiot', play: 'Käynnistä animaatiot',navServices: 'Palvelut', navMethod: 'Menetelmä', navAudit: 'Auditointi', cta: 'Pyydä maksuton auditointi', cta2: 'Katso mitä teemme',
     heroNote: 'Maksuton · 3 korjausta 48 tunnissa · ei puhelua', heroNext: 'Seuraava vapaa puhelu: {t}',
     heroTiles: ['Identiteetti: katso palvelu', 'Käyttöliittymät: katso palvelu', 'Video: katso palvelu', 'Ohjelmistokehitys: katso palvelu', 'Automaatio: katso palvelu', 'Älykkyys: katso palvelu'],
-    eyebrow: 'AI-natiivi studio', h1: 'syntyvät', h2: 'koneen', h3: 'tahdissa.',
-    heroWords: ['Brändit', 'Verkkosivut', 'Ohjelmistot', 'Automaatiot', 'Tekoälytuotteet'],
-    heroH1: 'Brändit, verkkosivut, ohjelmistot, automaatiot ja tekoälytuotteet syntyvät koneen tahdissa.',
+    eyebrow: 'AI-natiivi studio', h1: 'Brändistä tuotteeksi.', h2: 'Valmiina', h3: 'julkaisuun.',
     heroTrust: ['Toimimme Suomesta', 'Kaikki tiedostot ovat teidän', 'Ihminen tarkistaa kaiken'],
     heroP: 'Brändi, tuotteet, ohjelmistot ja automaatio startupeille, studioille ja perinteisille brändeille. Tekoäly kulkee mukana jokaisessa työvaiheessa, joten saat päivissä sen, mihin toimistot arvioivat viikkoja.',
     methodLabel: 'Menetelmä', methodTitle: 'Ensisilmäyksestä julkaisuun',
@@ -346,8 +340,6 @@ const T = {
     newsHelp: 'Näin autamme:', newsHelpData: 'tietosi ja tekoäly', newsShare: 'Jaa', newsCopied: 'Kopioitu näkemyksemme kanssa', newsNew: 'Uusi', newsStampNew: ' · {k} uutta tällä viikolla',
     newsTopics: { design: 'Suunnittelu', code: 'Koodi', agents: 'Agentit ja automaatio', regulation: 'Sääntely', search: 'Haku' },
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä'],
-    makeLabel: 'Mitä teemme', makeHint: 'Osoita, niin näet, mitä se tarkoittaa.', makeHintTouch: 'Napauta, niin näet palvelun.',
-    makeTips: ['Tekoäly kulkee mukana jokaisessa työvaiheessa, ja ihminen tarkistaa kaiken.', '', '', '', '', '', '', '', '', 'Lyhyitä sprinttejä ja toimivia versioita ensimmäisistä päivistä alkaen, jotta voitte ohjata työtä ajoissa.']
   }
 };
 const LEGAL = {

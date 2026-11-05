@@ -84,20 +84,6 @@
   }
 
   /* ---------- static text ---------- */
-  var MAKE_SVC = ['#about', 0, 0, 1, 1, 3, 4, 5, 2, '#method'];
-  var MI = 'style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: square; stroke-linejoin: miter;"';
-  var MAKE_ICONS = [
-    '<path d="M2 10 Q10 3 18 10 Q10 17 2 10 Z" ' + MI + '></path><path d="M10 7 L13 10 L10 13 L7 10 Z" style="fill: currentColor;"></path>',
-    '<circle cx="10" cy="10" r="7.5" ' + MI + '></circle><path d="M10 6 L14 10 L10 14 L6 10 Z" ' + MI + '></path>',
-    '<rect x="2.5" y="2.5" width="6" height="6" ' + MI + '></rect><rect x="11.5" y="2.5" width="6" height="6" ' + MI + '></rect><rect x="2.5" y="11.5" width="6" height="6" ' + MI + '></rect><rect x="11.5" y="11.5" width="6" height="6" style="fill: currentColor;"></rect>',
-    '<rect x="2" y="3.5" width="16" height="13" ' + MI + '></rect><path d="M2 7 H18" ' + MI + '></path>',
-    '<path d="M5 3 L15 10 L10.5 11 L13 16.5 L11 17.5 L8.5 12 L5 15 Z" ' + MI + '></path>',
-    '<path d="M7 5 L2.5 10 L7 15 M13 5 L17.5 10 L13 15 M11 4 L9 16" ' + MI + '></path>',
-    '<rect x="2" y="3" width="5" height="5" ' + MI + '></rect><rect x="13" y="12" width="5" height="5" ' + MI + '></rect><path d="M7 5.5 H10.5 V14.5 H13" ' + MI + '></path>',
-    '<path d="M10 2 L11.8 8.2 L18 10 L11.8 11.8 L10 18 L8.2 11.8 L2 10 L8.2 8.2 Z" ' + MI + '></path>',
-    '<rect x="2" y="4" width="16" height="12" ' + MI + '></rect><path d="M8 7.5 L13 10 L8 12.5 Z" style="fill: currentColor;"></path>',
-    '<circle cx="10" cy="10" r="7.5" ' + MI + '></circle><path d="M10 5.5 V10 L13 12" ' + MI + '></path>'
-  ];
   function applyText() {
     var tr = t();
     document.documentElement.lang = state.lang;
@@ -120,19 +106,6 @@
         return '<span style="' + LABEL + ' line-height: 1; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);">' + esc(tag) + '</span>';
       }).join('');
     });
-    // "What we make": outlined tiles; each service opens its panel in Services.
-    var ticker = $('#fm-ticker'), ticker2 = $('#fm-ticker2');
-    if (ticker) {
-      var html = tr.ticker.map(function (w, k) {
-        var svc = MAKE_SVC[k], icon = '<svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true" focusable="false">' + (MAKE_ICONS[k] || '') + '</svg>';
-        var attrs = typeof svc === 'number' ? 'button type="button" data-action="heroService" data-i="' + svc + '"' : 'a href="' + (svc || '#services') + '"';
-        var tag = attrs.split(' ')[0];
-        return '<li class="fm-make-item"><' + attrs + ' class="fm-make-tile" data-make="' + k + '">' + icon + '<span>' + esc(w) + '</span></' + tag + '></li>';
-      }).join('');
-      ticker.innerHTML = html;
-      if (ticker2) ticker2.innerHTML = html.replace(/ class="fm-make-tile"/g, ' class="fm-make-tile" tabindex="-1"');
-      setMakeCap(null);
-    }
     $$('.fm-lang button').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.getAttribute('lang') === state.lang));
     });
@@ -1467,37 +1440,7 @@
   renderLive();
   setInterval(renderLive, 30000);
 
-  /* ---------- Hero: the rotating first word, and the phone tile strip ----------
-     The first word of the headline is deleted and typed anew every few
-     seconds (Brands → Websites → …); with paused animations or reduced
-     motion it stays on the first word. Screen readers read one sentence. */
-  (function () {
-    var el = $('#fm-rot');
-    if (!el) return;
-    var k = 0, busy = false;
-    function words() { return (t().heroWords || []); }
-    function step() {
-      var list = words();
-      if (busy || state.paused || reducedMotion || document.hidden || list.length < 2) return;
-      var r = el.closest('.fm-hero').getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) return;
-      busy = true;
-      var from = el.textContent, to = list[(k + 1) % list.length], n = from.length;
-      var del = setInterval(function () {
-        n--; el.textContent = from.slice(0, Math.max(0, n));
-        if (n <= 0) {
-          clearInterval(del);
-          var m = 0;
-          var typ = setInterval(function () {
-            m++; el.textContent = to.slice(0, m);
-            if (m >= to.length) { clearInterval(typ); k = (k + 1) % list.length; busy = false; }
-          }, 95);
-        }
-      }, 55);
-    }
-    setInterval(step, 5200);
-    document.addEventListener('fm:lang', function () { k = 0; });
-  })();
+  /* ---------- Hero: the phone tile strip ---------- */
   (function () {
     // Copy each artwork tile into its own small picture for the phone strip.
     var track = $('#fm-hero-strip .fm-hero-strip-track'), tiles = $$('.fm-hero-art .fm-hx-tile > g[transform]');
@@ -1510,30 +1453,6 @@
     }).join('');
     track.innerHTML = '<div class="fm-hs-set">' + html + '</div><div class="fm-hs-set" aria-hidden="true">' + html.replace(/<button /g, '<button tabindex="-1" ') + '</div>';
     applyText();
-  })();
-
-  /* ---------- What we make: captions for the strip ---------- */
-  function setMakeCap(k) {
-    var cap = $('#fm-make-cap'), tr = t();
-    if (!cap) return;
-    if (k == null) {
-      var touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
-      cap.textContent = (touch ? tr.makeHintTouch : tr.makeHint) || ''; cap.classList.remove('is-on'); return;
-    }
-    var svc = MAKE_SVC[k], tip = (tr.makeTips || [])[k];
-    var word = tr.ticker[k].charAt(0).toUpperCase() + tr.ticker[k].slice(1);
-    // A service tile names its service and what it is; the others carry their own line.
-    cap.textContent = typeof svc === 'number' ? tr['s' + (svc + 1)] + ': ' + tr['s' + (svc + 1) + 'p'] : word + (tip ? ': ' + tip : '');
-    cap.classList.add('is-on');
-  }
-  (function () {
-    var win = $('.fm-make-window');
-    if (!win) return;
-    ['pointerover', 'focusin'].forEach(function (e) {
-      win.addEventListener(e, function (ev) { var tile = ev.target.closest && ev.target.closest('[data-make]'); if (tile) setMakeCap(Number(tile.getAttribute('data-make'))); });
-    });
-    win.addEventListener('pointerleave', function () { setMakeCap(null); });
-    win.addEventListener('focusout', function (ev) { if (!win.contains(ev.relatedTarget)) setMakeCap(null); });
   })();
 
   /* ---------- full re-render (language / theme change) ---------- */
