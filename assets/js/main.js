@@ -72,7 +72,7 @@
     contactOpen: false,
     au: { open: false, sent: false, tried: false, sending: false, sendError: false, kind: -1, more: false, data: { url: '', email: '', name: '', company: '', note: '' } },
     cf: { sent: false, tried: false, sending: false, sendError: false, data: { name: '', email: '', company: '', message: '' }, interests: [] },
-    ci: { sent: false, tried: false, sending: false, sendError: false, call: false, recap: '', data: { name: '', email: '', message: '', link: '', phone: '' } },
+    ci: { sent: false, tried: false, sending: false, sendError: false, more: false, recap: '', data: { name: '', email: '', message: '', link: '' } },
     bk: { calOff: 0, date: '', slot: '', step: '', tried: false, data: { name: '', email: '', company: '', topic: '' }, interests: [], doneSummary: '', sending: false, sendError: false },
     ready: false
   };
@@ -330,16 +330,16 @@
     if (!allowPrefs) return;
     try {
       var d = JSON.parse(LS.get(CI_DRAFT) || 'null');
-      if (d && typeof d === 'object') ['name', 'email', 'message', 'link', 'phone'].forEach(function (k) { if (typeof d[k] === 'string') state.ci.data[k] = d[k]; });
-      if (d && d.call) state.ci.call = true;
+      if (d && typeof d === 'object') ['name', 'email', 'message', 'link'].forEach(function (k) { if (typeof d[k] === 'string') state.ci.data[k] = d[k]; });
+      if (state.ci.data.link) state.ci.more = true;
     } catch (e) {}
   }
   function ciSaveDraft() {
     clearTimeout(ciSaveT);
     ciSaveT = setTimeout(function () {
       if (!allowPrefs) return;
-      var d = state.ci.data, any = ['name', 'email', 'message', 'link', 'phone'].some(function (k) { return String(d[k] || '').trim(); });
-      if (any) LS.set(CI_DRAFT, JSON.stringify(Object.assign({ call: state.ci.call }, d))); else LS.del(CI_DRAFT);
+      var d = state.ci.data, any = ['name', 'email', 'message', 'link'].some(function (k) { return String(d[k] || '').trim(); });
+      if (any) LS.set(CI_DRAFT, JSON.stringify(d)); else LS.del(CI_DRAFT);
       var n = $('#fm-ci-saved'); if (n) n.hidden = !any;
     }, 400);
   }
@@ -362,8 +362,7 @@
       host.innerHTML = '<div role="status" class="fm-ci-done" tabindex="-1">' + EYE_DRAW +
         '<h3 style="margin: 0; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h3>' +
         (c.recap ? '<div class="fm-ci-recap"><span>' + esc(C.youWrote) + '</span><p>' + esc(c.recap) + '</p></div>' : '') +
-        '<p class="fm-ci-when"><span class="fm-live-dot' + (liveOn ? ' is-on' : '') + '" aria-hidden="true"></span>' + esc(liveOn ? C.liveOn : C.liveOff) +
-        (c.recapPhone ? ' ' + esc(C.callNote.replace('{p}', c.recapPhone)) : '') + '</p>' +
+        '<p class="fm-ci-when"><span class="fm-live-dot' + (liveOn ? ' is-on' : '') + '" aria-hidden="true"></span>' + esc(liveOn ? C.liveOn : C.liveOff) + '</p>' +
         '<div class="fm-ci-wait"><span>' + esc(C.wait) + '</span><div>' +
         '<button type="button" class="fm-ct-altlink" data-action="openAudit"><span>' + esc(C.waitAudit) + '</span> ' + AR + '</button>' +
         '<a class="fm-ct-altlink" href="#book"><span>' + esc(C.waitBook) + '</span> ' + AR + '</a></div></div>' +
@@ -373,27 +372,28 @@
     var e = c.tried ? ciErrors() : { name: '', email: '', message: '' };
     var hasErr = !!(e.name || e.email || e.message);
     var msg = String(c.data.message).trim();
+    var PLUS = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6 H11 M6 1 V11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>';
     host.innerHTML =
       '<h3 class="fm-ci-title">' + esc(C.formTitle) + '</h3>' +
       (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox() : '') +
-      '<form id="fm-ci-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
+      '<form id="fm-ci-form" class="fm-ci-form" novalidate>' + HONEYPOT +
+      field('fm-ci-message', cf.message, { key: 'message', required: true, textarea: true, rows: 3, value: c.data.message, err: e.message }) +
+      '<div class="fm-ci-starters" role="group" aria-label="' + esc(C.startersLabel) + '"><span>' + esc(C.startersShort) + '</span>' +
+      C.starters.map(function (x, k) {
+        var on = msg.indexOf(x) !== -1;
+        return '<button type="button" class="fm-ci-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="ciStarter" data-i="' + k + '" title="' + esc(x) + '">' + esc(C.starterChips[k]) + '</button>';
+      }).join('') + '</div>' +
       '<div class="fm-ci-row">' +
       field('fm-ci-name', cf.name, { key: 'name', required: true, ac: 'name', value: c.data.name, err: e.name }) +
       field('fm-ci-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: c.data.email, err: e.email }) +
       '</div>' +
-      '<div class="fm-ci-starters" role="group" aria-label="' + esc(C.startersLabel) + '"><span>' + esc(C.startersLabel) + '</span><div>' +
-      C.starters.map(function (x, k) {
-        var on = msg.indexOf(x) !== -1;
-        return '<button type="button" class="fm-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="ciStarter" data-i="' + k + '">' + esc(x) + '</button>';
-      }).join('') + '</div></div>' +
-      field('fm-ci-message', cf.message, { key: 'message', required: true, textarea: true, rows: 4, hint: cf.messageHint, value: c.data.message, err: e.message }) +
-      field('fm-ci-link', C.link, { key: 'link', type: 'url', ac: 'url', hint: C.linkHint, value: c.data.link }) +
-      '<button type="button" class="fm-ci-call" data-action="ciCall" aria-pressed="' + !!c.call + '"><span class="fm-ci-box" aria-hidden="true"></span>' + esc(C.call) + '</button>' +
-      (c.call ? field('fm-ci-phone', C.phone, { key: 'phone', type: 'tel', ac: 'tel', value: c.data.phone }) : '') +
-      privacyLine() +
-      '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) +
+      (c.more ? field('fm-ci-link', C.link, { key: 'link', type: 'url', ac: 'url', value: c.data.link })
+        : '<button type="button" class="fm-ci-more" data-action="ciMore">' + PLUS + esc(C.addLink) + '</button>') +
+      '<div class="fm-ci-foot">' + privacyLine() +
+      '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div>' +
+      '<span class="fm-ci-meta">' + esc(cf.required) +
       '<span class="fm-ci-saved" id="fm-ci-saved"' + (allowPrefs && String(c.data.message || c.data.name || '').trim() ? '' : ' hidden') + '> · ' + esc(C.saved) + '</span></span>' +
-      '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
+      '</form>';
   }
   function submitInline() {
     var c = state.ci, e = ciErrors();
@@ -406,9 +406,9 @@
     var d = c.data;
     var done = function () {
       var first = String(d.message).trim().split('\n')[0];
-      state.ci = { sent: true, tried: false, sending: false, sendError: false, call: false,
-        recap: first.length > 120 ? first.slice(0, 117) + '…' : first, recapPhone: c.call ? String(d.phone).trim() : '',
-        data: { name: '', email: '', message: '', link: '', phone: '' } };
+      state.ci = { sent: true, tried: false, sending: false, sendError: false, more: false,
+        recap: first.length > 120 ? first.slice(0, 117) + '…' : first,
+        data: { name: '', email: '', message: '', link: '' } };
       LS.del(CI_DRAFT);
       renderInline();
       var s2 = $('#fm-ci-root .fm-ci-done'); if (s2) s2.focus();
@@ -419,7 +419,6 @@
       name: String(d.name).trim(), email: String(d.email).trim(),
       message: String(d.message).trim(),
       link: String(d.link || '').trim(),
-      prefers_call: c.call ? 'yes' : 'no', phone: c.call ? String(d.phone || '').trim() : '',
       source: 'contact section', language: state.lang
     };
     c.sending = true; c.sendError = false; renderInline();
@@ -1607,9 +1606,9 @@
       renderInline();
       var m = $('#fm-ci-message'); if (m) { m.focus(); m.setSelectionRange(m.value.length, m.value.length); }
     },
-    ciCall: function () {
-      state.ci.call = !state.ci.call; renderInline(); ciSaveDraft();
-      var f = $(state.ci.call ? '#fm-ci-phone' : '#fm-ci-root .fm-ci-call'); if (f) f.focus();
+    ciMore: function () {
+      state.ci.more = true; renderInline();
+      var f = $('#fm-ci-link'); if (f) f.focus();
     },
     ciAgain: function () { state.ci.sent = false; renderInline(); var n = $('#fm-ci-name'); if (n) n.focus(); },
     pickService: function (el) { pickService(el.closest('.fm-svc'), true); },

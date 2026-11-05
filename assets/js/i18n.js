@@ -111,7 +111,8 @@ const T = {
       again: 'Send another message',
       liveOn: 'We are working now: expect a reply today.', liveOff: 'We reply on the next working day.',
       saved: 'Draft saved on this device', link: 'Link to the page or file', linkHint: 'A page, prototype or shared file, if you have one.',
-      call: 'Call me instead', phone: 'Phone number', youWrote: 'You wrote', callNote: 'We will call you at {p}.',
+      youWrote: 'You wrote', addLink: 'Add a link to the page or file', startersShort: 'Start from:',
+      starterChips: ['Checkout drop-off', 'Dated brand', 'Repeat support questions', 'Prototype an idea'],
       wait: 'While you wait', waitAudit: 'Get a free audit', waitBook: 'Book a 30-min call'
     },
     faqLabel: 'Questions', faqTitle: 'Before you ask',
@@ -288,7 +289,8 @@ const T = {
       again: 'Lähetä uusi viesti',
       liveOn: 'Olemme töissä nyt: vastaamme vielä tänään.', liveOff: 'Vastaamme seuraavana arkipäivänä.',
       saved: 'Luonnos tallennettu tälle laitteelle', link: 'Linkki sivuun tai tiedostoon', linkHint: 'Sivu, prototyyppi tai jaettu tiedosto, jos sellainen on.',
-      call: 'Soittakaa mieluummin', phone: 'Puhelinnumero', youWrote: 'Kirjoitit', callNote: 'Soitamme numeroon {p}.',
+      youWrote: 'Kirjoitit', addLink: 'Lisää linkki sivuun tai tiedostoon', startersShort: 'Aloita:',
+      starterChips: ['Kassan pudotukset', 'Vanhentunut brändi', 'Toistuvat tukikysymykset', 'Idean prototyyppi'],
       wait: 'Sillä välin', waitAudit: 'Pyydä maksuton auditointi', waitBook: 'Varaa 30 minuutin puhelu'
     },
     faqLabel: 'Kysymykset', faqTitle: 'Ennen kuin kysyt',
@@ -435,7 +437,7 @@ const LEGAL = {
       title: 'Privacy notice', updated: 'Last updated: [DATE]',
       a: [
         { h: '1. Controller', ps: ['[COMPANY NAME], business ID [BUSINESS ID]', '[STREET ADDRESS], [POSTCODE AND CITY], Finland', 'Contact for privacy matters: [NAME], [YOUR EMAIL]'] },
-        { h: '2. What data we process', ps: ['When you contact us: your name, email address, company, the content of your message and, if you give them, a link and a phone number.', 'When you use the site: your cookie choices and the preference data listed in the cookie policy. Our hosting provider may log technical data such as your IP address for security. [CHECK WITH YOUR HOSTING PROVIDER]', 'For design audits and business outreach: publicly available work contact details of company representatives, such as name, job title and work email.'] },
+        { h: '2. What data we process', ps: ['When you contact us: your name, email address, company, the content of your message and, if you give one, a link.', 'When you use the site: your cookie choices and the preference data listed in the cookie policy. Our hosting provider may log technical data such as your IP address for security. [CHECK WITH YOUR HOSTING PROVIDER]', 'For design audits and business outreach: publicly available work contact details of company representatives, such as name, job title and work email.'] },
         { h: '3. Purpose and legal basis', ps: ['Answering enquiries and preparing offers: steps prior to entering a contract (GDPR Art. 6(1)(b)) and our legitimate interest (Art. 6(1)(f)).', 'Business outreach and unsolicited audits: our legitimate interest in offering our services to companies (Art. 6(1)(f)). You can object at any time and we will stop.', 'Preference and analytics storage: your consent (Art. 6(1)(a)). Strictly necessary storage: our legitimate interest in a working website.'] },
         { h: '4. How long we keep data', ps: ['Enquiries and business contact data: up to 24 months from the last contact, unless a customer relationship begins. [CHECK]', 'Cookies and local storage: as listed in the cookie policy.'] },
         { h: '5. Recipients and transfers', ps: ['We do not sell your data. Service providers process data on our behalf: Formspree (form delivery, United States), Supabase (booked meeting times only, no names or emails), GitHub Pages (hosting, United States), [EMAIL PROVIDER]. If data is transferred outside the EU or EEA, we use the European Commission’s standard contractual clauses or another lawful transfer mechanism.'] },
@@ -524,7 +526,7 @@ const LEGAL = {
       title: 'Tietosuojaseloste', updated: 'Päivitetty: [PÄIVÄMÄÄRÄ]',
       a: [
         { h: '1. Rekisterinpitäjä', ps: ['[YRITYKSEN NIMI], Y-tunnus [Y-TUNNUS]', '[KATUOSOITE], [POSTINUMERO JA -TOIMIPAIKKA]', 'Yhteyshenkilö tietosuoja-asioissa: [NIMI], [SÄHKÖPOSTIOSOITTEESI]'] },
-        { h: '2. Mitä tietoja käsittelemme', ps: ['Kun otat meihin yhteyttä: nimesi, sähköpostiosoitteesi, yrityksesi, viestisi sisältö sekä antamasi linkki ja puhelinnumero.', 'Kun käytät sivustoa: evästevalintasi ja evästekäytännössä luetellut asetustiedot. Palveluntarjoajamme voi tallentaa teknisiä tietoja, kuten IP-osoitteen, tietoturvan vuoksi. [TARKISTA PALVELUNTARJOAJALTASI]', 'Design-auditointeja ja yritysyhteydenottoja varten: yritysten edustajien julkisesti saatavilla olevat työyhteystiedot, kuten nimi, tehtävänimike ja työsähköposti.'] },
+        { h: '2. Mitä tietoja käsittelemme', ps: ['Kun otat meihin yhteyttä: nimesi, sähköpostiosoitteesi, yrityksesi, viestisi sisältö sekä mahdollinen antamasi linkki.', 'Kun käytät sivustoa: evästevalintasi ja evästekäytännössä luetellut asetustiedot. Palveluntarjoajamme voi tallentaa teknisiä tietoja, kuten IP-osoitteen, tietoturvan vuoksi. [TARKISTA PALVELUNTARJOAJALTASI]', 'Design-auditointeja ja yritysyhteydenottoja varten: yritysten edustajien julkisesti saatavilla olevat työyhteystiedot, kuten nimi, tehtävänimike ja työsähköposti.'] },
         { h: '3. Käsittelyn tarkoitus ja oikeusperuste', ps: ['Yhteydenottoihin vastaaminen ja tarjousten laatiminen: sopimusta edeltävät toimenpiteet (tietosuoja-asetuksen 6 artiklan 1 kohdan b alakohta) ja oikeutettu etumme (f alakohta).', 'Yritysyhteydenotot ja pyytämättömät auditoinnit: oikeutettu etumme tarjota palveluitamme yrityksille (f alakohta). Voit vastustaa käsittelyä milloin tahansa, ja lopetamme sen.', 'Asetus- ja analytiikkatiedot: suostumuksesi (a alakohta). Välttämättömät tallennukset: oikeutettu etumme toimivaan verkkosivustoon.'] },
         { h: '4. Säilytysaika', ps: ['Yhteydenotto- ja yritysyhteystiedot: enintään 24 kuukautta viimeisestä yhteydenotosta, ellei asiakassuhde ala. [TARKISTA]', 'Evästeet ja paikallinen tallennustila: evästekäytännön mukaisesti.'] },
         { h: '5. Tietojen vastaanottajat ja siirrot', ps: ['Emme myy tietojasi. Puolestamme tietoja käsittelevät palveluntarjoajat: Formspree (lomakkeiden välitys, Yhdysvallat), Supabase (vain varatut tapaamisajat, ei nimiä eikä sähköposteja), GitHub Pages (sivuston ylläpito, Yhdysvallat), [SÄHKÖPOSTIPALVELU]. Jos tietoja siirretään EU:n tai ETA:n ulkopuolelle, käytämme Euroopan komission vakiosopimuslausekkeita tai muuta lainmukaista siirtoperustetta.'] },
