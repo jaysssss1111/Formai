@@ -1501,38 +1501,14 @@
   });
 
   /* ---------- Who we are: the clickable loop, the founder's note and the team ---------- */
-  (function () {
-    // The four stages light up in turn (about every 2.4 s) while in view; clicking
-    // one holds it and says what happens there, clicking it again lets it run.
-    var wrap = $('.fm-ab-loop'), cap = $('#fm-loop-cap'), tiles = $$('.fm-st');
-    if (!wrap || !cap || !tiles.length) return;
-    var held = '', step = 0, inView = false;
-    function mark(k) { tiles.forEach(function (b) { b.classList.toggle('is-live', b.getAttribute('data-loop') === k); }); }
-    function show(k) {
-      held = held === k ? '' : k;
-      tiles.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-loop') === held)); });
-      wrap.classList.toggle('is-held', !!held);
-      cap.textContent = held ? t().loop.steps[held] : t().loop.cap;
-      if (held) { mark(held); step = tiles.map(function (b) { return b.getAttribute('data-loop'); }).indexOf(held); }
-    }
-    tiles.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-loop')); }); });
-    mark(tiles[0].getAttribute('data-loop'));
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { inView = e[0].isIntersecting; }, { threshold: 0.3 }).observe(wrap);
-    else inView = true;
-    setInterval(function () {
-      if (held || !inView || state.paused || reducedMotion || document.hidden) return;
-      step = (step + 1) % tiles.length; mark(tiles[step].getAttribute('data-loop'));
-    }, 2400);
-    document.addEventListener('fm:lang', function () { var k = held; held = ''; if (k) show(k); });
-  })();
   function renderTeam() {
     var host = $('#fm-team'), tr = t(), C = window.FM_CONFIG || {}, T = C.team || {};
     if (!host) return;
     var preview = /[?&]team-preview\b/.test(location.search) && C.teamPreview;
-    var real = (T.note && (T.note.en || T.note.fi)) || (T.people || []).some(function (p) { return p && p.name; });
+    var real = (T.note && (T.note.en || T.note.fi)) || (T.people || []).some(function (p) { return p && (p.name || p.role); });
     if (!real && preview) T = C.teamPreview;
-    var pick = function (v) { return v && (typeof v === 'string' ? v : (v[state.lang] || v.en)) || ''; };
-    var note = pick(T.note), people = (T.people || []).filter(function (p) { return p && p.name; });
+    var pick = function (v) { return v && (typeof v === 'string' || Array.isArray(v) ? v : (v[state.lang] || v.en)) || ''; };
+    var note = pick(T.note), people = (T.people || []).filter(function (p) { return p && (p.name || p.role); });
     if (!note && !people.length) { host.hidden = true; host.innerHTML = ''; return; }
     host.hidden = false;
     var safe = function (u) { return /^(assets\/|https:\/\/)/.test(String(u || '')) ? u : ''; };
@@ -1540,10 +1516,18 @@
       (note ? '<figure class="fm-note"><span class="fm-team-label">' + esc(tr.noteLabel) + '</span><blockquote>' + esc(note) + '</blockquote>' +
         (T.noteBy ? '<figcaption>' + esc(T.noteBy) + '</figcaption>' : '') + '</figure>' : '') +
       (people.length ? '<div class="fm-people"><span class="fm-team-label">' + esc(tr.teamLabel) + '</span><ul>' + people.map(function (p) {
-        var ini = p.name.split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase(), ph = safe(p.photo);
-        return '<li class="fm-person">' + (ph ? '<img src="' + esc(ph) + '" alt="" width="240" height="240" loading="lazy">' : '<span class="fm-ini" aria-hidden="true">' + esc(ini) + '</span>') +
-          '<div class="fm-person-body"><strong>' + esc(p.name) + '</strong>' + (pick(p.role) ? '<em>' + esc(pick(p.role)) + '</em>' : '') +
-          (pick(p.line) ? '<p>' + esc(pick(p.line)) + '</p>' : '') + '</div></li>';
+        var ph = safe(p.photo), role = pick(p.role), title = p.name || role;
+        var frame = ph ? '<img src="' + esc(ph) + '" alt="" width="240" height="240" loading="lazy">'
+          : '<span class="fm-photo" aria-hidden="true"><svg viewBox="0 0 144 144" focusable="false">' +
+            '<rect x="0.5" y="0.5" width="143" height="143" style="fill: var(--raised); stroke: var(--line); stroke-width: 1;"></rect>' +
+            '<path d="M24 78 H120 M72 30 V126" style="fill: none; stroke: var(--line); stroke-width: 1;"></path>' +
+            '<rect x="56" y="40" width="32" height="32" style="fill: var(--surface); stroke: var(--strong); stroke-width: 1;"></rect>' +
+            '<path d="M38 116 V102 Q38 88 52 88 H92 Q106 88 106 102 V116" style="fill: var(--surface); stroke: var(--strong); stroke-width: 1;"></path>' +
+            '<path d="M72 96 L77 101 L72 106 L67 101 Z" style="fill: var(--brand);"></path>' +
+            '<text x="12" y="20" style="font-family: \'DM Mono\', ui-monospace, monospace; font-size: 8px; letter-spacing: 0.12em; fill: var(--muted);">' + esc(tr.photoSoon) + '</text></svg></span>';
+        return '<li class="fm-person">' + frame + '<div class="fm-person-body"><strong>' + esc(title) + '</strong>' +
+          (p.name && role ? '<em>' + esc(role) + '</em>' : '') + (pick(p.line) ? '<p>' + esc(pick(p.line)) + '</p>' : '') +
+          (pick(p.does) ? '<ul class="fm-person-does">' + pick(p.does).map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '') + '</div></li>';
       }).join('') + '</ul></div>' : '');
   }
   renderTeam();
