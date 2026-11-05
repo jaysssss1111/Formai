@@ -1257,3 +1257,7 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
    phones too; the small animations inside the tiles keep running. */
 .fm-motion .fm-hero-art .fm-hx-tile{animation:none !important;opacity:1 !important;transform:none !important}
 @media (max-width:640px){.fm-hero-artcol{display:flex !important;width:100%}.fm-hero-artwrap{max-width:100% !important}}
+/* The nav sits on the page layer too, above the footer the curtain keeps
+   underneath (on phones that footer is pinned near the top of the screen). */
+.fm-root > header{position:relative;z-index:2;background:var(--surface)}
+.fm-root > header::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:var(--surface);z-index:-1}
