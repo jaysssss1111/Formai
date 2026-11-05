@@ -60,8 +60,14 @@
 
   var MODES = {
     roll: { every: [900, 2000], max: 3, run: function (layer) {
-      var p = pick(layer.fx, 1); if (!p) return;
-      var d = DIRS[Math.floor(Math.random() * 4)], dx = d[0] * CELL, dy = d[1] * CELL;
+      // Start and end cells stay clear of the data-grid-avoid content (text, buttons, artwork).
+      var rects = blockers(layer.fx), p = null, d = null;
+      for (var tries = 0; tries < 16 && !p; tries++) {
+        var q = pick(layer.fx, 1), dq = DIRS[Math.floor(Math.random() * 4)];
+        if (q && !hiddenAt(layer.fx, rects, q, 0, 0) && !hiddenAt(layer.fx, rects, q, dq[0], dq[1])) { p = q; d = dq; }
+      }
+      if (!p) return;
+      var dx = d[0] * CELL, dy = d[1] * CELL;
       var turn = (d[0] || d[1]) > 0 ? 1 : -1;
       var el = cell(layer.fx, p.ox + p.c * CELL, p.oy + p.r * CELL, false);
       layer.live++;

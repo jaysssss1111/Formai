@@ -771,3 +771,34 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   .fm-ct-grid{grid-template-columns:1fr;grid-template-areas:"head" "card" "next" "alt";grid-template-rows:none;padding:88px 20px}
 }
 @media (max-width:640px){.fm-ct-card{padding:22px;box-shadow:5px 5px 0 #C85A20;margin-right:5px}.fm-ci-row{grid-template-columns:1fr}}
+
+/* ---------- Hero: reassurance, live availability, tiles as a service menu ---------- */
+.fm-hero-sub{display:flex;flex-wrap:wrap;align-items:center;gap:10px 24px;margin-top:-12px}
+.fm-hero-note{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fm-hero-next{display:inline-flex;align-items:center;gap:10px;min-height:44px;color:var(--ink);text-decoration:none;font-size:15px;font-weight:400;border-bottom:1px solid var(--strong);transition:border-color .18s linear}
+.fm-hero-next[hidden]{display:none}
+.fm-hero-next svg{color:var(--accent);transition:transform .18s linear}
+.fm-hero-next:hover{border-bottom-color:var(--accent)}
+.fm-hero-next:hover svg{transform:translateX(3px)}
+.fm-hero-next:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.fm-hero-dot{position:relative;width:8px;height:8px;background:var(--brand);transform:rotate(45deg)}
+.fm-motion .fm-hero-dot::after{content:'';position:absolute;inset:-4px;border:1px solid var(--brand);animation:fm-hero-ping 2s cubic-bezier(.2,.7,.2,1) infinite}
+@keyframes fm-hero-ping{0%{opacity:.9;transform:scale(.6)}80%,100%{opacity:0;transform:scale(1.6)}}
+.fm-hero-artwrap{position:relative;width:100%;max-width:460px}
+.fm-hx-btns{position:absolute;inset:0}
+.fm-hx-btn{position:absolute;width:30%;height:30%;padding:0;border:0;background:transparent;cursor:pointer;outline:none}
+.fm-hx-btn::before{content:'';position:absolute;inset:0;border:2px solid var(--brand);opacity:0;transition:opacity .18s linear}
+.fm-hx-name{position:absolute;left:8px;bottom:8px;padding:5px 8px;background:var(--ink);color:var(--surface);font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;line-height:1;opacity:0;transform:translateY(4px);transition:opacity .18s linear,transform .18s linear;pointer-events:none}
+.fm-hx-btn:hover::before,.fm-hx-btn:focus-visible::before{opacity:1}
+.fm-hx-btn:hover .fm-hx-name,.fm-hx-btn:focus-visible .fm-hx-name{opacity:1;transform:none}
+/* While the pointer or focus is on the artwork, every tile stays in place. */
+.fm-hero-artwrap:hover .fm-hx-tile,.fm-hero-artwrap:focus-within .fm-hx-tile{animation:none !important;opacity:1;transform:none}
+@media (max-width:640px){
+  .fm-hero{padding:40px 20px 72px !important;gap:40px !important}
+  .fm-hero-text{gap:24px !important}
+  .fm-hero p[data-i18n="heroP"]{font-size:17px !important;line-height:1.45 !important}
+  .fm-hero .fm-btn{flex:1 1 auto;justify-content:center}
+  .fm-hero-sub{margin-top:-6px;gap:6px 16px}
+  .fm-hero-artwrap{max-width:340px}
+  .fm-hx-name{left:4px;bottom:4px;font-size:10px;padding:4px 6px}
+}
