@@ -74,13 +74,34 @@
     var v = item.take && (item.take[lang] || item.take.en);
     return v ? '<p class="fm-news-take"><span>' + esc(tr.newsTake) + '</span>' + esc(v) + '</p>' : '';
   }
+  // Topic -> the service that answers it (index in the Services picker), or a FAQ answer.
+  var HELP = { design: 0, code: 3, agents: 4, search: 5, regulation: 'faq-data' };
+  var DAY = 86400000;
+  function isNew(item) {
+    var d = Date.parse((item.date || '') + 'T00:00:00Z');
+    return d && Date.now() - d < 7 * DAY;
+  }
+  function actions(item, tr) {
+    var h = HELP[item.topic], help = '';
+    var ARR = '<svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>';
+    if (typeof h === 'number') {
+      help = '<button type="button" class="fm-news-help" data-action="heroService" data-i="' + h + '"><span>' + esc(tr.newsHelp) + '</span> ' + esc(tr['s' + (h + 1)]) + ' ' + ARR + '</button>';
+    } else if (h) {
+      help = '<a class="fm-news-help" href="#' + h + '"><span>' + esc(tr.newsHelp) + '</span> ' + esc(tr.newsHelpData) + ' ' + ARR + '</a>';
+    }
+    var share = '<button type="button" class="fm-news-share" data-news-share="' + esc(item.url) + '">' +
+      '<svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1 V9 M3.5 4.5 L7 1 L10.5 4.5 M2 8 V13 H12 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' +
+      '<span>' + esc(tr.newsShare) + '</span></button>';
+    return '<div class="fm-news-actions">' + help + share + '</div>';
+  }
   function image(item, i) {
     return cover(item.topic, i) +
       (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '');
   }
   function metaLine(item, tr, lang) {
     var topic = (tr.newsTopics && tr.newsTopics[item.topic]) || '';
-    return '<div class="fm-news-meta">' + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') +
+    return '<div class="fm-news-meta">' + (isNew(item) ? '<span class="fm-news-new">' + esc(tr.newsNew) + '</span>' : '') +
+      (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') +
       '<span>' + esc(item.source) + (item.date ? ' · ' + esc(formatDate(item.date, lang)) : '') + '</span></div>';
   }
   // A compact row for the list beside the lead story.
@@ -89,7 +110,7 @@
       '<a class="fm-news-rowlink" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' +
       '<div class="fm-news-thumb">' + image(item, i) + '</div>' +
       '<div class="fm-news-rowbody">' + metaLine(item, tr, lang) +
-      '<h3 class="fm-news-rowtitle">' + esc(item.title) + '</h3>' + take(item, tr, lang) + '</div></a></article>';
+      '<h3 class="fm-news-rowtitle">' + esc(item.title) + '</h3>' + take(item, tr, lang) + '</div></a>' + actions(item, tr) + '</article>';
   }
   function sorted(items) {
     return (items || []).slice().sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
@@ -120,7 +141,9 @@
   function stamp(items, tr, lang) {
     var list = sorted(items);
     if (!list.length || !tr.newsStamp) return '';
-    return tr.newsStamp.replace('{d}', formatDate(list[0].date, lang)).replace('{n}', list.length);
+    var fresh = list.filter(isNew).length;
+    return tr.newsStamp.replace('{d}', formatDate(list[0].date, lang)).replace('{n}', list.length) +
+      (fresh && tr.newsStampNew ? tr.newsStampNew.replace('{k}', fresh) : '');
   }
 
   // tr: the language's copy (needs newsRead and newsTopics); lang: 'en' or 'fi'.
@@ -134,12 +157,12 @@
       (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '') +
       '</div>' +
       '<div class="fm-news-body">' +
-      '<div class="fm-news-meta">' + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') + '<span>' + meta + '</span></div>' +
+      '<div class="fm-news-meta">' + (isNew(item) ? '<span class="fm-news-new">' + esc(tr.newsNew) + '</span>' : '') + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') + '<span>' + meta + '</span></div>' +
       '<h3 class="fm-news-title">' + esc(item.title) + '</h3>' +
       (item.summary ? '<p class="fm-news-summary">' + esc(item.summary) + '</p>' : '') + take(item, tr, lang) +
       '<span class="fm-news-read">' + esc(tr.newsRead) + ' ' + esc(item.source) +
       ' <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 L9 3 M4 3 H9 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span>' +
-      '</div></a></article>';
+      '</div></a>' + actions(item, tr) + '</article>';
   }
 
   function cards(items, tr, lang) {
