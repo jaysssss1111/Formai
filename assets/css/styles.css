@@ -1187,3 +1187,39 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-st-ar3{left:50%;top:75%;transform:translate(-50%,-50%) rotate(180deg)}
 .fm-st-ar4{left:25%;top:50%;transform:translate(-50%,-50%) rotate(270deg)}
 @media (max-width:480px){.fm-stages{gap:20px}.fm-st{padding:10px}.fm-root .fm-orange .fm-st-sub{font-size:8.5px}}
+
+/* ---------- Who we are: the four stages, drawn by the hero-art rules ----------
+   One row under the intro and the Helsinki line. The tiles use the light
+   palette of the hero art (cream panel, hairline frame, 1px secondary lines,
+   one 2px main shape, an orange accent); the live stage gets an ink frame and
+   its accent pops, review draws its tick. */
+.fm-ab-top{grid-template-columns:1fr !important;gap:32px}
+.fm-ab-intro{max-width:760px}
+.fm-ab-loop{display:flex;flex-direction:column;gap:12px}
+.fm-stages{display:flex !important;align-items:flex-start;gap:12px;max-width:none !important;
+  --surface:#EDE6D8;--raised:#F5F0E6;--ink:#141210;--muted:#5E564B;--line:#D2C9B7;--strong:#8A8173}
+.fm-st{flex:1 1 0;min-width:0;aspect-ratio:auto !important;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start !important;gap:6px;padding:0 !important;border:0 !important;background:transparent !important;color:#000 !important;cursor:pointer;text-align:left;box-shadow:none !important}
+.fm-st-svg{width:100%;height:auto;display:block}
+.fm-st-frame{transition:stroke .3s linear,stroke-width .3s linear}
+.fm-st.is-live .fm-st-frame{stroke:var(--ink);stroke-width:2}
+.fm-st-dia{transform-box:fill-box;transform-origin:center}
+.fm-motion .fm-st.is-live .fm-st-dia{animation:fm-st-pop .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fm-st-pop{0%{transform:scale(.4) rotate(-45deg)}60%{transform:scale(1.15)}100%{transform:none}}
+.fm-st-tick{stroke-dasharray:1;stroke-dashoffset:0}
+.fm-motion .fm-st.is-live .fm-st-tick{animation:fm-st-draw .7s cubic-bezier(.6,0,.2,1) both}
+@keyframes fm-st-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.fm-root .fm-orange .fm-st-name{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;line-height:1.3;color:#000 !important;margin-top:4px}
+.fm-root .fm-orange .fm-st-sub{font-family:'DM Sans',system-ui,sans-serif;font-size:13px;letter-spacing:0;text-transform:none;line-height:1.4;color:#000 !important;opacity:.72}
+.fm-st .fm-st-n,.fm-st .fm-st-ico{display:none}
+.fm-st:focus-visible{outline:2px solid #000;outline-offset:4px}
+.fm-st[aria-pressed="true"] .fm-st-frame{stroke:var(--ink);stroke-width:2}
+.fm-st[aria-pressed="true"] .fm-st-pic{box-shadow:4px 4px 0 #000}
+.fm-st:hover .fm-st-frame{stroke:var(--strong)}
+.fm-st-pic{position:relative;display:block;width:100%}
+.fm-st-ar{position:absolute;right:-17px;top:50%;width:14px;height:14px;transform:translateY(-50%)}
+.fm-stages{gap:20px !important}
+@media (min-width:901px){.fm-stages{max-width:920px !important}}
+@media (max-width:640px){.fm-stages{flex-wrap:wrap;gap:16px 12px}.fm-st{flex:1 1 calc(50% - 6px)}.fm-st-ar{display:none}}
+.fm-st.is-live .fm-st-frame,.fm-st[aria-pressed="true"] .fm-st-frame{stroke:var(--ink) !important;stroke-width:2 !important}
+.fm-root .fm-orange .fm-st.is-live .fm-st-sub{color:#000 !important}
+@media (max-width:640px){.fm-stages{gap:16px !important}.fm-st{flex:1 1 calc(50% - 8px) !important}}
