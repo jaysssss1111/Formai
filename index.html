@@ -597,10 +597,23 @@
 </section>
 
 <!-- CONTACT -->
-<section id="contact" class="fm-grain" style="width: 100%; border-top: 1px solid var(--line);">
-<div class="fm-pad" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 120px 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; gap: 32px;">
-<h2 class="fm-reveal" style="margin: 0; max-width: 900px; font-size: clamp(48px, 7vw, 96px); line-height: 0.95; font-weight: 200; letter-spacing: -0.04em;"><span data-i18n="contactTitle"></span><span class="fm-cursor" aria-hidden="true"></span></h2>
-<button type="button" class="fm-btn" data-action="openContact" aria-haspopup="dialog" style="font-family: inherit; font-size: 20px; font-weight: 300; line-height: 1.4; color: var(--accent); background: none; border: 0; border-bottom: 1px solid var(--accent); border-radius: 0; padding: 0 0 2px; cursor: pointer;"><span data-i18n="cf.open"></span> <svg class="fm-arrow" width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+<section id="contact" class="fm-ct" style="width: 100%;">
+<div class="fm-pad fm-ct-grid">
+<div class="fm-ct-head">
+<span class="fm-ct-label" data-i18n="ci.label"></span>
+<h2 class="fm-reveal fm-ct-title" style="margin: 0; max-width: 900px; font-size: clamp(48px, 7vw, 96px); line-height: 0.95; font-weight: 200; letter-spacing: -0.04em;"><span data-i18n="contactTitle"></span><span class="fm-cursor" aria-hidden="true"></span></h2>
+</div>
+<div class="fm-ct-card fm-reveal" id="fm-ci-root"></div>
+<div class="fm-ct-next fm-reveal">
+<span class="fm-ct-label" data-i18n="ci.nextTitle"></span>
+<ol class="fm-ct-steps"><li data-i18n="ci.next.0"></li><li data-i18n="ci.next.1"></li><li data-i18n="ci.next.2"></li></ol>
+<span class="fm-ct-based" data-i18n="ci.based"></span>
+</div>
+<div class="fm-ct-alt fm-reveal">
+<span class="fm-ct-label" data-i18n="ci.altTitle"></span>
+<a class="fm-ct-altlink" href="#book"><span data-i18n="ci.altBook"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>
+<button type="button" class="fm-ct-altlink" data-action="openAudit"><span data-i18n="ci.altAudit"></span> <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>
+</div>
 </div>
 </section>
 

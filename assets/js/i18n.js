@@ -79,6 +79,15 @@ const T = {
       f2: 'Nine fields before checkout', f2x: 'Ask for email and card only',
       f3: 'Hero image loads in 4.2 s', f3x: 'Compress + lazy-load: 0.9 s'
     },
+    ci: {
+      label: 'Write to us', nextTitle: 'What happens next', altTitle: 'Other ways to start',
+      next: ['We read every message ourselves.', 'We reply by email with questions or a first idea.', 'If it fits: a short call or a fixed-price offer.'],
+      based: 'Based in Finland',
+      altBook: 'Prefer to talk? Book a 30-min call', altAudit: 'Want proof first? Get a free audit',
+      formTitle: 'Start with a short note', startersLabel: 'Not sure how to start? Pick one:',
+      starters: ['Mobile visitors drop off before checkout.', 'Our brand looks dated next to competitors.', 'Our team answers the same support questions every day.', 'We have an idea and need a working prototype.'],
+      again: 'Send another message'
+    },
     faqLabel: 'Questions', faqTitle: 'Before you ask',
     faq: {
       q1: 'Who owns the files and the code?',
@@ -211,6 +220,15 @@ const T = {
       f1: 'Ostopainike on taitteen alla', f1x: 'Siirrä se hinnan viereen',
       f2: 'Kassalla yhdeksän kenttää', f2x: 'Kysy vain sähköposti ja kortti',
       f3: 'Pääkuva latautuu 4,2 s', f3x: 'Pakkaa ja viivästä: 0,9 s'
+    },
+    ci: {
+      label: 'Kirjoita meille', nextTitle: 'Mitä seuraavaksi tapahtuu', altTitle: 'Muita tapoja aloittaa',
+      next: ['Luemme jokaisen viestin itse.', 'Vastaamme sähköpostilla kysymyksin tai ensimmäisellä ajatuksella.', 'Jos tarpeet kohtaavat: lyhyt puhelu tai kiinteähintainen tarjous.'],
+      based: 'Toimimme Suomesta',
+      altBook: 'Haluatko mieluummin puhua? Varaa 30 minuutin puhelu', altAudit: 'Haluatko ensin näytön? Pyydä maksuton auditointi',
+      formTitle: 'Aloita lyhyellä viestillä', startersLabel: 'Etkö tiedä, miten aloittaa? Valitse yksi:',
+      starters: ['Mobiilikävijät putoavat pois ennen kassaa.', 'Brändimme näyttää vanhentuneelta kilpailijoihin verrattuna.', 'Tiimimme vastaa joka päivä samoihin tukikysymyksiin.', 'Meillä on idea, ja tarvitsemme toimivan prototyypin.'],
+      again: 'Lähetä uusi viesti'
     },
     faqLabel: 'Kysymykset', faqTitle: 'Ennen kuin kysyt',
     faq: {
