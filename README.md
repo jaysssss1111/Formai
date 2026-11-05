@@ -38,10 +38,11 @@ Julkaisuajo kirjoittaa sivun tekstit valmiiksi HTML:ään skriptillä `tools/pre
 
 ## Tekoälyuutiset
 
-Uutiskaruselli täyttyy tiedostosta `assets/data/news.json`.
+Uutisosio täyttyy tiedostosta `assets/data/news.json`. Uusin artikkeli näkyy pääjuttuna, seuraavat neljä listana sen vieressä.
 
 - **Automaattisesti:** `.github/workflows/news.yml` hakee joka maanantai artikkeleita alan uutissyötteistä (lista tiedostossa `tools/fetch-news.mjs`). Se valitsee aiheisiin (suunnittelu, koodi, agentit ja automaatio, sääntely, haku) osuvat artikkelit, lisää enintään kolme uutta ja julkaisee sivun. Ajon voi käynnistää myös käsin: Actions → Update news feed → Run workflow.
 - **Käsin:** lisää tiedostoon rivi `{ "title": "…", "url": "https://…", "source": "Julkaisija", "date": "2026-11-04", "summary": "Lyhyt kuvaus omin sanoin.", "topic": "design", "manual": true }`. Merkinnällä `"manual": true` artikkeli pysyy listan alussa, eikä automaattinen haku poista sitä. Aiheet: `design`, `code`, `agents`, `regulation`, `search`.
+- **”Sinulle”-rivi:** lisää artikkeliin kenttä `"take": { "en": "…", "fi": "…" }`, yksi lause siitä, mitä uutinen tarkoittaa asiakkaalle. Rivi näkyy kortissa; ilman sitä kortti näkyy ilman riviä. Automaattinen haku säilyttää kentän.
 - Kansikuvat piirretään brändin tyyliin aiheen mukaan, joten kolmansien osapuolten kuvia ei käytetä.
 
 ## Täydennettävää ennen julkaisua

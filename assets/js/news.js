@@ -1,6 +1,9 @@
 /* formai — AI news cards for the news carousel.
  * Shared by the browser (main.js) and the build step (tools/prerender.mjs),
- * so the same cards are in the published HTML and on screen.
+ * so the same layout is in the published HTML and on screen: the newest
+ * article as the lead story, the next ones as a list beside it, topic
+ * filters and a freshness line. An article's optional "take" ({ en, fi }) is
+ * one line on what it means for a business, written by hand in news.json.
  * Articles live in assets/data/news.json. A card shows the publisher's own
  * preview image (og:image) when there is one; underneath, a cover is drawn in
  * the brand style from the article's topic, which also shows if the image fails.
@@ -67,11 +70,64 @@
     } catch (e) { return iso; }
   }
 
+  function take(item, tr, lang) {
+    var v = item.take && (item.take[lang] || item.take.en);
+    return v ? '<p class="fm-news-take"><span>' + esc(tr.newsTake) + '</span>' + esc(v) + '</p>' : '';
+  }
+  function image(item, i) {
+    return cover(item.topic, i) +
+      (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '');
+  }
+  function metaLine(item, tr, lang) {
+    var topic = (tr.newsTopics && tr.newsTopics[item.topic]) || '';
+    return '<div class="fm-news-meta">' + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') +
+      '<span>' + esc(item.source) + (item.date ? ' · ' + esc(formatDate(item.date, lang)) : '') + '</span></div>';
+  }
+  // A compact row for the list beside the lead story.
+  function row(item, i, tr, lang) {
+    return '<article class="fm-news-row" role="listitem">' +
+      '<a class="fm-news-rowlink" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' +
+      '<div class="fm-news-thumb">' + image(item, i) + '</div>' +
+      '<div class="fm-news-rowbody">' + metaLine(item, tr, lang) +
+      '<h3 class="fm-news-rowtitle">' + esc(item.title) + '</h3>' + take(item, tr, lang) + '</div></a></article>';
+  }
+  function sorted(items) {
+    return (items || []).slice().sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
+  }
+  // opts: { topic: '' | 'design' | ..., all: bool }. Shows the lead and 4 more unless all.
+  function layout(items, tr, lang, opts) {
+    opts = opts || {};
+    var list = sorted(items).filter(function (x) { return !opts.topic || x.topic === opts.topic; });
+    if (!list.length) return '';
+    var SHOW = 4, rest = list.slice(1), shown = opts.all ? rest : rest.slice(0, SHOW);
+    var more = rest.length > SHOW
+      ? '<button type="button" class="fm-news-more" data-news-more aria-expanded="' + !!opts.all + '">' +
+        esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', list.length)) + '</button>' : '';
+    return '<div class="fm-news-lead" role="list">' + card(list[0], 0, tr, lang, true) + '</div>' +
+      '<div class="fm-news-side"><div class="fm-news-list" role="list">' + shown.map(function (x, k) { return row(x, k + 1, tr, lang); }).join('') + '</div>' + more + '</div>';
+  }
+  function filters(items, tr, active) {
+    var have = {};
+    (items || []).forEach(function (x) { have[x.topic] = (have[x.topic] || 0) + 1; });
+    var keys = Object.keys(tr.newsTopics || {}).filter(function (k) { return have[k]; });
+    if (keys.length < 2) return '';
+    var chip = function (k, label) {
+      var on = (active || '') === k;
+      return '<button type="button" class="fm-news-chip' + (on ? ' is-on' : '') + '" data-news-topic="' + k + '" aria-pressed="' + on + '">' + esc(label) + '</button>';
+    };
+    return chip('', tr.newsAll) + keys.map(function (k) { return chip(k, tr.newsTopics[k]); }).join('');
+  }
+  function stamp(items, tr, lang) {
+    var list = sorted(items);
+    if (!list.length || !tr.newsStamp) return '';
+    return tr.newsStamp.replace('{d}', formatDate(list[0].date, lang)).replace('{n}', list.length);
+  }
+
   // tr: the language's copy (needs newsRead and newsTopics); lang: 'en' or 'fi'.
-  function card(item, i, tr, lang) {
+  function card(item, i, tr, lang, lead) {
     var topic = (tr.newsTopics && tr.newsTopics[item.topic]) || '';
     var meta = esc(item.source) + (item.date ? ' · ' + esc(formatDate(item.date, lang)) : '');
-    return '<article class="fm-news-card" role="listitem">' +
+    return '<article class="fm-news-card' + (lead ? ' is-lead' : '') + '" role="listitem">' +
       '<a class="fm-news-link" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' +
       // The publisher's preview image over the drawn cover; if it fails, the cover shows.
       '<div class="fm-news-cover">' + cover(item.topic, i) +
@@ -80,7 +136,7 @@
       '<div class="fm-news-body">' +
       '<div class="fm-news-meta">' + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') + '<span>' + meta + '</span></div>' +
       '<h3 class="fm-news-title">' + esc(item.title) + '</h3>' +
-      (item.summary ? '<p class="fm-news-summary">' + esc(item.summary) + '</p>' : '') +
+      (item.summary ? '<p class="fm-news-summary">' + esc(item.summary) + '</p>' : '') + take(item, tr, lang) +
       '<span class="fm-news-read">' + esc(tr.newsRead) + ' ' + esc(item.source) +
       ' <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 L9 3 M4 3 H9 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span>' +
       '</div></a></article>';
@@ -90,5 +146,5 @@
     return (items || []).map(function (it, i) { return card(it, i, tr, lang); }).join('');
   }
 
-  root.FM_NEWS_UI = { cards: cards };
+  root.FM_NEWS_UI = { cards: cards, layout: layout, filters: filters, stamp: stamp };
 })(typeof window !== 'undefined' ? window : this);

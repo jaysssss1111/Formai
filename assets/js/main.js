@@ -753,13 +753,25 @@
   /* ---------- AI news carousel ---------- */
   var news = Array.isArray(window.FM_NEWS) ? window.FM_NEWS : null;
   function renderNews() {
-    var sec = $('#news'), track = $('#fm-news-track');
-    if (!sec || !track || !window.FM_NEWS_UI) return;
+    var sec = $('#news'), root = $('#fm-news-root'), UI = window.FM_NEWS_UI;
+    if (!sec || !root || !UI) return;
     if (!news || !news.length) { sec.hidden = true; return; }
     sec.hidden = false;
-    track.innerHTML = window.FM_NEWS_UI.cards(news, t(), state.lang);
-    carouselButtons(track);
+    var tr = t(), opts = { topic: state.newsTopic || '', all: !!state.newsAll };
+    var f = $('#fm-news-filters');
+    if (f) { f.innerHTML = UI.filters(news, tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
+    var st = $('#fm-news-stamp'); if (st) st.textContent = UI.stamp(news, tr, state.lang);
+    root.innerHTML = UI.layout(news, tr, state.lang, opts);
   }
+  document.addEventListener('click', function (ev) {
+    var c = ev.target.closest && ev.target.closest('[data-news-topic]');
+    if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; renderNews(); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
+    var m = ev.target.closest && ev.target.closest('[data-news-more]');
+    if (m) {
+      state.newsAll = !state.newsAll; renderNews();
+      var b2 = $('[data-news-more]'); if (b2) b2.focus();
+    }
+  });
   function loadNews() {
     if (news) { renderNews(); return; }
     if (!window.fetch) return;

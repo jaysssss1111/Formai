@@ -118,7 +118,9 @@ const T = {
     ],
     newsLabel: 'AI news', newsTitle: 'What is moving in AI',
     newsIntro: 'Articles on AI in design, code, automation and regulation, picked for what they mean for your business. New ones are added every week.',
-    newsRead: 'Read on', newsPrev: 'Previous articles', newsNext: 'Next articles', newsNote: '',
+    newsRead: 'Read on', newsNote: '', newsTake: 'For you', newsAll: 'All', newsFilter: 'Filter articles by topic',
+    newsMore: 'Show all {n} articles', newsLess: 'Show fewer', newsStamp: 'Updated weekly · latest {d} · {n} articles',
+    newsCtaText: 'Wondering what this means for your business?', newsCtaBtn: 'Get a free audit',
     newsTopics: { design: 'Design', code: 'Code', agents: 'Agents and automation', regulation: 'Regulation', search: 'Search' },
     ticker: ['ai-native', 'brand identity', 'design systems', 'web', 'ui / ux', 'software', 'automation', 'ai agents', 'motion', 'delivered in days']
   },
@@ -239,7 +241,9 @@ const T = {
     ],
     newsLabel: 'Tekoälyuutiset', newsTitle: 'Mitä tekoälyssä tapahtuu',
     newsIntro: 'Artikkeleita tekoälystä suunnittelussa, koodissa, automaatiossa ja sääntelyssä, valittuina sen mukaan, mitä ne merkitsevät liiketoiminnallesi. Uusia lisätään viikoittain.',
-    newsRead: 'Lue:', newsPrev: 'Edelliset artikkelit', newsNext: 'Seuraavat artikkelit', newsNote: 'Artikkelit ovat englanniksi.',
+    newsRead: 'Lue:', newsNote: 'Artikkelit ovat englanniksi.', newsTake: 'Sinulle', newsAll: 'Kaikki', newsFilter: 'Suodata artikkeleita aiheen mukaan',
+    newsMore: 'Näytä kaikki {n} artikkelia', newsLess: 'Näytä vähemmän', newsStamp: 'Päivittyy viikoittain · uusin {d} · {n} artikkelia',
+    newsCtaText: 'Mietitkö, mitä tämä tarkoittaa yrityksellesi?', newsCtaBtn: 'Pyydä maksuton auditointi',
     newsTopics: { design: 'Suunnittelu', code: 'Koodi', agents: 'Agentit ja automaatio', regulation: 'Sääntely', search: 'Haku' },
     ticker: ['ai-natiivi', 'brändi-identiteetti', 'design-järjestelmät', 'verkko', 'ui / ux', 'ohjelmistot', 'automaatio', 'tekoälyagentit', 'liike', 'valmiina päivissä']
   }
