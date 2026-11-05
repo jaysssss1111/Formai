@@ -61,7 +61,9 @@ function render(lang) {
   html = html.replace(/<html lang="[^"]*"/, `<html lang="${lang}" data-page-lang="${lang}"`);
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${esc(tr.meta.title)}</title>`);
   html = html.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${esc(tr.meta.description)}">`);
-  const faq = [1, 2, 3, 4, 5, 6, 7].map((n) => ({
+  // Every q/a pair, in the order they appear on the page.
+  const faqOrder = [...html.matchAll(/data-i18n="faq\.q(\d+)"/g)].map((m) => Number(m[1]));
+  const faq = faqOrder.map((n) => ({
     '@type': 'Question', name: tr.faq['q' + n], acceptedAnswer: { '@type': 'Answer', text: tr.faq['a' + n] }
   }));
   const ld = { '@context': 'https://schema.org', '@graph': [
