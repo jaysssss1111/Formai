@@ -1447,6 +1447,51 @@
   renderLive();
   setInterval(renderLive, 30000);
 
+  /* ---------- Hero: the rotating first word, and the phone tile strip ----------
+     The first word of the headline is deleted and typed anew every few
+     seconds (Brands → Websites → …); with paused animations or reduced
+     motion it stays on the first word. Screen readers read one sentence. */
+  (function () {
+    var el = $('#fm-rot');
+    if (!el) return;
+    var k = 0, busy = false;
+    function words() { return (t().heroWords || []); }
+    function step() {
+      var list = words();
+      if (busy || state.paused || reducedMotion || document.hidden || list.length < 2) return;
+      var r = el.closest('.fm-hero').getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      busy = true;
+      var from = el.textContent, to = list[(k + 1) % list.length], n = from.length;
+      var del = setInterval(function () {
+        n--; el.textContent = from.slice(0, Math.max(0, n));
+        if (n <= 0) {
+          clearInterval(del);
+          var m = 0;
+          var typ = setInterval(function () {
+            m++; el.textContent = to.slice(0, m);
+            if (m >= to.length) { clearInterval(typ); k = (k + 1) % list.length; busy = false; }
+          }, 70);
+        }
+      }, 40);
+    }
+    setInterval(step, 2800);
+    document.addEventListener('fm:lang', function () { k = 0; });
+  })();
+  (function () {
+    // Copy each artwork tile into its own small picture for the phone strip.
+    var track = $('#fm-hero-strip .fm-hero-strip-track'), tiles = $$('.fm-hero-art .fm-hx-tile > g[transform]');
+    if (!track || !tiles.length) return;
+    var order = [0, 1, 2, 3, 4, 5];
+    var html = tiles.map(function (g, k) {
+      return '<button type="button" class="fm-hs-tile" data-action="heroService" data-i="' + order[k] + '" data-i18n-aria-label="heroTiles.' + order[k] + '">' +
+        '<svg viewBox="0 0 144 144" aria-hidden="true" focusable="false">' + g.innerHTML + '</svg>' +
+        '<span data-i18n="s' + (order[k] + 1) + '"></span></button>';
+    }).join('');
+    track.innerHTML = '<div class="fm-hs-set">' + html + '</div><div class="fm-hs-set" aria-hidden="true">' + html.replace(/<button /g, '<button tabindex="-1" ') + '</div>';
+    applyText();
+  })();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -1628,6 +1673,12 @@
     else if (ev.target.id === 'fm-ci-form') { ev.preventDefault(); submitInline(); }
     else if (ev.target.id === 'fm-bk-form') { ev.preventDefault(); submitBooking(); }
     else if (ev.target.id === 'fm-au-form') { ev.preventDefault(); submitAudit(); }
+    else if (ev.target.id === 'fm-hero-start') {
+      ev.preventDefault();
+      var hv = String(($('#fm-hero-url') || {}).value || '').trim();
+      if (hv) state.au.data.url = hv;
+      openAudit();
+    }
     else if (ev.target.id === 'fm-au-start') {
       // 1) The one-field start: carry the address into the audit dialog.
       ev.preventDefault();
