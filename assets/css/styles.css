@@ -488,3 +488,13 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-foot-id{grid-area:id}.fm-socials{grid-area:social;justify-self:end}.fm-foot-nav{grid-area:nav}.fm-foot-end{grid-area:end;justify-content:flex-end}
 @media (max-width:760px){.fm-footer .fm-foot-top{grid-template-columns:1fr;grid-template-areas:"id" "social" "nav" "end"}.fm-foot-end{justify-content:flex-start}}
 @media (max-width:760px){.fm-socials{justify-self:start}}
+
+/* ---------- Brand-orange band (Who we are), same scheme as the footer ----------
+   On #C85A20 only black passes 4.5:1 for small text (4.9:1), so text, tags,
+   rules and focus rings are black; the same in both themes. */
+.fm-orange{background:#C85A20;color:#000;
+  --ink:#000;--muted:#000;--strong:#000;--line:rgba(0,0,0,.28);--accent:#000;--surface:#C85A20;--raised:#C85A20;--on-accent:#C85A20}
+.fm-root .fm-orange h2,.fm-root .fm-orange h3,.fm-root .fm-orange p,.fm-root .fm-orange span{color:#000 !important}
+.fm-root .fm-orange h2,.fm-root .fm-orange h3{text-shadow:none}
+.fm-orange .fm-col:hover{border-top-color:#EDE6D8 !important}
+.fm-orange :focus-visible{outline-color:#000 !important}
