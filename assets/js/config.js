@@ -12,6 +12,14 @@ window.FM_CONFIG = {
   contactEndpoint: 'https://formspree.io/f/mgaadkpg',
   bookingEndpoint: 'https://formspree.io/f/mgaadkpg',
   // auditEndpoint: '',  // optional: a separate Formspree form for audit requests (defaults to contactEndpoint)
+  // Social profiles shown as icons in the footer. Paste the full profile address;
+  // an icon becomes a link as soon as its address is set.
+  social: {
+    x: '',          // e.g. https://x.com/formai
+    instagram: '',  // e.g. https://www.instagram.com/formai
+    linkedin: '',   // e.g. https://www.linkedin.com/company/formai
+    facebook: ''    // e.g. https://www.facebook.com/formai
+  },
   supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
   supabaseKey: 'sb_publishable_K04nYpPk4CcktUmZktxd0A_pw_bAEnM' // publishable key, safe to publish
 };
