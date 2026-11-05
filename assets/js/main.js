@@ -1094,11 +1094,14 @@
   /* ---------- Footer social links from config.js ---------- */
   (function () {
     var social = (window.FM_CONFIG || {}).social || {};
+    var any = false;
     $$('.fm-social').forEach(function (el) {
       var url = social[el.getAttribute('data-social')];
-      if (url && /^https:\/\//.test(url)) el.setAttribute('href', url);
-      else { el.removeAttribute('href'); el.setAttribute('aria-disabled', 'true'); }
+      // An icon shows only once its profile address is set, so there are no dead buttons.
+      if (url && /^https:\/\//.test(url)) { el.setAttribute('href', url); el.hidden = false; any = true; }
+      else { el.removeAttribute('href'); el.hidden = true; }
     });
+    var nav = $('.fm-socials'); if (nav) nav.hidden = !any;
   })();
 
   /* ---------- Services picker ----------
@@ -1531,6 +1534,19 @@
   }
   renderTeam();
 
+  /* ---------- Footer: company details from config.js ---------- */
+  function renderCompany() {
+    var host = $('#fm-foot-company'), C = (window.FM_CONFIG || {}).company || {}, tr = t();
+    if (!host) return;
+    if (!C.name) { host.hidden = true; return; }
+    host.hidden = false;
+    var mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(C.email || '') ? '<a class="fm-foot-a" href="mailto:' + esc(C.email) + '">' + esc(C.email) + '</a>' : '';
+    host.innerHTML = '<span class="fm-foot-h">' + esc(tr.foot.company) + '</span><address>' +
+      '<strong>' + esc(C.name) + '</strong>' + (C.businessId ? '<span>' + esc(tr.foot.businessId) + ' ' + esc(C.businessId) + '</span>' : '') +
+      (C.street ? '<span>' + esc(C.street) + '</span>' : '') + (C.city ? '<span>' + esc(C.city) + '</span>' : '') + mail + '</address>';
+  }
+  renderCompany();
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
@@ -1541,6 +1557,7 @@
     renderLive();
     setToolCap(null);
     renderTeam();
+    renderCompany();
     renderFaqTools();
     renderAudit();
     renderDoc();

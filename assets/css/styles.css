@@ -1192,3 +1192,35 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-ci-foot > p{flex:1 1 220px;font-size:13px !important;line-height:1.5 !important}
 .fm-ci-meta{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:-4px}
 @media (max-width:640px){.fm-ct-card{padding:20px !important}.fm-ci-foot .fm-btn{width:100%;justify-content:center}}
+
+/* ---------- Footer: site map, company details, utilities ---------- */
+.fm-foot-wrap{width:100%;max-width:1200px;margin:0 auto;padding:56px 40px 32px;box-sizing:border-box;display:flex;flex-direction:column;gap:40px}
+.fm-foot-row1{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
+.fm-foot-row1 .fm-foot-id{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.fm-foot-tag{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#000}
+.fm-socials[hidden],.fm-social[hidden]{display:none !important}
+.fm-foot-map{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 32px;padding-top:28px;border-top:1px solid #000}
+.fm-foot-col{display:flex;flex-direction:column;gap:12px}
+.fm-foot-col[hidden]{display:none}
+.fm-foot-h{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#000;opacity:.7}
+.fm-foot-col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.fm-foot-a{display:inline-flex;align-items:center;min-height:28px;padding:0;border:0;background:transparent;color:#000;cursor:pointer;text-decoration:none;font:inherit;font-size:15px;line-height:1.3;text-align:left}
+.fm-foot-a:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.fm-foot-company address{font-style:normal;display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.4;color:#000}
+.fm-foot-company strong{font-weight:400}
+.fm-foot-row3{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;padding-top:20px;border-top:1px solid rgba(0,0,0,.28)}
+.fm-foot-util{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.fm-foot-lang{display:flex;border:1px solid #000}
+.fm-foot-lang button{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;line-height:1;min-width:44px;min-height:40px;padding:0 12px;border:0;border-radius:0;background:transparent;color:#000;cursor:pointer}
+.fm-foot-lang button[aria-pressed="true"]{background:#000;color:#C85A20}
+.fm-footer .fm-foot-util .fm-pause{min-height:40px}
+.fm-foot-top-link{display:inline-flex;align-items:center;gap:8px;min-height:40px;color:#000;text-decoration:none;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.fm-foot-top-link:hover{text-decoration:underline;text-underline-offset:4px}
+@media (max-width:900px){.fm-foot-map{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+  .fm-foot-wrap{padding:36px 20px 24px;gap:28px}
+  .fm-foot-map{gap:22px 20px;padding-top:22px}
+  .fm-foot-a,.fm-foot-company address{font-size:14px}
+  .fm-foot-row3{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:640px){.fm-foot-col{gap:8px}.fm-foot-col ul{gap:0}.fm-foot-a{min-height:30px}.fm-foot-row1 .fm-foot-logo{min-height:36px}.fm-footer .fm-foot-nav{gap:0 18px}.fm-footer .fm-foot-nav .fm-textbtn{min-height:36px}}
