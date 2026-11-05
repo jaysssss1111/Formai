@@ -1502,18 +1502,28 @@
 
   /* ---------- Who we are: the clickable loop, the founder's note and the team ---------- */
   (function () {
-    var wrap = $('.fm-ab-loop'), cap = $('#fm-loop-cap');
-    if (!wrap || !cap) return;
-    var on = '';
+    // The four stages light up in turn (about every 2.4 s) while in view; clicking
+    // one holds it and says what happens there, clicking it again lets it run.
+    var wrap = $('.fm-ab-loop'), cap = $('#fm-loop-cap'), tiles = $$('.fm-st');
+    if (!wrap || !cap || !tiles.length) return;
+    var held = '', step = 0, inView = false;
+    function mark(k) { tiles.forEach(function (b) { b.classList.toggle('is-live', b.getAttribute('data-loop') === k); }); }
     function show(k) {
-      on = on === k ? '' : k;
-      $$('.fm-loop-btn', wrap).forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-loop') === on)); });
-      wrap.classList.toggle('is-held', !!on);
-      wrap.setAttribute('data-step', on);
-      cap.textContent = on ? t().loop.steps[on] : t().loop.cap;
+      held = held === k ? '' : k;
+      tiles.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-loop') === held)); });
+      wrap.classList.toggle('is-held', !!held);
+      cap.textContent = held ? t().loop.steps[held] : t().loop.cap;
+      if (held) { mark(held); step = tiles.map(function (b) { return b.getAttribute('data-loop'); }).indexOf(held); }
     }
-    $$('.fm-loop-btn', wrap).forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-loop')); }); });
-    document.addEventListener('fm:lang', function () { var k = on; on = ''; if (k) show(k); });
+    tiles.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-loop')); }); });
+    mark(tiles[0].getAttribute('data-loop'));
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { inView = e[0].isIntersecting; }, { threshold: 0.3 }).observe(wrap);
+    else inView = true;
+    setInterval(function () {
+      if (held || !inView || state.paused || reducedMotion || document.hidden) return;
+      step = (step + 1) % tiles.length; mark(tiles[step].getAttribute('data-loop'));
+    }, 2400);
+    document.addEventListener('fm:lang', function () { var k = held; held = ''; if (k) show(k); });
   })();
   function renderTeam() {
     var host = $('#fm-team'), tr = t(), C = window.FM_CONFIG || {}, T = C.team || {};
