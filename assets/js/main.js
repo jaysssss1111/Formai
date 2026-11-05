@@ -1516,20 +1516,24 @@
     document.addEventListener('fm:lang', function () { var k = on; on = ''; if (k) show(k); });
   })();
   function renderTeam() {
-    var host = $('#fm-team'), tr = t(), T = (window.FM_CONFIG || {}).team || {};
+    var host = $('#fm-team'), tr = t(), C = window.FM_CONFIG || {}, T = C.team || {};
     if (!host) return;
-    var note = T.note && (T.note[state.lang] || T.note.en), people = (T.people || []).filter(function (p) { return p && p.name; });
+    var preview = /[?&]team-preview\b/.test(location.search) && C.teamPreview;
+    var real = (T.note && (T.note.en || T.note.fi)) || (T.people || []).some(function (p) { return p && p.name; });
+    if (!real && preview) T = C.teamPreview;
+    var pick = function (v) { return v && (typeof v === 'string' ? v : (v[state.lang] || v.en)) || ''; };
+    var note = pick(T.note), people = (T.people || []).filter(function (p) { return p && p.name; });
     if (!note && !people.length) { host.hidden = true; host.innerHTML = ''; return; }
     host.hidden = false;
     var safe = function (u) { return /^(assets\/|https:\/\/)/.test(String(u || '')) ? u : ''; };
-    host.innerHTML = (note ? '<figure class="fm-note"><span class="fm-team-label">' + esc(tr.noteLabel) + '</span><blockquote>' + esc(note) + '</blockquote>' +
+    host.innerHTML = (!real && preview ? '<span class="fm-team-sample">' + esc(tr.teamPreview) + '</span>' : '') +
+      (note ? '<figure class="fm-note"><span class="fm-team-label">' + esc(tr.noteLabel) + '</span><blockquote>' + esc(note) + '</blockquote>' +
         (T.noteBy ? '<figcaption>' + esc(T.noteBy) + '</figcaption>' : '') + '</figure>' : '') +
       (people.length ? '<div class="fm-people"><span class="fm-team-label">' + esc(tr.teamLabel) + '</span><ul>' + people.map(function (p) {
-        var role = p.role && (typeof p.role === 'string' ? p.role : (p.role[state.lang] || p.role.en)) || '';
-        var ini = p.name.split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase();
-        var ph = safe(p.photo);
-        return '<li>' + (ph ? '<img src="' + esc(ph) + '" alt="" width="72" height="72" loading="lazy">' : '<span class="fm-ini" aria-hidden="true">' + esc(ini) + '</span>') +
-          '<span><strong>' + esc(p.name) + '</strong>' + (role ? '<em>' + esc(role) + '</em>' : '') + '</span></li>';
+        var ini = p.name.split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase(), ph = safe(p.photo);
+        return '<li class="fm-person">' + (ph ? '<img src="' + esc(ph) + '" alt="" width="240" height="240" loading="lazy">' : '<span class="fm-ini" aria-hidden="true">' + esc(ini) + '</span>') +
+          '<div class="fm-person-body"><strong>' + esc(p.name) + '</strong>' + (pick(p.role) ? '<em>' + esc(pick(p.role)) + '</em>' : '') +
+          (pick(p.line) ? '<p>' + esc(pick(p.line)) + '</p>' : '') + '</div></li>';
       }).join('') + '</ul></div>' : '');
   }
   renderTeam();

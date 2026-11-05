@@ -27,7 +27,19 @@ window.FM_CONFIG = {
     note: { en: '', fi: '' },   // 3-4 sentences in your own voice, e.g. why you started formai
     noteBy: '',                 // the name under the note, e.g. 'Jay, founder'
     people: [
-      // { name: 'First Last', role: { en: 'Brand and interface design', fi: 'Brändi- ja käyttöliittymäsuunnittelu' }, photo: 'assets/img/first.jpg' }
+      // { name: 'First Last', role: { en: 'Brand and interface design', fi: '…' }, line: { en: 'One line on what they do.', fi: '…' }, photo: 'assets/img/first.jpg' }
+    ]
+  },
+  // A sample team, shown only when the address ends in ?team-preview, to see the
+  // layout before the real details are in. Visitors never see it.
+  teamPreview: {
+    note: { en: 'We started formai because good design and working software should not take an agency three months. With AI agents doing the drafting and testing, a small team can stay close to every decision and still ship in days. You always talk to the people doing the work.',
+            fi: 'Perustimme formain, koska hyvän suunnittelun ja toimivan ohjelmiston ei pitäisi viedä toimistolta kolmea kuukautta. Kun tekoälyagentit luonnostelevat ja testaavat, pieni tiimi pysyy lähellä jokaista päätöstä ja julkaisee silti päivissä. Puhut aina niiden ihmisten kanssa, jotka työn tekevät.' },
+    noteBy: 'Aino K., founder',
+    people: [
+      { name: 'Aino K.', role: { en: 'Founder · Brand and interfaces', fi: 'Perustaja · Brändi ja käyttöliittymät' }, line: { en: 'Turns a fuzzy brief into a clear brand and the screens that carry it.', fi: 'Tekee sumeasta toimeksiannosta selkeän brändin ja sitä kantavat näkymät.' }, photo: 'assets/img/team-sample-1.svg' },
+      { name: 'Mikko L.', role: { en: 'Development and AI agents', fi: 'Kehitys ja tekoälyagentit' }, line: { en: 'Builds the product and sets up the agents that draft, test and check.', fi: 'Rakentaa tuotteen ja agentit, jotka luonnostelevat, testaavat ja tarkistavat.' }, photo: 'assets/img/team-sample-2.svg' },
+      { name: 'Sara N.', role: { en: 'Automation and motion', fi: 'Automaatio ja liike' }, line: { en: 'Connects the tools you use and makes the films that launch the work.', fi: 'Yhdistää käyttämänne työkalut ja tekee videot, joilla työ lanseerataan.' }, photo: 'assets/img/team-sample-3.svg' }
     ]
   },
   supabaseUrl: 'https://lbffcataydbzwyyypiip.supabase.co',
