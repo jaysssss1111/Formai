@@ -165,13 +165,13 @@ const T = {
     aboutLabel: 'Who we are', aboutTitle: 'Agencies sell hours. We sell results.',
     aboutP: 'formai is a design and technology company based in Finland. Our goal: every company, from a two-person startup to a hundred-year-old brand, gets agency-level brand, product and software at the speed AI makes possible. Designers and developers work side by side with AI agents, so one team takes you from first idea to live product, with no hand-offs.',
     aboutFacts: ['Based in Finland', 'English and Finnish', 'People + AI agents'],
-    mfLabel: 'What we believe',
+    mfLabel: 'What we believe', mfMore: 'Read more', mfLess: 'Close',
     mf: [
-      { h: 'Working things, not slide decks.', p: 'Within days you click, test and comment on the real thing, not a presentation about it.' },
-      { h: 'AI does the groundwork. People decide.', p: 'Agents draft, test and check. A designer or developer reviews everything before it reaches you.' },
-      { h: 'Everything we make is yours.', p: 'Files and code are handed over to you, ready for your team or any other to build on. No lock-in.' },
-      { h: 'A fixed price before we start.', p: 'You approve one price for one sprint. It does not grow by the hour.' },
-      { h: 'Honest from the first look.', p: 'The free audit tells you what to fix, even if the answer is that you do not need us.' }
+      { h: 'Working things, not slide decks.', p: 'Within days you click, test and comment on the real thing, not a presentation about it.', d: 'Every sprint produces the real thing from the start: a clickable prototype, a page on a preview link, a workflow you can run. You react to what you can actually see and use, every few days, so decisions rest on the work itself, not on promises about it.' },
+      { h: 'AI does the groundwork. People decide.', p: 'Agents draft, test and check. A designer or developer reviews everything before it reaches you.', d: 'Agents research, draft layouts and copy, write code and tests, and check each other\'s output. A designer or developer then reviews every piece, fixes what is off and decides what ships. Nothing generated reaches you unreviewed, and there is always a person responsible for it.' },
+      { h: 'Everything we make is yours.', p: 'Files and code are handed over to you, ready for your team or any other to build on. No lock-in.', d: 'You get the working files: design files, the code in a repository in your own account, the brand assets and instructions to run it all. Any team can carry on from where we stop. If we part ways, nothing stops working and nothing has to be rebuilt.' },
+      { h: 'A fixed price before we start.', p: 'You approve one price for one sprint. It does not grow by the hour.', d: 'After the free audit or a short call you get a written offer: what the sprint delivers, how long it takes and one price. If the work takes us longer than planned, that is on us. Anything new is agreed as its own sprint, with its own price, before work begins.' },
+      { h: 'Honest from the first look.', p: 'The free audit tells you what to fix, even if the answer is that you do not need us.', d: 'The audit names the three changes that matter most and explains why. If your site is already in good shape, or a fix you can make yourself is enough, we say so. We would rather earn your trust than sell you a project you do not need.' }
     ],
     whLabel: 'What we do, how, and what you get',
     whLinks: ['See all services', 'See the method', 'Who owns the files'],
@@ -353,13 +353,13 @@ const T = {
     aboutLabel: 'Keitä olemme', aboutTitle: 'Toimistot myyvät tunteja. Me myymme tuloksia.',
     aboutP: 'formai on suomalainen suunnittelu- ja teknologiayritys. Tavoitteemme: jokainen yritys, kahden hengen startupista satavuotiaaseen brändiin, saa toimistotason brändin, tuotteen ja ohjelmiston sillä nopeudella, jonka tekoäly tekee mahdolliseksi. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi tiimi vie sinut ensimmäisestä ideasta julkaistuun tuotteeseen ilman välikäsiä.',
     aboutFacts: ['Suomesta', 'Suomeksi ja englanniksi', 'Ihmiset + tekoälyagentit'],
-    mfLabel: 'Mihin uskomme',
+    mfLabel: 'Mihin uskomme', mfMore: 'Lue lisää', mfLess: 'Sulje',
     mf: [
-      { h: 'Toimivia asioita, ei diaesityksiä.', p: 'Päivien sisällä klikkaat, testaat ja kommentoit oikeaa asiaa, et esitystä siitä.' },
-      { h: 'Tekoäly tekee pohjatyön. Ihmiset päättävät.', p: 'Agentit luonnostelevat, testaavat ja tarkistavat. Suunnittelija tai kehittäjä käy kaiken läpi ennen kuin se tulee sinulle.' },
-      { h: 'Kaikki tekemämme on teidän.', p: 'Tiedostot ja koodi luovutetaan teille, valmiina teidän tai kenen tahansa tiimin jatkettavaksi. Ei sitoutumista meihin.' },
-      { h: 'Kiinteä hinta ennen aloitusta.', p: 'Hyväksyt yhden hinnan yhdelle sprintille. Se ei kasva tuntien mukana.' },
-      { h: 'Rehellisesti alusta asti.', p: 'Maksuton auditointi kertoo, mitä kannattaa korjata, vaikka vastaus olisi, ettet tarvitse meitä.' }
+      { h: 'Toimivia asioita, ei diaesityksiä.', p: 'Päivien sisällä klikkaat, testaat ja kommentoit oikeaa asiaa, et esitystä siitä.', d: 'Jokainen sprintti tuottaa alusta asti oikeaa työtä: klikattavan prototyypin, sivun esikatselulinkissä tai työnkulun, jota voi ajaa. Kommentoit sitä, mitä näet ja voit käyttää, muutaman päivän välein, joten päätökset perustuvat itse työhön eivätkä lupauksiin siitä.' },
+      { h: 'Tekoäly tekee pohjatyön. Ihmiset päättävät.', p: 'Agentit luonnostelevat, testaavat ja tarkistavat. Suunnittelija tai kehittäjä käy kaiken läpi ennen kuin se tulee sinulle.', d: 'Agentit tekevät taustatyön, luonnostelevat taitot ja tekstit, kirjoittavat koodin ja testit ja tarkistavat toistensa tuotoksen. Suunnittelija tai kehittäjä käy sen jälkeen jokaisen osan läpi, korjaa sen mikä ei toimi ja päättää, mikä julkaistaan. Mikään tuotettu ei päädy sinulle tarkistamatta, ja jokaisesta vastaa aina ihminen.' },
+      { h: 'Kaikki tekemämme on teidän.', p: 'Tiedostot ja koodi luovutetaan teille, valmiina teidän tai kenen tahansa tiimin jatkettavaksi. Ei sitoutumista meihin.', d: 'Saat toimivat tiedostot: suunnittelutiedostot, koodin omalla tililläsi olevassa repositoriossa, brändiaineistot ja ohjeet kaiken käyttämiseen. Kuka tahansa tiimi voi jatkaa siitä, mihin me jäämme. Jos yhteistyö päättyy, mikään ei lakkaa toimimasta eikä mitään tarvitse rakentaa uudelleen.' },
+      { h: 'Kiinteä hinta ennen aloitusta.', p: 'Hyväksyt yhden hinnan yhdelle sprintille. Se ei kasva tuntien mukana.', d: 'Maksuttoman auditoinnin tai lyhyen puhelun jälkeen saat kirjallisen tarjouksen: mitä sprintti tuottaa, kauanko se kestää ja yksi hinta. Jos työ vie meiltä suunniteltua kauemmin, se on meidän vastuullamme. Kaikesta uudesta sovitaan omana sprinttinään ja omalla hinnallaan ennen kuin työ alkaa.' },
+      { h: 'Rehellisesti alusta asti.', p: 'Maksuton auditointi kertoo, mitä kannattaa korjata, vaikka vastaus olisi, ettet tarvitse meitä.', d: 'Auditointi nimeää kolme tärkeintä muutosta ja perustelee ne. Jos sivustosi on jo hyvässä kunnossa tai pieni korjaus, jonka voit tehdä itse, riittää, kerromme sen. Haluamme mieluummin ansaita luottamuksesi kuin myydä projektin, jota et tarvitse.' }
     ],
     whLabel: 'Mitä teemme, miten ja mitä saat',
     whLinks: ['Katso kaikki palvelut', 'Katso menetelmä', 'Kenelle tiedostot kuuluvat'],
