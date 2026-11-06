@@ -113,10 +113,8 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
    the eye closes (non-scaling stroke: 2.5 of 64 units at 120 px). */
 .fm-ld-svg{animation:fm-ld-in .15s ease-out both}
 .fm-ld-lid{stroke-width:4.7px}
-.fm-ld-eye{transform-box:view-box;transform-origin:32px 32px;animation:fm-ld-blink .34s cubic-bezier(.55,0,.45,1) .35s both}
 .fm-ld-pupil{transform-box:view-box;transform-origin:32px 32px;animation:fm-ld-react .5s cubic-bezier(.3,0,.3,1) .7s both}
 @keyframes fm-ld-in{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
-@keyframes fm-ld-blink{0%{transform:scaleY(1)}42%,52%{transform:scaleY(.04)}100%{transform:scaleY(1)}}
 @keyframes fm-ld-react{0%{transform:scale(1)}40%{transform:scale(.82)}100%{transform:scale(1)}}
 .fm-ld-bar{animation:fm-ld-bar 1.1s cubic-bezier(.6,0,.2,1) infinite}
 .fm-loader{transition:transform .7s cubic-bezier(.7,0,.2,1),visibility 0s linear .7s}
@@ -1444,9 +1442,6 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-totop-eye{display:block;width:168px;height:168px;overflow:visible}
 .fm-totop-outline{stroke:#141210;stroke-width:7.9px}   /* the logo's 3/64 of the width, kept while the eye closes */
 .fm-root[data-theme="dark"] .fm-totop-outline{stroke:#EDE6D8}
-.fm-totop-lid{transform-box:view-box;transform-origin:32px 32px}
-@keyframes fm-blink{0%,100%{transform:scaleY(1)}42%,58%{transform:scaleY(.04)}}
-.fm-totop-curtain.is-blink .fm-totop-lid{animation:fm-blink .34s cubic-bezier(.6,0,.4,1)}
 @media (max-width:640px){.fm-totop-eye{width:128px;height:128px}.fm-totop-outline{stroke-width:6px}}
 
 /* ---------- Contact ("Write to us") in light mode: the site's warm sand, not black ----------
@@ -1479,8 +1474,6 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-nav-eye{display:block;flex:none;width:36px;height:36px;margin-left:10px}
 .fm-nav-eye-line{stroke:#141210;stroke-width:1.7px}
 .fm-root[data-theme="dark"] .fm-nav-eye-line{stroke:#EDE6D8}
-.fm-nav-lid{transform-box:view-box;transform-origin:32px 32px}
-.fm-motion a:hover > .fm-nav-eye .fm-nav-lid,.fm-motion a:focus-visible > .fm-nav-eye .fm-nav-lid{animation:fm-blink .34s cubic-bezier(.6,0,.4,1)}
 /* Phones: keep the header on one row (wordmark + eye + mode, language and menu buttons at 44 px) */
 @media (max-width:430px){
   header.fm-pad{column-gap:10px !important}
@@ -1557,3 +1550,9 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-root .fm-orange .fm-mf-row .fm-mf-n{align-self:start;padding-top:.08em}
 .fm-root .fm-orange .fm-mf-row > p{padding-top:.45em}
 @media (max-width:640px){.fm-root .fm-orange .fm-mf-row > p{padding-top:0}}
+
+/* Blinking eyes: the corners stay sharp points when open (the eye's ~81 deg corner needs a miter
+   ratio of 1.54), but as the eye closes the corners get so narrow that a miter limit of 10 let
+   them shoot out sideways as long lines. A limit of 2 keeps the open shape exactly and cuts the
+   corner off flat while closing, so the eye never grows wider than itself. */
+.fm-ld-lid,.fm-totop-outline,.fm-nav-eye-line{stroke-miterlimit:2}

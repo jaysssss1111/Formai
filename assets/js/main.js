@@ -38,6 +38,11 @@
     try { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); }
     catch (e) { var h = document.documentElement, was = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; window.scrollTo(0, y); h.style.scrollBehavior = was; }
   }
+  // Blink an eye mark: its upper lid comes down onto the lower lid and back, covering the pupil.
+  function eyeBlink(root) {
+    if (!root) return;
+    [].forEach.call(root.querySelectorAll('.fm-lid-anim'), function (a) { try { a.beginElement(); } catch (e) {} });
+  }
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   var reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
@@ -1701,12 +1706,12 @@
         var host = $('.fm-root') || document.body, cur = document.createElement('div');
         cur.className = 'fm-totop-curtain'; cur.setAttribute('aria-hidden', 'true');
         cur.innerHTML = '<span class="fm-totop-tile"><svg class="fm-totop-eye" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g class="fm-totop-lid">' +
-          '<path class="fm-totop-outline" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" fill="none" stroke-width="3" stroke-linejoin="miter" stroke-miterlimit="10" vector-effect="non-scaling-stroke"></path>' +
-          '<path d="M32 23 L41 32 L32 41 L23 32 Z" fill="#C85A20"></path></g></svg></span>';
+          '<path class="fm-totop-outline" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" fill="none" stroke-linejoin="miter" stroke-miterlimit="2" vector-effect="non-scaling-stroke"><animate class="fm-lid-anim" attributeName="d" begin="indefinite" dur="0.34s" fill="remove" calcMode="spline" keyTimes="0;0.45;0.55;1" keySplines=".55 0 .45 1;0 0 1 1;.55 0 .45 1" values="M4 32 Q32 8 60 32 Q32 56 4 32 Z;M4 32 Q32 56 60 32 Q32 56 4 32 Z;M4 32 Q32 56 60 32 Q32 56 4 32 Z;M4 32 Q32 8 60 32 Q32 56 4 32 Z"></animate></path>' +
+          '<clipPath id="fm-totop-clip"><rect x="0" y="20" width="64" height="64"><animate class="fm-lid-anim" attributeName="y" begin="indefinite" dur="0.34s" fill="remove" calcMode="spline" keyTimes="0;0.45;0.55;1" keySplines=".55 0 .45 1;0 0 1 1;.55 0 .45 1" values="20;44;44;20"></animate></rect></clipPath><g clip-path="url(#fm-totop-clip)"><path fill="#C85A20" d="M32 23 L41 32 L32 41 L23 32 Z"></path></g></g></svg></span>';
         host.appendChild(cur);
         void cur.offsetWidth; cur.classList.add('is-in');
         setTimeout(function () { jumpTo(0); land(); }, 470);   // the rise takes 0.42 s: jump once it fully covers the screen
-        setTimeout(function () { cur.classList.add('is-blink'); }, 560);   // the eye has popped up: blink
+        setTimeout(function () { eyeBlink(cur); }, 560);   // the eye has popped up: blink
         setTimeout(function () {
           cur.classList.add('is-out');
           setTimeout(function () { cur.remove(); }, 650);
@@ -1727,6 +1732,17 @@
     if (row && ev.target.closest('.fm-mf-more') && row.classList.contains('is-on')) return;
     $$('.fm-mf-row.is-on').forEach(function (r) { if (r !== row) mfSet(r, false); });
     if (row) mfSet(row, !row.classList.contains('is-on'));
+  });
+
+  /* ---------- Navbar and footer logo: the eye blinks when pointed at or focused ---------- */
+  [].forEach.call(document.querySelectorAll('a > .fm-nav-eye'), function (svg) {
+    var link = svg.parentNode, last = 0;
+    var go = function () {
+      if (state.paused || reducedMotion || Date.now() - last < 400) return;
+      last = Date.now(); eyeBlink(svg);
+    };
+    link.addEventListener('mouseenter', go);
+    link.addEventListener('focus', go);
   });
 
   /* ---------- full re-render (language / theme change) ---------- */
