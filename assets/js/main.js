@@ -1715,11 +1715,18 @@
     });
   })();
 
-  /* ---------- What we believe: tapping a line highlights it (phones have no hover) ---------- */
+  /* ---------- What we believe: a line opens to show the detail behind its claim ----------
+     Tap or click anywhere on a line (or press Enter / Space on its title button). Opening one
+     closes the others; tapping the open one closes it. Clicks inside the opened text do not close it. */
+  function mfSet(row, open) {
+    row.classList.toggle('is-on', open);
+    var b = row.querySelector('.fm-mf-btn'); if (b) b.setAttribute('aria-expanded', String(open));
+  }
   document.addEventListener('click', function (ev) {
     var row = ev.target.closest && ev.target.closest('.fm-mf-row');
-    $$('.fm-mf-row.is-on').forEach(function (r) { if (r !== row) r.classList.remove('is-on'); });
-    if (row) row.classList.toggle('is-on');
+    if (row && ev.target.closest('.fm-mf-more') && row.classList.contains('is-on')) return;
+    $$('.fm-mf-row.is-on').forEach(function (r) { if (r !== row) mfSet(r, false); });
+    if (row) mfSet(row, !row.classList.contains('is-on'));
   });
 
   /* ---------- full re-render (language / theme change) ---------- */

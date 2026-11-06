@@ -1526,3 +1526,27 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 
 /* What we do / How we do it / What you get: the same cream as the AI news article text area */
 .fm-wh-card{background:#EDE6D8}
+
+/* ---------- What we believe: each line opens to show the detail behind its claim ----------
+   The title is a button (aria-expanded); the detail panel slides open by animating its grid
+   row from 0fr to 1fr and fades in, and is hidden from assistive tech while closed. A + at the
+   right turns into a - when open. Nothing in the closed line moves. */
+.fm-mf-row{position:relative;cursor:pointer;padding-right:44px}
+.fm-mf-btn{all:unset;cursor:pointer;display:inline}
+.fm-mf-btn:focus-visible{outline:2px solid #26221E;outline-offset:4px}
+.fm-mf-pm{position:absolute;right:4px;top:28px;width:16px;height:16px;pointer-events:none}
+.fm-mf-pm::before,.fm-mf-pm::after{content:"";position:absolute;left:0;top:7px;width:16px;height:1.5px;background:#26221E;transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.fm-mf-pm::after{transform:rotate(90deg)}
+.fm-mf-row.is-on .fm-mf-pm::after{transform:rotate(0deg)}
+.fm-mf-more{grid-column:2 / -1;display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.2,.7,.2,1)}
+.fm-mf-more-in{overflow:hidden;min-height:0;visibility:hidden;opacity:0;transform:translateY(-6px);transition:opacity .3s ease,transform .4s cubic-bezier(.2,.7,.2,1),visibility 0s linear .4s}
+.fm-mf-row.is-on .fm-mf-more{grid-template-rows:1fr}
+.fm-mf-row.is-on .fm-mf-more-in{visibility:visible;opacity:1;transform:none;transition:opacity .35s ease .08s,transform .4s cubic-bezier(.2,.7,.2,1),visibility 0s}
+.fm-root .fm-orange .fm-mf-more p{margin:0;padding:14px 0 4px;max-width:720px;font-size:17px;line-height:1.6;font-weight:400;opacity:1;cursor:text}
+@media (max-width:640px){.fm-mf-row{padding-right:32px}.fm-mf-pm{top:24px;right:0}.fm-mf-more{grid-column:2}.fm-root .fm-orange .fm-mf-more p{font-size:16px}}
+@media (prefers-reduced-motion:reduce){.fm-mf-more,.fm-mf-more-in,.fm-mf-pm::before,.fm-mf-pm::after{transition:none}}
+/* Keep // and the summary with the first line of the title, also when the title wraps */
+.fm-mf-row{align-items:start}
+.fm-root .fm-orange .fm-mf-row .fm-mf-n{align-self:start;padding-top:.08em}
+.fm-root .fm-orange .fm-mf-row > p{padding-top:.45em}
+@media (max-width:640px){.fm-root .fm-orange .fm-mf-row > p{padding-top:0}}
