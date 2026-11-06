@@ -9,7 +9,8 @@
 /* Theme tokens */
 :root,.fm-root[data-theme="dark"]{--surface:#141210;--raised:#1E1B18;--ink:#EDE6D8;--muted:#A39A8B;--line:#2B2722;--strong:#6E665A;--accent:#E2692B;--on-accent:#141210;--brand:#C85A20;color-scheme:dark}
 .fm-root[data-theme="light"]{--surface:#EDE6D8;--raised:#F5F0E6;--ink:#26221E;--muted:#5E564B;--line:#D2C9B7;--strong:#8A8173;--accent:#A8461A;--on-accent:#EDE6D8;color-scheme:light}
-html{background:#141210}
+html{background:#EDE6D8}
+html[data-theme="dark"]{background:#141210}
 html[data-theme="light"]{background:#EDE6D8}
 .fm-root{min-height:100vh;display:flex;flex-direction:column;background:var(--surface);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-weight:300}
 
