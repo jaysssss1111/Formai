@@ -1523,3 +1523,6 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 /* Service icons at 60% opacity; the open, hovered or focused one at full strength */
 .fm-root .fm-orange .fm-svc-ic{opacity:.6;transition:color .2s linear,opacity .2s linear}
 .fm-root .fm-orange .fm-svc.is-on .fm-svc-ic,.fm-root .fm-orange .fm-svc-tab:hover .fm-svc-ic,.fm-root .fm-orange .fm-svc-tab:focus-visible .fm-svc-ic{opacity:1}
+
+/* What we do / How we do it / What you get: the same cream as the AI news article text area */
+.fm-wh-card{background:#EDE6D8}
