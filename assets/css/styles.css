@@ -470,11 +470,6 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 .fm-footer :focus-visible{outline:2px solid #26221E !important;outline-offset:2px}
 @media (max-width:640px){.fm-foot-top{padding-left:20px;padding-right:20px}}
 
-/* The eye blinks now and then; its pupil follows the pointer (main.js). */
-@keyframes fm-foot-blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
-.fm-foot-eye-lid{transform-box:fill-box;transform-origin:center}
-.fm-motion .fm-foot-eye-lid{animation:fm-foot-blink 6s linear infinite}
-.fm-foot-pupil{transition:transform .12s linear}
 
 /* Footer logo (nav size) and social links: black outlines on the orange. */
 .fm-foot-logo{display:flex;align-items:center;min-height:44px}
