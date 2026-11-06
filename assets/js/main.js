@@ -57,7 +57,7 @@
   var allowPrefs = !!(consent && consent.prefs);
   function save(k, v) { if (allowPrefs) LS.set(k, v); }
 
-  var sysMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+  var sysMode = 'light';   // first visit: the light theme, whatever the device setting
   var navLang = String(navigator.language || '').toLowerCase().indexOf('fi') === 0 ? 'fi' : '';
 
   // The language switch hands the theme and the pause setting to the other
