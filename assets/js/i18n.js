@@ -158,18 +158,27 @@ const T = {
       { kind: 'Startup', title: 'A B2B software company before its seed round', problem: 'A working product without a brand, and a support inbox that takes the founders’ time.', approach: 'Identity and landing page in one sprint, then an AI assistant that answers routine support questions from the product documentation.', deliver: ['Identity', 'Landing page', 'AI assistant'], time: 'Planned sprint: 2 weeks' }
     ],
     toolsHint: 'Point at a tool to see what we use it for.', toolTips: ['Language and image models inside the products we build.', 'Claude models for research, writing and agent work.', 'An agent-first coding environment for building and testing.', 'Coding agents for well-defined programming tasks.', 'Writing, refactoring and reviewing code with an agent.', 'Where your code lives, with its full history, and stays yours.', 'Hosting and previews, so you see every change live.'], toolNames: ['OpenAI', 'Anthropic', 'Antigravity', 'Codex', 'Claude Code', 'GitHub', 'Vercel'],
-    prLinks: ['How we use AI', 'Who owns the files', 'See the method'],
     live: { on: '{t} in Helsinki · we are working now', off: '{t} in Helsinki · we reply on the next working day' },
     teamLabel: 'The people', noteLabel: 'Why formai', teamPreview: 'Sample team, for layout only', photoSoon: 'PHOTO',
     foot: { services: 'Services', studio: 'Explore', start: 'Start here', company: 'Company', map: 'Site map', top: 'Back to top', businessId: 'Business ID' },
     toolsLabel: 'Tools we build with',
-    aboutLabel: 'Who we are', aboutTitle: 'One team, from brand to software',
-    aboutP: 'formai is a design and technology company based in Finland. Designers and developers work side by side with AI agents, so one team delivers brand, product, software and automation, with no hand-offs between agencies.',
+    aboutLabel: 'Who we are', aboutTitle: 'Agencies sell hours. We sell results.',
+    aboutP: 'formai is a design and technology company based in Finland. Our goal: every company, from a two-person startup to a hundred-year-old brand, gets agency-level brand, product and software at the speed AI makes possible. Designers and developers work side by side with AI agents, so one team takes you from first idea to live product, with no hand-offs.',
     aboutFacts: ['Based in Finland', 'English and Finnish', 'People + AI agents'],
-    principles: [
-      { h: 'People decide', p: 'AI drafts, tests and builds. A designer or developer reviews everything before it reaches you.' },
-      { h: 'Files you own', p: 'Everything we make is handed over as working files that you and any other team can keep building on.' },
-      { h: 'Days, not weeks', p: 'Short sprints with working versions from the first days, so you can steer early.' }
+    mfLabel: 'What we believe',
+    mf: [
+      { h: 'Working things, not slide decks.', p: 'Within days you click, test and comment on the real thing, not a presentation about it.' },
+      { h: 'AI does the groundwork. People decide.', p: 'Agents draft, test and check. A designer or developer reviews everything before it reaches you.' },
+      { h: 'Everything we make is yours.', p: 'Files, code and accounts are handed over to you, ready for your team or any other to build on. No lock-in.' },
+      { h: 'A fixed price before we start.', p: 'You approve one price for one sprint. It does not grow by the hour.' },
+      { h: 'Honest from the first look.', p: 'The free audit tells you what to fix, even if the answer is that you do not need us.' }
+    ],
+    whLabel: 'What we do, how, and what you get',
+    whLinks: ['See all services', 'See the method', 'Who owns the files'],
+    wh: [
+      { tag: '01 · What we do', h: 'Brand, product, software and automation', p: 'Everything a company needs to look right, work well and run itself, made by one team.' },
+      { tag: '02 · How we do it', h: 'People and AI agents in one loop', p: 'Short sprints where agents do the groundwork and people make every decision.', list: ['A free audit first: three fixes in 48 h', 'Sprints of 5–15 days, with working files every few days', 'A person reviews everything before you see it'] },
+      { tag: '03 · What you get', h: 'Working files you own', p: 'A handover you can build on, not a link that stops working when we part ways.', list: ['Brand guide, logo files and fonts', 'Design files and a design system', 'The code in your own repository, live', 'Automations with their instructions', 'A handover session and notes'] }
     ],
     newsLabel: 'AI news', newsTitle: 'What is moving in AI',
     newsIntro: 'Articles on AI in design, code, automation and regulation, picked for what they mean for your business. New ones are added every week.',
@@ -337,18 +346,27 @@ const T = {
       { kind: 'Startup', title: 'B2B-ohjelmistoyritys ennen siemenkierrosta', problem: 'Toimiva tuote ilman brändiä ja tukisähköposti, joka vie perustajien ajan.', approach: 'Identiteetti ja laskeutumissivu yhdessä sprintissä, sitten tekoälyavustaja, joka vastaa tavallisiin tukikysymyksiin tuotedokumentaation pohjalta.', deliver: ['Identiteetti', 'Laskeutumissivu', 'Tekoälyavustaja'], time: 'Suunniteltu sprintti: 2 viikkoa' }
     ],
     toolsHint: 'Osoita työkalua, niin näet, mihin käytämme sitä.', toolTips: ['Kieli- ja kuvamallit rakentamiemme tuotteiden sisällä.', 'Claude-mallit tutkimukseen, kirjoittamiseen ja agenttityöhön.', 'Agenttilähtöinen koodausympäristö rakentamiseen ja testaamiseen.', 'Koodausagentit tarkasti rajattuihin ohjelmointitehtäviin.', 'Koodin kirjoittaminen, uudistaminen ja tarkistus agentin kanssa.', 'Koodisi koti koko historioineen, ja se pysyy sinun.', 'Julkaisu ja esikatselut, joten näet jokaisen muutoksen heti.'], toolNames: ['OpenAI', 'Anthropic', 'Antigravity', 'Codex', 'Claude Code', 'GitHub', 'Vercel'],
-    prLinks: ['Näin käytämme tekoälyä', 'Kenelle tiedostot kuuluvat', 'Katso menetelmä'],
     live: { on: 'Helsingissä klo {t} · olemme töissä nyt', off: 'Helsingissä klo {t} · vastaamme seuraavana arkipäivänä' },
     teamLabel: 'Ihmiset', noteLabel: 'Miksi formai', teamPreview: 'Esimerkkitiimi, vain asettelua varten', photoSoon: 'KUVA',
     foot: { services: 'Palvelut', studio: 'Tutustu', start: 'Aloita tästä', company: 'Yritys', map: 'Sivukartta', top: 'Takaisin ylös', businessId: 'Y-tunnus' },
     toolsLabel: 'Työkalut, joilla rakennamme',
-    aboutLabel: 'Keitä olemme', aboutTitle: 'Yksi tiimi brändistä ohjelmistoon',
-    aboutP: 'formai on suomalainen suunnittelu- ja teknologiayritys. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi tiimi toimittaa brändin, tuotteen, ohjelmiston ja automaation ilman, että työ siirtyy toimistolta toiselle.',
+    aboutLabel: 'Keitä olemme', aboutTitle: 'Toimistot myyvät tunteja. Me myymme tuloksia.',
+    aboutP: 'formai on suomalainen suunnittelu- ja teknologiayritys. Tavoitteemme: jokainen yritys, kahden hengen startupista satavuotiaaseen brändiin, saa toimistotason brändin, tuotteen ja ohjelmiston sillä nopeudella, jonka tekoäly tekee mahdolliseksi. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi tiimi vie sinut ensimmäisestä ideasta julkaistuun tuotteeseen ilman välikäsiä.',
     aboutFacts: ['Suomesta', 'Suomeksi ja englanniksi', 'Ihmiset + tekoälyagentit'],
-    principles: [
-      { h: 'Ihmiset päättävät', p: 'Tekoäly luonnostelee, testaa ja rakentaa. Suunnittelija tai kehittäjä tarkistaa kaiken ennen kuin se päätyy sinulle.' },
-      { h: 'Tiedostot ovat teidän', p: 'Kaikki tekemämme luovutetaan toimivina tiedostoina, joiden päälle te ja kuka tahansa muu tiimi voi jatkaa rakentamista.' },
-      { h: 'Päiviä, ei viikkoja', p: 'Lyhyitä sprinttejä ja toimivia versioita ensimmäisistä päivistä alkaen, jotta voitte ohjata työtä ajoissa.' }
+    mfLabel: 'Mihin uskomme',
+    mf: [
+      { h: 'Toimivia asioita, ei diaesityksiä.', p: 'Päivien sisällä klikkaat, testaat ja kommentoit oikeaa asiaa, et esitystä siitä.' },
+      { h: 'Tekoäly tekee pohjatyön. Ihmiset päättävät.', p: 'Agentit luonnostelevat, testaavat ja tarkistavat. Suunnittelija tai kehittäjä käy kaiken läpi ennen kuin se tulee sinulle.' },
+      { h: 'Kaikki tekemämme on teidän.', p: 'Tiedostot, koodi ja tilit luovutetaan teille, valmiina teidän tai kenen tahansa tiimin jatkettavaksi. Ei sitoutumista meihin.' },
+      { h: 'Kiinteä hinta ennen aloitusta.', p: 'Hyväksyt yhden hinnan yhdelle sprintille. Se ei kasva tuntien mukana.' },
+      { h: 'Rehellisesti alusta asti.', p: 'Maksuton auditointi kertoo, mitä kannattaa korjata, vaikka vastaus olisi, ettet tarvitse meitä.' }
+    ],
+    whLabel: 'Mitä teemme, miten ja mitä saat',
+    whLinks: ['Katso kaikki palvelut', 'Katso menetelmä', 'Kenelle tiedostot kuuluvat'],
+    wh: [
+      { tag: '01 · Mitä teemme', h: 'Brändi, tuote, ohjelmistot ja automaatio', p: 'Kaikki, mitä yritys tarvitsee näyttääkseen oikealta, toimiakseen hyvin ja pyöriäkseen itsestään, yhden tiimin tekemänä.' },
+      { tag: '02 · Miten teemme', h: 'Ihmiset ja tekoälyagentit samassa silmukassa', p: 'Lyhyitä sprinttejä, joissa agentit tekevät pohjatyön ja ihmiset tekevät jokaisen päätöksen.', list: ['Ensin maksuton auditointi: kolme korjausta 48 tunnissa', '5–15 päivän sprintit ja toimivia tiedostoja muutaman päivän välein', 'Ihminen tarkistaa kaiken ennen kuin näet sen'] },
+      { tag: '03 · Mitä saat', h: 'Toimivat tiedostot, jotka omistat', p: 'Luovutus, jonka päälle voi rakentaa, ei linkki, joka lakkaa toimimasta, kun yhteistyö päättyy.', list: ['Brändiohje, logotiedostot ja fontit', 'Suunnittelutiedostot ja design-järjestelmä', 'Koodi omassa repositoriossanne, julkaistuna', 'Automaatiot ohjeineen', 'Luovutuspalaveri ja muistiinpanot'] }
     ],
     newsLabel: 'Tekoälyuutiset', newsTitle: 'Mitä tekoälyssä tapahtuu',
     newsIntro: 'Artikkeleita tekoälystä suunnittelussa, koodissa, automaatiossa ja sääntelyssä, valittuina sen mukaan, mitä ne merkitsevät liiketoiminnallesi. Uusia lisätään viikoittain.',

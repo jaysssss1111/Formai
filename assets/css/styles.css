@@ -1297,3 +1297,37 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-cookie{background:var(--raised) !important;color:var(--ink) !important;border-color:var(--strong) !important;border-top-color:#C85A20 !important}
 .fm-root[data-theme="light"] .fm-cookie{box-shadow:0 16px 40px -18px rgba(20,18,16,.6)}
 .fm-root[data-theme="dark"] .fm-cookie{box-shadow:0 16px 40px -18px rgba(0,0,0,.8)}
+
+/* ---------- Who we are: belief headline, manifesto, what / how / what you get ---------- */
+.fm-ab-intro{max-width:820px}
+#about .fm-ab-intro h2{font-size:clamp(40px,5.6vw,76px) !important;line-height:.98 !important}
+.fm-root .fm-orange .fm-mf-label{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px}
+.fm-mf-list{list-style:none;margin:0;padding:0;border-top:1px solid #000}
+.fm-mf-row{display:grid;grid-template-columns:64px minmax(0,1.15fr) minmax(0,1fr);gap:8px 32px;align-items:baseline;padding:24px 0;border-bottom:1px solid #000;transition:background-color .2s linear,padding .2s ease}
+.fm-root .fm-orange .fm-mf-n{font-family:'DM Mono',ui-monospace,monospace;font-size:13px;letter-spacing:.08em;transition:color .2s linear}
+.fm-root .fm-orange .fm-mf-row h3{margin:0;font-size:clamp(22px,2.4vw,32px);line-height:1.15;font-weight:300;letter-spacing:-.02em}
+.fm-root .fm-orange .fm-mf-row p{margin:0;font-size:16px;line-height:1.55;font-weight:400;opacity:.82}
+.fm-mf-row:hover{background:rgba(0,0,0,.06);padding-left:12px;padding-right:12px}
+.fm-root .fm-orange .fm-mf-row:hover .fm-mf-n{color:#EDE6D8 !important}
+.fm-wh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.fm-wh-card{--ink:#141210;--muted:#5E564B;background:#F5F0E6;border:1px solid #000;box-shadow:6px 6px 0 #000;padding:28px;display:flex;flex-direction:column;gap:14px;transition:transform .2s ease,box-shadow .2s ease}
+.fm-wh-card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #000}
+.fm-root .fm-orange .fm-wh-card h3,.fm-root .fm-orange .fm-wh-card p,.fm-root .fm-orange .fm-wh-card span,.fm-root .fm-orange .fm-wh-card li{color:#141210 !important}
+.fm-root .fm-orange .fm-wh-card .fm-wh-tag{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#A8461A !important}
+.fm-root .fm-orange .fm-wh-card h3{margin:0;font-size:24px;line-height:1.15;font-weight:400;letter-spacing:-.01em}
+.fm-root .fm-orange .fm-wh-card p{margin:0;font-size:16px;line-height:1.55;font-weight:300;color:#3F3931 !important}
+.fm-wh-list{list-style:none;margin:4px 0 0;padding:14px 0 0;border-top:1px solid #D2C9B7;display:flex;flex-direction:column;gap:10px;flex:1}
+.fm-root .fm-orange .fm-wh-list li{position:relative;padding-left:18px;font-size:15px;line-height:1.4}
+.fm-wh-list li::before{content:"";position:absolute;left:2px;top:.42em;width:7px;height:7px;background:#C85A20;transform:rotate(45deg)}
+.fm-wh-svcs{list-style:none;margin:4px 0 0;padding:14px 0 0;border-top:1px solid #D2C9B7;display:flex;flex-wrap:wrap;gap:8px;flex:1;align-content:flex-start}
+.fm-wh-svc{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;border:1px solid #8A8173;background:transparent;color:#141210;font:inherit;font-size:14px;cursor:pointer;transition:background-color .15s linear,border-color .15s linear,color .15s linear}
+.fm-wh-svc svg{transition:transform .18s linear}
+.fm-wh-svc:hover,.fm-wh-svc:focus-visible{background:#141210;border-color:#141210;color:#EDE6D8}
+.fm-root .fm-orange .fm-wh-svc:hover span,.fm-root .fm-orange .fm-wh-svc:focus-visible span{color:#EDE6D8 !important}
+.fm-wh-svc:hover svg{transform:translateX(3px)}
+.fm-wh-card :focus-visible{outline-color:#141210 !important}
+.fm-wh-card .fm-pr-link{color:#141210;border-bottom-color:#141210}
+@media (prefers-reduced-motion:reduce){.fm-mf-row,.fm-wh-card{transition:none}.fm-wh-card:hover{transform:none}}
+@media (max-width:900px){.fm-wh-grid{grid-template-columns:1fr}.fm-wh-card{box-shadow:4px 4px 0 #000;margin-right:4px}.fm-wh-card:hover{box-shadow:4px 4px 0 #000;transform:none}}
+@media (max-width:640px){.fm-mf-row{grid-template-columns:40px minmax(0,1fr);padding:20px 0}.fm-mf-row p{grid-column:2}.fm-wh-card{padding:22px}}
+#about .fm-ab-intro h2{text-wrap:balance}
