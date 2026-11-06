@@ -1437,3 +1437,12 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-totop-dia{display:block;width:30px;height:30px;background:#000;transform:rotate(45deg) scale(.5);transition:transform .42s cubic-bezier(.2,.7,.2,1)}
 .fm-totop-curtain.is-in .fm-totop-dia{transform:rotate(225deg) scale(1)}
 .fm-totop-curtain.is-out .fm-totop-dia{transform:rotate(405deg) scale(.4);transition:transform .58s cubic-bezier(.75,0,.25,1)}
+
+/* ---------- Contact ("Write to us") in light mode: the site's warm sand, not black ----------
+   The section was a near-black band in both themes, harsh between the light FAQ and the
+   orange footer. In light mode it uses the art tone (#E3DAC8, as Work) and the light palette;
+   the cream form card keeps its black frame and orange offset shadow. Dark mode is unchanged. */
+.fm-root[data-theme="light"] .fm-ct{background:#E3DAC8;color:#141210;border-top:1px solid #D2C9B7;
+  --surface:#EDE6D8;--raised:#F5F0E6;--ink:#141210;--muted:#5E564B;--line:#D2C9B7;--strong:#8A8173;--accent:#A8461A;--on-accent:#EDE6D8}
+.fm-root[data-theme="light"] .fm-ct .fm-ct-title{color:#3A342D !important}
+.fm-root[data-theme="light"] .fm-ct .fm-ct-label,.fm-root[data-theme="light"] .fm-ct .fm-ct-steps li::before{color:#9A3F17}
