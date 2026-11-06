@@ -1336,3 +1336,5 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-root .fm-orange .fm-mf-n{font-size:clamp(18px,1.9vw,26px);letter-spacing:-.04em;line-height:1.15}
 @media (max-width:640px){.fm-mf-row{grid-template-columns:32px minmax(0,1fr)}}
 @media (max-width:640px){.fm-mf-row{column-gap:16px}}
+/* 15 tools: a longer loop keeps the old pace. */
+.fm-motion .fm-tools-track{animation-duration:68s}
