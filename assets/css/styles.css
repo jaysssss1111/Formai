@@ -1472,3 +1472,18 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-root .fm-ct,.fm-root[data-theme="light"] .fm-ct{background:var(--surface-hero,#EDE6D8)}
 .fm-root[data-theme="light"] .fm-ct{--surface-hero:#EDE6D8;border-top-color:#D2C9B7}
 .fm-root[data-theme="dark"] .fm-ct{--surface-hero:#141210}
+
+/* ---------- Navbar: the eye mark after the wordmark; it blinks when the logo is pointed at ---------- */
+.fm-nav-eye{display:block;flex:none;width:36px;height:36px;margin-left:10px}
+.fm-nav-eye-line{stroke:#141210;stroke-width:1.7px}
+.fm-root[data-theme="dark"] .fm-nav-eye-line{stroke:#EDE6D8}
+.fm-nav-lid{transform-box:view-box;transform-origin:32px 32px}
+.fm-motion a:hover > .fm-nav-eye .fm-nav-lid,.fm-motion a:focus-visible > .fm-nav-eye .fm-nav-lid{animation:fm-blink .34s cubic-bezier(.6,0,.4,1)}
+/* Phones: keep the header on one row (wordmark + eye + mode, language and menu buttons at 44 px) */
+@media (max-width:430px){
+  header.fm-pad{column-gap:10px !important}
+  header.fm-pad > div{gap:8px !important}
+  header.fm-pad a[href="#top"] img{height:24px !important}
+  .fm-nav-eye{width:24px;height:24px;margin-left:6px}
+  .fm-nav-eye-line{stroke-width:1.2px}
+}
