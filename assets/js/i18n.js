@@ -169,16 +169,16 @@ const T = {
     mf: [
       { h: 'Working things, not slide decks.', p: 'Within days you click, test and comment on the real thing, not a presentation about it.' },
       { h: 'AI does the groundwork. People decide.', p: 'Agents draft, test and check. A designer or developer reviews everything before it reaches you.' },
-      { h: 'Everything we make is yours.', p: 'Files, code and accounts are handed over to you, ready for your team or any other to build on. No lock-in.' },
+      { h: 'Everything we make is yours.', p: 'Files and code are handed over to you, ready for your team or any other to build on. No lock-in.' },
       { h: 'A fixed price before we start.', p: 'You approve one price for one sprint. It does not grow by the hour.' },
       { h: 'Honest from the first look.', p: 'The free audit tells you what to fix, even if the answer is that you do not need us.' }
     ],
     whLabel: 'What we do, how, and what you get',
     whLinks: ['See all services', 'See the method', 'Who owns the files'],
     wh: [
-      { tag: '01 · What we do', h: 'Brand, product, software and automation', p: 'Everything a company needs to look right, work well and run itself, made by one team.' },
-      { tag: '02 · How we do it', h: 'People and AI agents in one loop', p: 'Short sprints where agents do the groundwork and people make every decision.', list: ['A free audit first: three fixes in 48 h', 'Sprints of 5–15 days, with working files every few days', 'A person reviews everything before you see it'] },
-      { tag: '03 · What you get', h: 'Working files you own', p: 'A handover you can build on, not a link that stops working when we part ways.', list: ['Brand guide, logo files and fonts', 'Design files and a design system', 'The code in your own repository, live', 'Automations with their instructions', 'A handover session and notes'] }
+      { tag: 'What we do', h: 'Brand, product, software and automation', p: 'Everything a company needs to look right, work well and run itself, made by one team.' },
+      { tag: 'How we do it', h: 'People and AI agents in one loop', p: 'Short sprints where agents do the groundwork and people make every decision.', list: ['A free audit first: three fixes in 48 h', 'Sprints of 5–15 days, with working files every few days', 'A person reviews everything before you see it'] },
+      { tag: 'What you get', h: 'Working files you own', p: 'A handover you can build on, not a link that stops working when we part ways.', list: ['Brand guide, logo files and fonts', 'Design files and a design system', 'The code in your own repository, live', 'Automations with their instructions', 'A handover session and notes'] }
     ],
     newsLabel: 'AI news', newsTitle: 'What is moving in AI',
     newsIntro: 'Articles on AI in design, code, automation and regulation, picked for what they mean for your business. New ones are added every week.',
@@ -357,16 +357,16 @@ const T = {
     mf: [
       { h: 'Toimivia asioita, ei diaesityksiä.', p: 'Päivien sisällä klikkaat, testaat ja kommentoit oikeaa asiaa, et esitystä siitä.' },
       { h: 'Tekoäly tekee pohjatyön. Ihmiset päättävät.', p: 'Agentit luonnostelevat, testaavat ja tarkistavat. Suunnittelija tai kehittäjä käy kaiken läpi ennen kuin se tulee sinulle.' },
-      { h: 'Kaikki tekemämme on teidän.', p: 'Tiedostot, koodi ja tilit luovutetaan teille, valmiina teidän tai kenen tahansa tiimin jatkettavaksi. Ei sitoutumista meihin.' },
+      { h: 'Kaikki tekemämme on teidän.', p: 'Tiedostot ja koodi luovutetaan teille, valmiina teidän tai kenen tahansa tiimin jatkettavaksi. Ei sitoutumista meihin.' },
       { h: 'Kiinteä hinta ennen aloitusta.', p: 'Hyväksyt yhden hinnan yhdelle sprintille. Se ei kasva tuntien mukana.' },
       { h: 'Rehellisesti alusta asti.', p: 'Maksuton auditointi kertoo, mitä kannattaa korjata, vaikka vastaus olisi, ettet tarvitse meitä.' }
     ],
     whLabel: 'Mitä teemme, miten ja mitä saat',
     whLinks: ['Katso kaikki palvelut', 'Katso menetelmä', 'Kenelle tiedostot kuuluvat'],
     wh: [
-      { tag: '01 · Mitä teemme', h: 'Brändi, tuote, ohjelmistot ja automaatio', p: 'Kaikki, mitä yritys tarvitsee näyttääkseen oikealta, toimiakseen hyvin ja pyöriäkseen itsestään, yhden tiimin tekemänä.' },
-      { tag: '02 · Miten teemme', h: 'Ihmiset ja tekoälyagentit samassa silmukassa', p: 'Lyhyitä sprinttejä, joissa agentit tekevät pohjatyön ja ihmiset tekevät jokaisen päätöksen.', list: ['Ensin maksuton auditointi: kolme korjausta 48 tunnissa', '5–15 päivän sprintit ja toimivia tiedostoja muutaman päivän välein', 'Ihminen tarkistaa kaiken ennen kuin näet sen'] },
-      { tag: '03 · Mitä saat', h: 'Toimivat tiedostot, jotka omistat', p: 'Luovutus, jonka päälle voi rakentaa, ei linkki, joka lakkaa toimimasta, kun yhteistyö päättyy.', list: ['Brändiohje, logotiedostot ja fontit', 'Suunnittelutiedostot ja design-järjestelmä', 'Koodi omassa repositoriossanne, julkaistuna', 'Automaatiot ohjeineen', 'Luovutuspalaveri ja muistiinpanot'] }
+      { tag: 'Mitä teemme', h: 'Brändi, tuote, ohjelmistot ja automaatio', p: 'Kaikki, mitä yritys tarvitsee näyttääkseen oikealta, toimiakseen hyvin ja pyöriäkseen itsestään, yhden tiimin tekemänä.' },
+      { tag: 'Miten teemme', h: 'Ihmiset ja tekoälyagentit samassa silmukassa', p: 'Lyhyitä sprinttejä, joissa agentit tekevät pohjatyön ja ihmiset tekevät jokaisen päätöksen.', list: ['Ensin maksuton auditointi: kolme korjausta 48 tunnissa', '5–15 päivän sprintit ja toimivia tiedostoja muutaman päivän välein', 'Ihminen tarkistaa kaiken ennen kuin näet sen'] },
+      { tag: 'Mitä saat', h: 'Toimivat tiedostot, jotka omistat', p: 'Luovutus, jonka päälle voi rakentaa, ei linkki, joka lakkaa toimimasta, kun yhteistyö päättyy.', list: ['Brändiohje, logotiedostot ja fontit', 'Suunnittelutiedostot ja design-järjestelmä', 'Koodi omassa repositoriossanne, julkaistuna', 'Automaatiot ohjeineen', 'Luovutuspalaveri ja muistiinpanot'] }
     ],
     newsLabel: 'Tekoälyuutiset', newsTitle: 'Mitä tekoälyssä tapahtuu',
     newsIntro: 'Artikkeleita tekoälystä suunnittelussa, koodissa, automaatiossa ja sääntelyssä, valittuina sen mukaan, mitä ne merkitsevät liiketoiminnallesi. Uusia lisätään viikoittain.',

@@ -1331,3 +1331,8 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 @media (max-width:900px){.fm-wh-grid{grid-template-columns:1fr}.fm-wh-card{box-shadow:4px 4px 0 #000;margin-right:4px}.fm-wh-card:hover{box-shadow:4px 4px 0 #000;transform:none}}
 @media (max-width:640px){.fm-mf-row{grid-template-columns:40px minmax(0,1fr);padding:20px 0}.fm-mf-row p{grid-column:2}.fm-wh-card{padding:22px}}
 #about .fm-ab-intro h2{text-wrap:balance}
+/* Manifesto markers: "//" sized to the line it leads. */
+.fm-mf-row{grid-template-columns:48px minmax(0,1.15fr) minmax(0,1fr)}
+.fm-root .fm-orange .fm-mf-n{font-size:clamp(18px,1.9vw,26px);letter-spacing:-.04em;line-height:1.15}
+@media (max-width:640px){.fm-mf-row{grid-template-columns:32px minmax(0,1fr)}}
+@media (max-width:640px){.fm-mf-row{column-gap:16px}}
