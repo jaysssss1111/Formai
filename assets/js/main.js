@@ -2050,7 +2050,7 @@
     }
     if (!showLoader) { loader.classList.add('is-off'); done(); return; }
     var start = Date.now();
-    var finish = function () { setTimeout(done, Math.max(0, 1000 - (Date.now() - start))); };
+    var finish = function () { setTimeout(done, Math.max(0, 1300 - (Date.now() - start))); };   // long enough for the eye's blink
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(finish, finish); else finish();
     setTimeout(done, 4000);
   }
