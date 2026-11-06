@@ -31,6 +31,13 @@
     get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
     set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   };
+  // Scroll without animation. html has scroll-behavior: smooth, and switching it off inline for
+  // a moment does not stop Chrome from animating, so ask for 'instant' directly (older
+  // browsers that do not know the value fall back to the inline switch).
+  function scrollNow(y) {
+    try { window.scrollTo({ top: y, left: 0, behavior: 'instant' }); }
+    catch (e) { var h = document.documentElement, was = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; window.scrollTo(0, y); h.style.scrollBehavior = was; }
+  }
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   var reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
@@ -1677,26 +1684,31 @@
     // Back to top: a smooth scroll over the whole page rushed every section past (and the
     // curtain footer flickered under them). Instead: the diamond send-off, a short fade to the
     // page colour, a jump to just below the hero, then fade back in while gliding to the top.
-    var jumpTo = function (y) { var h = document.documentElement, was = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; window.scrollTo(0, y); h.style.scrollBehavior = was; };
+    var jumpTo = scrollNow;
     var land = function () { var c = $('#content'); if (c) c.focus({ preventScroll: true }); };
     if (link) link.addEventListener('click', function (ev) {
       ev.preventDefault();
       if (state.paused || reducedMotion) { jumpTo(0); land(); return; }
       link.classList.remove('is-go'); void link.offsetWidth; link.classList.add('is-go');
       setTimeout(function () { link.classList.remove('is-go'); }, 900);
+      if (window.scrollY < innerHeight * 1.5) {
+        setTimeout(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); land(); }, 380);
+        return;
+      }
+      // A curtain in the footer's orange rises over the page with a turning diamond, the page
+      // jumps to the top behind it, and the curtain carries on up to uncover the hero.
       setTimeout(function () {
-        if (window.scrollY < innerHeight * 1.5) { window.scrollTo({ top: 0, behavior: 'smooth' }); land(); return; }
-        var host = $('.fm-root') || document.body, veil = document.createElement('div');
-        veil.className = 'fm-totop-veil'; veil.setAttribute('aria-hidden', 'true'); host.appendChild(veil);
-        void veil.offsetWidth; veil.classList.add('is-on');
+        var host = $('.fm-root') || document.body, cur = document.createElement('div');
+        cur.className = 'fm-totop-curtain'; cur.setAttribute('aria-hidden', 'true');
+        cur.innerHTML = '<span class="fm-totop-dia"></span>';
+        host.appendChild(cur);
+        void cur.offsetWidth; cur.classList.add('is-in');
         setTimeout(function () {
-          jumpTo(Math.round(innerHeight * 0.45));
-          veil.classList.remove('is-on'); veil.classList.add('is-off');
-          requestAnimationFrame(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-          land();
-          setTimeout(function () { veil.remove(); }, 450);
-        }, 200);
-      }, 380);
+          jumpTo(0); land();
+          cur.classList.add('is-out');
+          setTimeout(function () { cur.remove(); }, 650);
+        }, 470);   // the rise takes 0.42 s: jump only once it fully covers the screen
+      }, 160);
     });
   })();
 
@@ -1748,7 +1760,7 @@
     html.style.scrollBehavior = 'auto';
     function place() {
       var el = pos.id && document.getElementById(pos.id);
-      window.scrollTo(0, pos.end ? document.documentElement.scrollHeight : el ? Math.max(0, el.getBoundingClientRect().top + window.scrollY + pos.off) : 0);
+      scrollNow(pos.end ? document.documentElement.scrollHeight : el ? Math.max(0, el.getBoundingClientRect().top + window.scrollY + pos.off) : 0);
     }
     place();
     requestAnimationFrame(place);
@@ -1856,7 +1868,7 @@
         return el ? Math.max(0, Math.round(window.scrollY + el.getBoundingClientRect().top - (svcWide.matches ? 24 : 12))) : window.scrollY;
       };
       // html has scroll-behavior: smooth, which makes behavior 'auto' smooth too; switch it off to really jump.
-      var jumpTo = function (y) { var h = document.documentElement, was = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; window.scrollTo(0, y); h.style.scrollBehavior = was; };
+      var jumpTo = scrollNow;
       var done = false, userMoved = false, settleT = 0, giveUp = 0;
       var stopEvents = ['touchstart', 'wheel', 'keydown'];
       var onUser = function () { userMoved = true; finish(); };
@@ -2001,7 +2013,7 @@
   function toTop() {
     if (fromSwitch || (location.hash.length > 1 && !window.__fmReload)) return;
     var html = document.documentElement, was = html.style.scrollBehavior;
-    html.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); html.style.scrollBehavior = was;
+    html.style.scrollBehavior = 'auto'; scrollNow(0); html.style.scrollBehavior = was;
   }
   toTop();
   addEventListener('load', toTop);
