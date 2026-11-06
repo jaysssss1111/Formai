@@ -60,11 +60,15 @@
   var sysMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
   var navLang = String(navigator.language || '').toLowerCase().indexOf('fi') === 0 ? 'fi' : '';
 
+  // The language switch hands the theme and the pause setting to the other
+  // language's page (once, through this tab's session), so they stay as they
+  // were even without preference storage.
+  var carried = (function () { try { var c = JSON.parse(SS.get('fm-lang-pos') || 'null'); return c && Date.now() - c.t < 15000 ? c : null; } catch (e) { return null; } })();
   var state = {
-    mode: (allowPrefs && LS.get('fm-mode')) || sysMode || 'dark',
+    mode: (carried && carried.mode) || (allowPrefs && LS.get('fm-mode')) || sysMode || 'dark',
     // Prerendered pages (/ and /fi/) carry their language; the template falls back to prefs.
     lang: document.documentElement.getAttribute('data-page-lang') || (allowPrefs && LS.get('fm-lang')) || navLang || 'en',
-    paused: allowPrefs && LS.get('fm-paused') === '1',
+    paused: carried && typeof carried.paused === 'boolean' ? carried.paused : allowPrefs && LS.get('fm-paused') === '1',
     menuOpen: false,
     bannerOpen: !consent,
     draft: { prefs: !!(consent && consent.prefs), analytics: !!(consent && consent.analytics), marketing: !!(consent && consent.marketing) },
@@ -1574,7 +1578,7 @@
       var secs = $$('main > section[id], main > [id]'), at = null;
       for (var i = 0; i < secs.length; i++) { var r = secs[i].getBoundingClientRect(); if (r.bottom > 1) { at = { id: secs[i].id, off: Math.round(-r.top) }; break; } }
       // Past the last section (in the footer) the spot is simply the end of the page.
-      SS.set('fm-lang-pos', JSON.stringify({ id: at && window.scrollY > 0 ? at.id : '', off: at ? at.off : 0, end: !at && window.scrollY > 0, hash: location.hash, t: Date.now() }));
+      SS.set('fm-lang-pos', JSON.stringify({ id: at && window.scrollY > 0 ? at.id : '', off: at ? at.off : 0, end: !at && window.scrollY > 0, hash: location.hash, mode: state.mode, paused: !!state.paused, t: Date.now() }));
       location.assign(path);
       return;
     }
