@@ -1695,19 +1695,22 @@
         setTimeout(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); land(); }, 380);
         return;
       }
-      // A curtain in the footer's orange rises over the page with a turning diamond, the page
-      // jumps to the top behind it, and the curtain carries on up to uncover the hero.
+      // A curtain in the footer's orange rises over the page, the formai eye pops up on a cream
+      // tile, the page jumps to the top behind it, the eye blinks, and the curtain lifts off.
       setTimeout(function () {
         var host = $('.fm-root') || document.body, cur = document.createElement('div');
         cur.className = 'fm-totop-curtain'; cur.setAttribute('aria-hidden', 'true');
-        cur.innerHTML = '<span class="fm-totop-dia"></span>';
+        cur.innerHTML = '<span class="fm-totop-tile"><svg class="fm-totop-eye" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g class="fm-totop-lid">' +
+          '<path d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" fill="none" stroke="#141210" stroke-width="3" stroke-linejoin="miter" stroke-miterlimit="10" vector-effect="non-scaling-stroke"></path>' +
+          '<path d="M32 23 L41 32 L32 41 L23 32 Z" fill="#C85A20"></path></g></svg></span>';
         host.appendChild(cur);
         void cur.offsetWidth; cur.classList.add('is-in');
+        setTimeout(function () { jumpTo(0); land(); }, 470);   // the rise takes 0.42 s: jump once it fully covers the screen
+        setTimeout(function () { cur.classList.add('is-blink'); }, 560);   // the eye has popped up: blink
         setTimeout(function () {
-          jumpTo(0); land();
           cur.classList.add('is-out');
           setTimeout(function () { cur.remove(); }, 650);
-        }, 470);   // the rise takes 0.42 s: jump only once it fully covers the screen
+        }, 920);
       }, 160);
     });
   })();
