@@ -1348,7 +1348,9 @@
         if (d.open && history.replaceState) history.replaceState(null, '', '#' + d.id);
       });
     });
+    var fromHashSeen = false;
     function fromHash() {
+      if (window.__fmReload && !fromHashSeen) { fromHashSeen = true; return; }
       var id = decodeURIComponent(location.hash.slice(1));
       if (!/^faq-/.test(id)) return;
       var d = document.getElementById(id);
@@ -1821,7 +1823,7 @@
   var fromSwitch = !!carried;
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   function toTop() {
-    if (fromSwitch || location.hash.length > 1) return;
+    if (fromSwitch || (location.hash.length > 1 && !window.__fmReload)) return;
     var html = document.documentElement, was = html.style.scrollBehavior;
     html.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); html.style.scrollBehavior = was;
   }
