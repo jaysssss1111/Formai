@@ -1434,9 +1434,16 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   transform:translateY(100%);transition:transform .42s cubic-bezier(.75,0,.25,1);box-shadow:0 -1px 0 #000,0 1px 0 #000}
 .fm-totop-curtain.is-in{transform:none}
 .fm-totop-curtain.is-out{transform:translateY(-100%);transition:transform .58s cubic-bezier(.75,0,.25,1)}
-.fm-totop-dia{display:block;width:30px;height:30px;background:#000;transform:rotate(45deg) scale(.5);transition:transform .42s cubic-bezier(.2,.7,.2,1)}
-.fm-totop-curtain.is-in .fm-totop-dia{transform:rotate(225deg) scale(1)}
-.fm-totop-curtain.is-out .fm-totop-dia{transform:rotate(405deg) scale(.4);transition:transform .58s cubic-bezier(.75,0,.25,1)}
+/* The formai eye mark (as in assets/logos) on a cream tile: pops up, blinks once, lifts away. */
+.fm-totop-tile{display:grid;place-items:center;width:144px;height:144px;background:#F5F0E6;border:1px solid #141210;box-shadow:6px 6px 0 #141210;
+  opacity:0;transform:scale(.55);transition:opacity .18s ease,transform .2s ease}
+.fm-totop-curtain.is-in .fm-totop-tile{opacity:1;transform:none;transition:opacity .2s ease .12s,transform .44s cubic-bezier(.34,1.56,.64,1) .12s}
+.fm-totop-curtain.is-out .fm-totop-tile{opacity:0;transform:translateY(-16px) scale(.92);transition:opacity .34s ease,transform .5s cubic-bezier(.75,0,.25,1)}
+.fm-totop-eye{display:block;width:108px;height:108px;overflow:visible}
+.fm-totop-lid{transform-box:view-box;transform-origin:32px 32px}
+@keyframes fm-blink{0%,100%{transform:scaleY(1)}42%,58%{transform:scaleY(.04)}}
+.fm-totop-curtain.is-blink .fm-totop-lid{animation:fm-blink .34s cubic-bezier(.6,0,.4,1)}
+@media (max-width:640px){.fm-totop-tile{width:124px;height:124px;box-shadow:5px 5px 0 #141210}.fm-totop-eye{width:92px;height:92px}}
 
 /* ---------- Contact ("Write to us") in light mode: the site's warm sand, not black ----------
    The section was a near-black band in both themes, harsh between the light FAQ and the
