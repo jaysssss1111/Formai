@@ -1490,3 +1490,6 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 
 /* Service icons in a soft cream so they stand apart from the dark text on the orange */
 .fm-root .fm-orange .fm-svc-ic{color:#F5F0E6 !important}   /* beats the dark-text rule for spans on orange */
+
+/* What we do: just the "See all services" link, kept at the foot of the card like the others */
+.fm-wh-card .fm-pr-link{margin-top:auto}
