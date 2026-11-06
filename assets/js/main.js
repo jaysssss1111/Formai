@@ -1695,13 +1695,13 @@
         setTimeout(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); land(); }, 380);
         return;
       }
-      // A curtain in the footer's orange rises over the page, the formai eye pops up on a cream
-      // tile, the page jumps to the top behind it, the eye blinks, and the curtain lifts off.
+      // A curtain in the hero's own colour rises over the page, the formai eye mark pops up, the
+      // page jumps to the top behind it, the eye blinks, and the curtain lifts off to the hero.
       setTimeout(function () {
         var host = $('.fm-root') || document.body, cur = document.createElement('div');
         cur.className = 'fm-totop-curtain'; cur.setAttribute('aria-hidden', 'true');
         cur.innerHTML = '<span class="fm-totop-tile"><svg class="fm-totop-eye" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g class="fm-totop-lid">' +
-          '<path d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" fill="none" stroke="#141210" stroke-width="3" stroke-linejoin="miter" stroke-miterlimit="10" vector-effect="non-scaling-stroke"></path>' +
+          '<path class="fm-totop-outline" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" fill="none" stroke-width="3" stroke-linejoin="miter" stroke-miterlimit="10" vector-effect="non-scaling-stroke"></path>' +
           '<path d="M32 23 L41 32 L32 41 L23 32 Z" fill="#C85A20"></path></g></svg></span>';
         host.appendChild(cur);
         void cur.offsetWidth; cur.classList.add('is-in');
