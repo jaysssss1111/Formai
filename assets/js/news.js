@@ -95,7 +95,10 @@
     var read = '<a class="fm-news-readbtn" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer" aria-label="' +
       esc((tr.newsReadBtn || 'Read') + ': ' + item.title + ' (' + item.source + ')') + '"><span>' + esc(tr.newsReadBtn || 'Read') + '</span>' +
       '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 L9 3 M4 3 H9 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>';
-    return '<div class="fm-news-actions">' + help + '<div class="fm-news-btns">' + share + read + '</div></div>';
+    var like = '<button type="button" class="fm-news-like" data-news-like="' + esc(item.url) + '" aria-pressed="false" aria-label="' +
+      esc((tr.newsLike || 'Like') + ': ' + item.title) + '" title="' + esc(tr.newsLike || 'Like') + '">' +
+      '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14 L2.2 8.3 A3.3 3.3 0 0 1 8 3.6 A3.3 3.3 0 0 1 13.8 8.3 Z" style="stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round;"></path></svg></button>';
+    return '<div class="fm-news-actions">' + help + '<div class="fm-news-btns">' + like + share + read + '</div></div>';
   }
   function image(item, i) {
     return cover(item.topic, i) +

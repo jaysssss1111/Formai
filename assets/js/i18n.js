@@ -182,7 +182,7 @@ const T = {
     ],
     newsLabel: 'AI news', newsTitle: 'What is moving in AI',
     newsIntro: 'Articles on AI in design, code, automation and regulation, picked for what they mean for your business. New ones are added every week.',
-    newsRead: 'Read on', newsReadBtn: 'Read article', newsNote: '', newsTake: 'For you', newsAll: 'All', newsFilter: 'Filter articles by topic',
+    newsRead: 'Read on', newsReadBtn: 'Read article', newsLike: 'Like', newsLiked: 'Liked', newsNote: '', newsTake: 'For you', newsAll: 'All', newsFilter: 'Filter articles by topic',
     newsMore: 'Show all {n} articles', newsLess: 'Show fewer', newsStamp: 'Updated weekly · latest {d} · {n} articles',
     newsCtaText: 'Wondering what this means for your business?', newsCtaBtn: 'Get a free audit',
     newsHelp: 'How we help:', newsHelpData: 'your data and AI', newsShare: 'Share', newsCopied: 'Copied, with our take', newsNew: 'New', newsStampNew: ' · {k} new this week',
@@ -370,7 +370,7 @@ const T = {
     ],
     newsLabel: 'Tekoälyuutiset', newsTitle: 'Mitä tekoälyssä tapahtuu',
     newsIntro: 'Artikkeleita tekoälystä suunnittelussa, koodissa, automaatiossa ja sääntelyssä, valittuina sen mukaan, mitä ne merkitsevät liiketoiminnallesi. Uusia lisätään viikoittain.',
-    newsRead: 'Lue:', newsReadBtn: 'Lue artikkeli', newsNote: 'Artikkelit ovat englanniksi.', newsTake: 'Sinulle', newsAll: 'Kaikki', newsFilter: 'Suodata artikkeleita aiheen mukaan',
+    newsRead: 'Lue:', newsReadBtn: 'Lue artikkeli', newsLike: 'Tykkää', newsLiked: 'Tykätty', newsNote: 'Artikkelit ovat englanniksi.', newsTake: 'Sinulle', newsAll: 'Kaikki', newsFilter: 'Suodata artikkeleita aiheen mukaan',
     newsMore: 'Näytä kaikki {n} artikkelia', newsLess: 'Näytä vähemmän', newsStamp: 'Päivittyy viikoittain · uusin {d} · {n} artikkelia',
     newsCtaText: 'Mietitkö, mitä tämä tarkoittaa yrityksellesi?', newsCtaBtn: 'Pyydä maksuton auditointi',
     newsHelp: 'Näin autamme:', newsHelpData: 'tietosi ja tekoäly', newsShare: 'Jaa', newsCopied: 'Kopioitu näkemyksemme kanssa', newsNew: 'Uusi', newsStampNew: ' · {k} uutta tällä viikolla',
@@ -447,7 +447,8 @@ const LEGAL = {
         { name: 'fm-mode', purpose: 'Remembers the light or dark theme', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
         { name: 'fm-lang', purpose: 'Remembers your language', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
         { name: 'fm-paused', purpose: 'Remembers whether animations are paused', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
-        { name: 'fm-ci-draft', purpose: 'Keeps an unsent contact message on your device', type: 'Local storage', duration: 'Until you send the message, clear it or withdraw consent', category: 'Preferences' }
+        { name: 'fm-ci-draft', purpose: 'Keeps an unsent contact message on your device', type: 'Local storage', duration: 'Until you send the message, clear it or withdraw consent', category: 'Preferences' },
+        { name: 'fm-news-likes', purpose: 'Remembers the AI news articles you liked, only on this device', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' }
       ],
       b: [
         { h: 'Third parties', ps: ['Fonts are hosted on our own server, so no data is sent to third parties when the page opens.', 'We do not currently use analytics or marketing cookies. If we add them, we will update this list and ask for your consent before anything is stored.'] },
@@ -538,7 +539,8 @@ const LEGAL = {
         { name: 'fm-mode', purpose: 'Muistaa vaalean tai tumman teeman', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
         { name: 'fm-lang', purpose: 'Muistaa kielivalintasi', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
         { name: 'fm-paused', purpose: 'Muistaa, onko animaatiot pysäytetty', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
-        { name: 'fm-ci-draft', purpose: 'Säilyttää lähettämättömän yhteydenottoviestin laitteellasi', type: 'Paikallinen tallennustila', duration: 'Kunnes lähetät viestin, tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' }
+        { name: 'fm-ci-draft', purpose: 'Säilyttää lähettämättömän yhteydenottoviestin laitteellasi', type: 'Paikallinen tallennustila', duration: 'Kunnes lähetät viestin, tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
+        { name: 'fm-news-likes', purpose: 'Muistaa tekoälyuutiset, joista tykkäsit, vain tällä laitteella', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' }
       ],
       b: [
         { h: 'Kolmannet osapuolet', ps: ['Fontit ladataan omalta palvelimeltamme, joten sivun avautuessa tietoja ei välity kolmansille osapuolille.', 'Emme tällä hetkellä käytä analytiikka- tai markkinointievästeitä. Jos otamme niitä käyttöön, päivitämme tämän luettelon ja pyydämme suostumuksesi ennen kuin mitään tallennetaan.'] },
