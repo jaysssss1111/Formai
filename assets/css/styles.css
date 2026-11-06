@@ -1493,3 +1493,8 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 
 /* What we do: just the "See all services" link, kept at the foot of the card like the others */
 .fm-wh-card .fm-pr-link{margin-top:auto}
+
+/* What we do: the six services as plain labels (no link); only "See all services" links */
+.fm-wh-svc.is-static{cursor:default;padding:0 12px}
+.fm-wh-svc.is-static:hover{background:transparent;border-color:#8A8173;color:#26221E}
+.fm-root .fm-orange .fm-wh-svc.is-static:hover span{color:#26221E !important}
