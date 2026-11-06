@@ -143,6 +143,7 @@
     var SHOW = 4, shown = rest.slice(0, SHOW), older = rest.slice(SHOW);
     var btn = function (where) {
       return '<button type="button" class="fm-news-more" data-news-more="' + where + '" aria-expanded="' + !!opts.all + '" aria-controls="fm-news-older">' +
+        '<svg class="fm-news-more-ic" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 3.5 H6 L7.5 5 H14.5 V13 H1.5 Z" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter;"></path><path d="M1.5 7 H14.5" style="fill: none; stroke: currentColor; stroke-width: 1.4;"></path></svg>' +
         '<span>' + esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', older.length)) + '</span>' +
         '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="' + (opts.all ? 'M2 8 L6 4 L10 8' : 'M2 4 L6 8 L10 4') + '" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>';
     };

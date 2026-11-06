@@ -1407,3 +1407,10 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-news-older{animation:fm-news-older-in .35s ease}
 @media (prefers-reduced-motion:reduce){.fm-news-older{animation:none}}
 @media (max-width:900px){.fm-news-older .fm-news-list{grid-template-columns:1fr}}
+
+/* "More articles": easier to find, with a folder icon; full width on phones */
+.fm-news-more{border-color:var(--ink);font-weight:500;padding:0 16px}
+.fm-news-more .fm-news-more-ic{color:var(--accent)}
+.fm-news-more:hover{background:var(--ink);color:var(--surface)}
+.fm-news-more:hover .fm-news-more-ic{color:#E2692B}
+@media (max-width:900px){.fm-news-side .fm-news-more,.fm-news-older .fm-news-more{align-self:stretch;justify-content:center;min-height:52px}}
