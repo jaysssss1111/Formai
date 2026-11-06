@@ -1781,11 +1781,31 @@
       // A hero tile opens that service in the Services picker.
       var item = $$('.fm-svc')[Number(el.getAttribute('data-i'))];
       if (!item) return;
-      window.__fmSvcHold = Date.now() + 1600; clearTimeout(svcHover);
+      window.__fmSvcHold = Date.now() + 4000; clearTimeout(svcHover);
       pickService(item, false);
-      var sec = $('#services');
-      if (sec) sec.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-      var tab = item.querySelector('.fm-svc-tab'); if (tab) setTimeout(function () { tab.focus({ preventScroll: true }); }, reducedMotion ? 0 : 500);
+      // One scroll to the right spot: the section on wide screens (list and panel side by side),
+      // the chosen service's row on phones (its card opens below it). When the scroll settles,
+      // check it arrived (content can shift on the way) and only then move focus.
+      var tab = item.querySelector('.fm-svc-tab'), sec = $('#services');
+      var target = function () {
+        var el = svcWide.matches || !tab ? sec : tab;
+        return el ? Math.max(0, Math.round(window.scrollY + el.getBoundingClientRect().top - (svcWide.matches ? 24 : 12))) : window.scrollY;
+      };
+      var done = false, settleT = 0, giveUp = 0;
+      var finish = function () {
+        if (done) return; done = true;
+        window.removeEventListener('scroll', onScroll);
+        clearTimeout(settleT); clearTimeout(giveUp);
+        var y = target();
+        if (Math.abs(window.scrollY - y) > 6) window.scrollTo({ top: y, behavior: 'auto' });
+        window.__fmSvcHold = Date.now() + 600;
+        if (tab) tab.focus({ preventScroll: true });
+      };
+      var onScroll = function () { clearTimeout(settleT); settleT = setTimeout(finish, 160); };
+      if (reducedMotion || Math.abs(window.scrollY - target()) < 4) { window.scrollTo({ top: target(), behavior: 'auto' }); finish(); return; }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      giveUp = setTimeout(finish, 3000);
+      window.scrollTo({ top: target(), behavior: 'smooth' });
     },
     quickSlot: function (el) {
       var b = state.bk, M = calModel();
