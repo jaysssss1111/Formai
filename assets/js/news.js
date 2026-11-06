@@ -92,7 +92,10 @@
     var share = '<button type="button" class="fm-news-share" data-news-share="' + esc(item.url) + '">' +
       '<svg width="13" height="13" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1 V9 M3.5 4.5 L7 1 L10.5 4.5 M2 8 V13 H12 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' +
       '<span>' + esc(tr.newsShare) + '</span></button>';
-    return '<div class="fm-news-actions">' + help + share + '</div>';
+    var read = '<a class="fm-news-readbtn" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer" aria-label="' +
+      esc((tr.newsReadBtn || 'Read') + ': ' + item.title + ' (' + item.source + ')') + '"><span>' + esc(tr.newsReadBtn || 'Read') + '</span>' +
+      '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 L9 3 M4 3 H9 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></a>';
+    return '<div class="fm-news-actions">' + help + '<div class="fm-news-btns">' + share + read + '</div></div>';
   }
   function image(item, i) {
     return cover(item.topic, i) +
@@ -107,24 +110,29 @@
   // A compact row for the list beside the lead story.
   function row(item, i, tr, lang) {
     return '<article class="fm-news-row" role="listitem">' +
-      '<a class="fm-news-rowlink" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' +
+      '<div class="fm-news-rowlink">' +
       '<div class="fm-news-thumb">' + image(item, i) + '</div>' +
       '<div class="fm-news-rowbody">' + metaLine(item, tr, lang) +
-      '<h3 class="fm-news-rowtitle">' + esc(item.title) + '</h3>' + take(item, tr, lang) + '</div></a>' + actions(item, tr) + '</article>';
+      '<h3 class="fm-news-rowtitle"><button type="button" class="fm-news-pick" data-news-pick="' + esc(item.url) + '" aria-controls="fm-news-lead">' + esc(item.title) + '</button></h3>' +
+      take(item, tr, lang) + '</div></div></article>';
   }
   function sorted(items) {
     return (items || []).slice().sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
   }
-  // opts: { topic: '' | 'design' | ..., all: bool }. Shows the lead and 4 more unless all.
+  // opts: { topic: '' | 'design' | ..., all: bool, pick: url }. Shows the lead (the picked article, else
+  // the newest) and 4 more unless all.
   function layout(items, tr, lang, opts) {
     opts = opts || {};
     var list = sorted(items).filter(function (x) { return !opts.topic || x.topic === opts.topic; });
     if (!list.length) return '';
-    var SHOW = 4, rest = list.slice(1), shown = opts.all ? rest : rest.slice(0, SHOW);
+    var lead = 0;
+    if (opts.pick) list.forEach(function (x, k) { if (x.url === opts.pick) lead = k; });
+    var top = list[lead], rest = list.filter(function (x, k) { return k !== lead; });
+    var SHOW = 4, shown = opts.all ? rest : rest.slice(0, SHOW);
     var more = rest.length > SHOW
       ? '<button type="button" class="fm-news-more" data-news-more aria-expanded="' + !!opts.all + '">' +
         esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', list.length)) + '</button>' : '';
-    return '<div class="fm-news-lead" role="list">' + card(list[0], 0, tr, lang, true) + '</div>' +
+    return '<div class="fm-news-lead" id="fm-news-lead" role="list" aria-live="polite">' + card(top, lead, tr, lang, true) + '</div>' +
       '<div class="fm-news-side"><div class="fm-news-list" role="list">' + shown.map(function (x, k) { return row(x, k + 1, tr, lang); }).join('') + '</div>' + more + '</div>';
   }
   function filters(items, tr, active) {
@@ -151,18 +159,16 @@
     var topic = (tr.newsTopics && tr.newsTopics[item.topic]) || '';
     var meta = esc(item.source) + (item.date ? ' · ' + esc(formatDate(item.date, lang)) : '');
     return '<article class="fm-news-card' + (lead ? ' is-lead' : '') + '" role="listitem">' +
-      '<a class="fm-news-link" href="' + esc(item.url) + '" target="_blank" rel="noopener noreferrer">' +
+      '<div class="fm-news-link">' +
       // The publisher's preview image over the drawn cover; if it fails, the cover shows.
       '<div class="fm-news-cover">' + cover(item.topic, i) +
       (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '') +
       '</div>' +
       '<div class="fm-news-body">' +
       '<div class="fm-news-meta">' + (isNew(item) ? '<span class="fm-news-new">' + esc(tr.newsNew) + '</span>' : '') + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') + '<span>' + meta + '</span></div>' +
-      '<h3 class="fm-news-title">' + esc(item.title) + '</h3>' +
+      '<h3 class="fm-news-title" tabindex="-1">' + esc(item.title) + '</h3>' +
       (item.summary ? '<p class="fm-news-summary">' + esc(item.summary) + '</p>' : '') + take(item, tr, lang) +
-      '<span class="fm-news-read">' + esc(tr.newsRead) + ' ' + esc(item.source) +
-      ' <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 L9 3 M4 3 H9 V8" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></span>' +
-      '</div></a>' + actions(item, tr) + '</article>';
+      '</div></div>' + actions(item, tr) + '</article>';
   }
 
   function cards(items, tr, lang) {
