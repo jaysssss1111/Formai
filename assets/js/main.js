@@ -1337,11 +1337,13 @@
     if (!host || !U) return;
     var items = $$('.fm-faq-item[data-group]'), counts = {};
     items.forEach(function (d) { var g = d.getAttribute('data-group'); counts[g] = (counts[g] || 0) + 1; });
-    var chip = function (g, label, n) {
+    var chip = function (g, label, n, cls) {
       var on = faqState.group === g;
-      return '<button type="button" class="fm-chip fm-faq-chip' + (on ? ' is-on' : '') + '" data-faq-group="' + g + '" aria-pressed="' + on + '">' + esc(label) + ' <span>' + n + '</span></button>';
+      return '<button type="button" class="fm-chip fm-faq-chip' + (cls ? ' ' + cls : '') + (on ? ' is-on' : '') + '" data-faq-group="' + g + '" aria-pressed="' + on + '">' + esc(label) + ' <span>' + n + '</span></button>';
     };
-    host.innerHTML = chip('', U.all, items.length) + Object.keys(U.groups).filter(function (g) { return counts[g]; }).map(function (g) { return chip(g, U.groups[g], counts[g]); }).join('');
+    // "Most asked" sits right after All, in brand orange, and shows the questions tagged as most asked.
+    var top = items.filter(function (d) { return d.querySelector('.fm-faq-top'); }).length;
+    host.innerHTML = chip('', U.all, items.length) + (top ? chip('top', U.topChip || U.top, top, 'fm-faq-chip-top') : '') + Object.keys(U.groups).filter(function (g) { return counts[g]; }).map(function (g) { return chip(g, U.groups[g], counts[g]); }).join('');
     filterFaq();
   }
   function filterFaq() {
@@ -1351,7 +1353,7 @@
       var qSpan = d.querySelector('summary [data-i18n^="faq.q"]');
       var qText = get(tr, qSpan.getAttribute('data-i18n')) || '';
       var aEl = d.querySelector('[data-i18n^="faq.a"]'), aText = aEl ? get(tr, aEl.getAttribute('data-i18n')) || '' : '';
-      var okG = !faqState.group || d.getAttribute('data-group') === faqState.group;
+      var okG = !faqState.group || (faqState.group === 'top' ? !!d.querySelector('.fm-faq-top') : d.getAttribute('data-group') === faqState.group);
       // Every meaningful word of the search must appear somewhere in the question, answer or its search words.
       var hay = faqNorm(qText + ' ' + aText + ' ' + (FAQ_KEYS[d.id] || ''));
       var words = q.split(/[^a-z0-9\u00c0-\u024f-]+/).filter(function (w) { return w.length > 1 && FAQ_STOP.indexOf(w) === -1; });
