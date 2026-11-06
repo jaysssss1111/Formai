@@ -424,6 +424,7 @@ const LEGAL = {
       rows: [
         { name: 'fm-consent', purpose: 'Stores your cookie choices and when you made them', type: 'Local storage', duration: '12 months', category: 'Strictly necessary' },
         { name: 'fm-seen', purpose: 'Shows the loading animation only once per visit', type: 'Session storage', duration: 'Until you close the tab', category: 'Strictly necessary' },
+        { name: 'fm-lang-pos', purpose: 'Keeps your place on the page, your theme and the animation setting when you switch language', type: 'Session storage', duration: 'Cleared as soon as the other language has opened', category: 'Strictly necessary' },
         { name: 'fm-mode', purpose: 'Remembers the light or dark theme', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
         { name: 'fm-lang', purpose: 'Remembers your language', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
         { name: 'fm-paused', purpose: 'Remembers whether animations are paused', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' },
@@ -513,6 +514,7 @@ const LEGAL = {
       rows: [
         { name: 'fm-consent', purpose: 'Tallentaa evästevalintasi ja niiden ajankohdan', type: 'Paikallinen tallennustila', duration: '12 kuukautta', category: 'Välttämätön' },
         { name: 'fm-seen', purpose: 'Näyttää latausanimaation vain kerran käynnin aikana', type: 'Istuntotallennus', duration: 'Kunnes suljet välilehden', category: 'Välttämätön' },
+        { name: 'fm-lang-pos', purpose: 'Säilyttää kohtasi sivulla, teeman ja animaatioasetuksen, kun vaihdat kieltä', type: 'Istuntotallennus', duration: 'Poistetaan heti, kun toinen kieli on avautunut', category: 'Välttämätön' },
         { name: 'fm-mode', purpose: 'Muistaa vaalean tai tumman teeman', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
         { name: 'fm-lang', purpose: 'Muistaa kielivalintasi', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
         { name: 'fm-paused', purpose: 'Muistaa, onko animaatiot pysäytetty', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' },
