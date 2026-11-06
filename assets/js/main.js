@@ -1011,6 +1011,7 @@
     if (f) { f.innerHTML = UI.filters(allNews(), tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
     var st = $('#fm-news-stamp'); if (st) st.textContent = UI.stamp(news, tr, state.lang);
     root.innerHTML = UI.layout(allNews(), tr, state.lang, opts);
+    var mb = $('#fm-news-morebar'); if (mb) mb.innerHTML = UI.moreButton(allNews(), tr, opts, 'chip');
     syncLikes();
   }
   document.addEventListener('click', function (ev) {
@@ -1058,11 +1059,16 @@
     if (m) {
       var fromEnd = m.getAttribute('data-news-more') === 'end';
       state.newsAll = !state.newsAll; renderNews();
-      var b2 = $('[data-news-more="side"]');
-      if (b2) {
-        b2.focus({ preventScroll: true });
-        // Closing from the end of a long list: bring the button back into view.
-        if (fromEnd) { var r = b2.getBoundingClientRect(); window.scrollTo({ top: window.scrollY + r.top - innerHeight * 0.4, behavior: reducedMotion ? 'auto' : 'smooth' }); }
+      var chip = $('[data-news-more="chip"]'), older = $('#fm-news-older');
+      if (state.newsAll && older) {
+        // Opened from the filter row: glide down to the earlier articles.
+        var h = older.querySelector('.fm-news-older-h') || older;
+        window.scrollTo({ top: window.scrollY + h.getBoundingClientRect().top - 88, behavior: reducedMotion ? 'auto' : 'smooth' });
+        h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true });
+      } else if (chip) {
+        chip.focus({ preventScroll: true });
+        // Closed from the end of the list: bring the filter row back into view.
+        if (fromEnd) { var r = chip.getBoundingClientRect(); window.scrollTo({ top: window.scrollY + r.top - innerHeight * 0.3, behavior: reducedMotion ? 'auto' : 'smooth' }); }
       }
     }
   });
