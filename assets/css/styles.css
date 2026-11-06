@@ -1487,3 +1487,8 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
   .fm-nav-eye{width:24px;height:24px;margin-left:6px}
   .fm-nav-eye-line{stroke-width:1.2px}
 }
+
+/* Footer: the same eye after the wordmark, one colour on the orange (an orange pupil would vanish) */
+.fm-foot-logo .fm-nav-eye-line,.fm-root[data-theme="dark"] .fm-foot-logo .fm-nav-eye-line{stroke:#26221E}
+.fm-foot-pupil{fill:#EDE6D8}   /* cream, like the "ai" of the footer wordmark */
+@media (max-width:430px){.fm-foot-logo .fm-nav-eye{width:30px;height:30px;margin-left:8px}.fm-foot-logo .fm-nav-eye-line{stroke-width:1.4px}}
