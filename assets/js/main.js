@@ -947,6 +947,12 @@
 
   /* ---------- AI news carousel ---------- */
   var news = Array.isArray(window.FM_NEWS) ? window.FM_NEWS : null;
+  var newsArchive = [];
+  function allNews() {
+    var have = {};
+    (news || []).forEach(function (x) { have[x.url] = true; });
+    return (news || []).concat(newsArchive.filter(function (x) { return x && x.url && !have[x.url]; }));
+  }
   var NEWS_LIKES = 'fm-news-likes', likes = {};
   try { if (allowPrefs) (JSON.parse(LS.get(NEWS_LIKES) || '[]') || []).forEach(function (u) { if (typeof u === 'string') likes[u] = true; }); } catch (e) {}
   function saveLikes() {
@@ -1002,9 +1008,9 @@
     sec.hidden = false;
     var tr = t(), opts = { topic: state.newsTopic || '', all: !!state.newsAll, pick: state.newsPick || '' };
     var f = $('#fm-news-filters');
-    if (f) { f.innerHTML = UI.filters(news, tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
+    if (f) { f.innerHTML = UI.filters(allNews(), tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
     var st = $('#fm-news-stamp'); if (st) st.textContent = UI.stamp(news, tr, state.lang);
-    root.innerHTML = UI.layout(news, tr, state.lang, opts);
+    root.innerHTML = UI.layout(allNews(), tr, state.lang, opts);
     syncLikes();
   }
   document.addEventListener('click', function (ev) {
@@ -1034,7 +1040,7 @@
     var sh = ev.target.closest && ev.target.closest('[data-news-share]');
     if (sh) {
       // Share the article with our "For you" line: the share sheet where there is one, else copy both.
-      var url = sh.getAttribute('data-news-share'), it = (news || []).filter(function (x) { return x.url === url; })[0] || {};
+      var url = sh.getAttribute('data-news-share'), it = allNews().filter(function (x) { return x.url === url; })[0] || {};
       var tr = t(), tk = it.take && (it.take[state.lang] || it.take.en);
       var text = (tk ? tr.newsTake + ': ' + tk + ' (formai)' : it.title || '');
       if (navigator.share) { navigator.share({ title: it.title, text: text, url: url }).catch(function () {}); return; }
@@ -1050,12 +1056,25 @@
     }
     var m = ev.target.closest && ev.target.closest('[data-news-more]');
     if (m) {
+      var fromEnd = m.getAttribute('data-news-more') === 'end';
       state.newsAll = !state.newsAll; renderNews();
-      var b2 = $('[data-news-more]'); if (b2) b2.focus();
+      var b2 = $('[data-news-more="side"]');
+      if (b2) {
+        b2.focus({ preventScroll: true });
+        // Closing from the end of a long list: bring the button back into view.
+        if (fromEnd) { var r = b2.getBoundingClientRect(); window.scrollTo({ top: window.scrollY + r.top - innerHeight * 0.4, behavior: reducedMotion ? 'auto' : 'smooth' }); }
+      }
     }
   });
+  function loadArchive() {
+    if (!window.fetch) return;
+    fetch(ASSETS + 'data/news-archive.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function (list) { newsArchive = Array.isArray(list) ? list : []; if (newsArchive.length && news) renderNews(); })
+      .catch(function () {});
+  }
   function loadNews() {
-    loadCounts();
+    loadCounts(); loadArchive();
     if (news) { renderNews(); return; }
     if (!window.fetch) return;
     fetch(ASSETS + 'data/news.json', { cache: 'no-cache' })

@@ -137,6 +137,22 @@ async function addImages(list) {
 const existing = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : [];
 const manual = existing.filter((x) => x.manual);
 const seen = new Set(existing.map((x) => x.url));
+// Articles that drop off news.json are kept in the archive (shown under "More articles"),
+// newest first, and are never collected again.
+const ARCHIVE = 'assets/data/news-archive.json';
+const archive = fs.existsSync(ARCHIVE) ? JSON.parse(fs.readFileSync(ARCHIVE, 'utf8')) : [];
+archive.forEach((x) => seen.add(x.url));
+function archiveDropped(out) {
+  const keep = new Set(out.map((x) => x.url));
+  const dropped = existing.filter((x) => !keep.has(x.url));
+  if (!dropped.length) return;
+  const all = [...dropped, ...archive]
+    .filter((x, i, a) => a.findIndex((y) => y.url === x.url) === i)
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+    .slice(0, 300);
+  fs.writeFileSync(ARCHIVE, JSON.stringify(all, null, 2) + '\n');
+  console.log(`news-archive.json: ${dropped.length} moved to the archive (${all.length} in total)`);
+}
 const found = [];
 
 for (const f of FEEDS) {
@@ -213,5 +229,6 @@ const picked = [...added, ...auto]
 const out = [...manual, ...picked];
 if (args.includes('--dry-run')) { console.log('dry run: news.json not changed'); process.exit(0); }
 fs.mkdirSync('assets/data', { recursive: true });
+archiveDropped(out);
 fs.writeFileSync(FILE, JSON.stringify(await addImages(out), null, 2) + '\n');
 console.log(`news.json: ${manual.length} hand-picked + ${picked.length} collected (${added.length} new)`);

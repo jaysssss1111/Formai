@@ -63,6 +63,13 @@
     return '<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' + art + '</svg>';
   }
 
+  function monthName(ym, lang) {
+    if (!/^\d{4}-\d{2}$/.test(ym || '')) return '';
+    try {
+      var s = new Intl.DateTimeFormat(lang === 'fi' ? 'fi-FI' : 'en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(ym + '-01T00:00:00Z'));
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    } catch (e) { return ym; }
+  }
   function formatDate(iso, lang) {
     if (!iso) return '';
     try {
@@ -131,12 +138,31 @@
     var lead = 0;
     if (opts.pick) list.forEach(function (x, k) { if (x.url === opts.pick) lead = k; });
     var top = list[lead], rest = list.filter(function (x, k) { return k !== lead; });
-    var SHOW = 4, shown = opts.all ? rest : rest.slice(0, SHOW);
-    var more = rest.length > SHOW
-      ? '<button type="button" class="fm-news-more" data-news-more aria-expanded="' + !!opts.all + '">' +
-        esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', list.length)) + '</button>' : '';
+    // The lead and four more beside it; everything older (the rest of news.json and the
+    // archive) opens under "More articles", grouped by month, newest first.
+    var SHOW = 4, shown = rest.slice(0, SHOW), older = rest.slice(SHOW);
+    var btn = function (where) {
+      return '<button type="button" class="fm-news-more" data-news-more="' + where + '" aria-expanded="' + !!opts.all + '" aria-controls="fm-news-older">' +
+        '<span>' + esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', older.length)) + '</span>' +
+        '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="' + (opts.all ? 'M2 8 L6 4 L10 8' : 'M2 4 L6 8 L10 4') + '" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>';
+    };
+    var more = older.length ? btn('side') : '';
+    var olderHtml = '';
+    if (opts.all && older.length) {
+      var groups = [], cur = null;
+      older.forEach(function (x, k) {
+        var m = String(x.date || '').slice(0, 7);
+        if (!cur || cur.m !== m) { cur = { m: m, items: [] }; groups.push(cur); }
+        cur.items.push(row(x, SHOW + 1 + k, tr, lang));
+      });
+      olderHtml = '<div class="fm-news-older" id="fm-news-older"><h3 class="fm-news-older-h">' + esc(tr.newsOlder) + '</h3>' +
+        groups.map(function (g) {
+          return '<section class="fm-news-month" aria-label="' + esc(monthName(g.m, lang)) + '"><h4>' + esc(monthName(g.m, lang)) + '</h4>' +
+            '<div class="fm-news-list" role="list">' + g.items.join('') + '</div></section>';
+        }).join('') + btn('end') + '</div>';
+    }
     return '<div class="fm-news-lead" id="fm-news-lead" role="list" aria-live="polite">' + card(top, lead, tr, lang, true) + '</div>' +
-      '<div class="fm-news-side"><div class="fm-news-list" role="list">' + shown.map(function (x, k) { return row(x, k + 1, tr, lang); }).join('') + '</div>' + more + '</div>';
+      '<div class="fm-news-side"><div class="fm-news-list" role="list">' + shown.map(function (x, k) { return row(x, k + 1, tr, lang); }).join('') + '</div>' + more + '</div>' + olderHtml;
   }
   function filters(items, tr, active) {
     var have = {};

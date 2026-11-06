@@ -1391,3 +1391,19 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-faq-top{display:inline-flex;align-items:center;gap:6px;background:#C85A20;border-color:#C85A20;color:#000;font-weight:500;padding:5px 8px}
 .fm-faq-top::before{content:"";flex:none;width:6px;height:6px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0 L10 5 L5 10 L0 5 Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0 L10 5 L5 10 L0 5 Z'/%3E%3C/svg%3E") center/contain no-repeat}
 @media (max-width:640px){.fm-faq-top{display:inline-flex;font-size:9px;padding:4px 6px;gap:5px}.fm-faq-top::before{width:5px;height:5px}}
+
+/* ---------- AI news: "More articles" opens the earlier ones, by month ---------- */
+.fm-news-more{display:inline-flex;align-items:center;gap:10px}
+.fm-news-more svg{transition:transform .18s linear}
+.fm-news-more:hover svg{transform:translateY(2px)}
+.fm-news-more[aria-expanded="true"]:hover svg{transform:translateY(-2px)}
+.fm-news-older{grid-column:1/-1;display:flex;flex-direction:column;gap:28px;padding-top:32px;border-top:1px solid var(--strong)}
+.fm-news-older-h{margin:0;font-size:clamp(24px,2.4vw,30px);line-height:1.15;font-weight:300;letter-spacing:-.02em}
+.fm-news-month{display:flex;flex-direction:column;gap:10px}
+.fm-news-month h4{margin:0;font-family:'DM Mono',ui-monospace,monospace;font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.fm-news-older .fm-news-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}
+.fm-news-older .fm-news-more{align-self:flex-start}
+@keyframes fm-news-older-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fm-news-older{animation:fm-news-older-in .35s ease}
+@media (prefers-reduced-motion:reduce){.fm-news-older{animation:none}}
+@media (max-width:900px){.fm-news-older .fm-news-list{grid-template-columns:1fr}}
