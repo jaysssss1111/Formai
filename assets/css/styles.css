@@ -1299,12 +1299,12 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 #about .fm-ab-intro h2{font-size:clamp(40px,5.6vw,76px) !important;line-height:.98 !important}
 .fm-root .fm-orange .fm-mf-label{font-family:'DM Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:8px}
 .fm-mf-list{list-style:none;margin:0;padding:0;border-top:1px solid #26221E}
-.fm-mf-row{display:grid;grid-template-columns:64px minmax(0,1.15fr) minmax(0,1fr);gap:8px 32px;align-items:baseline;padding:24px 0;border-bottom:1px solid #26221E;transition:background-color .2s linear,padding .2s ease}
+.fm-mf-row{display:grid;grid-template-columns:64px minmax(0,1.15fr) minmax(0,1fr);gap:8px 32px;align-items:baseline;padding:24px 0;border-bottom:1px solid #26221E;transition:background-color .2s linear,box-shadow .2s linear}
 .fm-root .fm-orange .fm-mf-n{font-family:'DM Mono',ui-monospace,monospace;font-size:13px;letter-spacing:.08em;transition:color .2s linear}
 .fm-root .fm-orange .fm-mf-row h3{margin:0;font-size:clamp(22px,2.4vw,32px);line-height:1.15;font-weight:300;letter-spacing:-.02em}
 .fm-root .fm-orange .fm-mf-row p{margin:0;font-size:16px;line-height:1.55;font-weight:400;opacity:.82}
-.fm-mf-row:hover{background:rgba(0,0,0,.06);padding-left:12px;padding-right:12px}
-.fm-root .fm-orange .fm-mf-row:hover .fm-mf-n{color:#EDE6D8 !important}
+
+
 .fm-wh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .fm-wh-card{--ink:#26221E;--muted:#5E564B;background:#F5F0E6;border:1px solid #26221E;box-shadow:6px 6px 0 #26221E;padding:28px;display:flex;flex-direction:column;gap:14px;transition:transform .2s ease,box-shadow .2s ease}
 .fm-wh-card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #26221E}
@@ -1504,3 +1504,12 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 
 /* Write to us, What happens next: // instead of 01-03, as in What we believe */
 .fm-ct-steps li::before{content:'//';letter-spacing:-.04em}
+
+/* What we believe: a hover band that never moves or re-wraps the text (it used to add padding,
+   so lines grew and shifted), and only where there is a real pointer, so a tap on a phone
+   leaves no lingering box. */
+@media (hover:hover) and (pointer:fine){
+  .fm-mf-row:hover{background:rgba(0,0,0,.06);box-shadow:-12px 0 0 rgba(0,0,0,.06),12px 0 0 rgba(0,0,0,.06)}
+  .fm-root .fm-orange .fm-mf-row:hover .fm-mf-n{color:#EDE6D8 !important}
+}
+.fm-mf-row{-webkit-tap-highlight-color:transparent}
