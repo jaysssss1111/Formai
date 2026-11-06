@@ -1501,3 +1501,6 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 
 /* How we do it / What you get: the list diamonds as thin orange outlines, not filled */
 .fm-wh-list li::before{width:8px;height:8px;top:.36em;box-sizing:border-box;background:transparent;border:1.25px solid #C85A20}
+
+/* Write to us, What happens next: // instead of 01-03, as in What we believe */
+.fm-ct-steps li::before{content:'//';letter-spacing:-.04em}
