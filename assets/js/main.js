@@ -153,9 +153,31 @@
     renderBanner();
   }
 
+  // The cookie bar rises in once when it first appears. Later updates (a switch, Settings,
+  // a theme or language change) redraw it in place: no replayed entrance (it used to vanish
+  // for half a second each time), the panel keeps its scroll and focus stays on the control.
+  var bannerShown = false;
   function renderBanner() {
     var host = $('#fm-banner-root');
-    if (!(state.ready && state.bannerOpen)) { host.innerHTML = ''; return; }
+    if (!(state.ready && state.bannerOpen)) { host.innerHTML = ''; bannerShown = false; return; }
+    var old = host.querySelector('.fm-cookie');
+    var wasPanel = !!(old && !old.classList.contains('fm-cookie-bar')), oldScroll = old ? old.scrollTop : 0;
+    var act = document.activeElement, focusKey = act && host.contains(act) && act.getAttribute('data-action') ? act.getAttribute('data-action') + '|' + (act.getAttribute('data-cat') || '') : '';
+    buildBanner(host);
+    var el = host.querySelector('.fm-cookie');
+    if (!el) return;
+    var isPanel = !el.classList.contains('fm-cookie-bar');
+    if (bannerShown) el.classList.add(isPanel && !wasPanel ? 'is-swap' : 'is-still');
+    else if (state.ckMore) el.classList.add('is-swap');   // reopened from Cookie settings: no first-load delay
+    bannerShown = true;
+    if (wasPanel && isPanel && oldScroll) el.scrollTop = oldScroll;
+    if (focusKey) {
+      var parts = focusKey.split('|');
+      var again = host.querySelector('[data-action="' + parts[0] + '"]' + (parts[1] ? '[data-cat="' + parts[1] + '"]' : ''));
+      if (again) again.focus({ preventScroll: true });
+    }
+  }
+  function buildBanner(host) {
     var ck = t().ck;
     var d = state.draft;
     var cats = [
