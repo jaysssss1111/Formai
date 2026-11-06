@@ -20,7 +20,7 @@ window.FM_CONFIG = {
     linkedin: '',   // e.g. https://www.linkedin.com/company/formai
     facebook: ''    // e.g. https://www.facebook.com/formai
   },
-  // Who we are: a short note from the founder and the people in the studio.
+  // Who we are: a short note from the founder and the people in the company.
   // Both stay hidden on the site until filled in. Photos go in assets/img/
   // (square, at least 240 x 240 px); leave photo empty to show initials.
   team: {
