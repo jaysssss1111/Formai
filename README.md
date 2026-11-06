@@ -1,6 +1,6 @@
 # formai — verkkosivusto
 
-formai on AI-natiivi design-studio. Tämä repositorio sisältää studion verkkosivuston, joka on rakennettu toimitetusta lähdepaketista (`formai-lahdetiedostot.zip`) samoilla kielillä kuin alkuperäinen: **HTML, CSS ja JavaScript**. Sivusto on staattinen, eikä se tarvitse build-vaihetta tai riippuvuuksia.
+formai on AI-natiivi suunnittelu- ja teknologiayritys. Tämä repositorio sisältää yrityksen verkkosivuston, joka on rakennettu toimitetusta lähdepaketista (`formai-lahdetiedostot.zip`) samoilla kielillä kuin alkuperäinen: **HTML, CSS ja JavaScript**. Sivusto on staattinen, eikä se tarvitse build-vaihetta tai riippuvuuksia.
 
 ## Rakenne
 

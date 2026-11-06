@@ -5,7 +5,7 @@ const T = {
     langLabel: 'Language', loading: 'Loading', home: 'formai, home', navLabel: 'Main', menu: 'Menu', skip: 'Skip to content', pause: 'Pause animations', play: 'Play animations',navServices: 'Services', navMethod: 'Method', navAudit: 'Audit', cta: 'Get a free audit', cta2: 'See what we make',
     heroNote: 'Free · 3 fixes in 48 h · no call needed', heroNext: 'Next free call: {t}',
     heroTiles: ['Identity: see the service', 'Interfaces: see the service', 'Film: see the service', 'Development: see the service', 'Automation: see the service', 'Intelligence: see the service'],
-    eyebrow: 'AI-native studio', h1: 'From brand to product.', h2: 'Built to', h3: 'ship.',
+    eyebrow: 'AI-native company', h1: 'From brand to product.', h2: 'Built to', h3: 'ship.',
     heroTrust: ['Based in Finland', 'You own every file', 'A person reviews everything'],
     heroP: 'Brand, product, software and automation for startups, studios and legacy brands. AI runs through every step of how we work, so you get in days what agencies quote in weeks.',
     methodLabel: 'Method', methodTitle: 'From first look to launch',
@@ -79,8 +79,8 @@ const T = {
       ]
     },
     meta: {
-      title: 'formai — AI-native design studio for brand, web, software and automation',
-      description: 'formai is an AI-native studio in Finland. Brand identity, websites, software and AI automation for startups, studios and legacy brands, delivered in days. Get a free audit of one screen.'
+      title: 'formai — AI-native design and technology company for brand, web, software and automation',
+      description: 'formai is an AI-native design and technology company in Finland. Brand identity, websites, software and AI automation for startups, studios and legacy brands, delivered in days. Get a free audit of one screen.'
     },
     auditPoints: ['3 fixes', '48 h', 'Free'],
     au: {
@@ -161,10 +161,10 @@ const T = {
     prLinks: ['How we use AI', 'Who owns the files', 'See the method'],
     live: { on: '{t} in Helsinki · we are working now', off: '{t} in Helsinki · we reply on the next working day' },
     teamLabel: 'The people', noteLabel: 'Why formai', teamPreview: 'Sample team, for layout only', photoSoon: 'PHOTO',
-    foot: { services: 'Services', studio: 'Studio', start: 'Start here', company: 'Company', map: 'Site map', top: 'Back to top', businessId: 'Business ID' },
+    foot: { services: 'Services', studio: 'Explore', start: 'Start here', company: 'Company', map: 'Site map', top: 'Back to top', businessId: 'Business ID' },
     toolsLabel: 'Tools we build with',
-    aboutLabel: 'Who we are', aboutTitle: 'A small studio with a large toolset',
-    aboutP: 'formai is a design and development studio based in Finland. Designers and developers work side by side with AI agents, so one small team can deliver brand, product, software and automation without handing the work between agencies.',
+    aboutLabel: 'Who we are', aboutTitle: 'One team, from brand to software',
+    aboutP: 'formai is a design and technology company based in Finland. Designers and developers work side by side with AI agents, so one team delivers brand, product, software and automation, with no hand-offs between agencies.',
     aboutFacts: ['Based in Finland', 'English and Finnish', 'People + AI agents'],
     principles: [
       { h: 'People decide', p: 'AI drafts, tests and builds. A designer or developer reviews everything before it reaches you.' },
@@ -184,7 +184,7 @@ const T = {
     langLabel: 'Kieli', loading: 'Ladataan', home: 'formai, etusivu', navLabel: 'Päävalikko', menu: 'Valikko', skip: 'Siirry sisältöön', pause: 'Pysäytä animaatiot', play: 'Käynnistä animaatiot',navServices: 'Palvelut', navMethod: 'Menetelmä', navAudit: 'Auditointi', cta: 'Pyydä maksuton auditointi', cta2: 'Katso mitä teemme',
     heroNote: 'Maksuton · 3 korjausta 48 tunnissa · ei puhelua', heroNext: 'Seuraava vapaa puhelu: {t}',
     heroTiles: ['Identiteetti: katso palvelu', 'Käyttöliittymät: katso palvelu', 'Video: katso palvelu', 'Ohjelmistokehitys: katso palvelu', 'Automaatio: katso palvelu', 'Älykkyys: katso palvelu'],
-    eyebrow: 'AI-natiivi studio', h1: 'Brändistä tuotteeksi.', h2: 'Valmiina', h3: 'julkaisuun.',
+    eyebrow: 'AI-natiivi yritys', h1: 'Brändistä tuotteeksi.', h2: 'Valmiina', h3: 'julkaisuun.',
     heroTrust: ['Toimimme Suomesta', 'Kaikki tiedostot ovat teidän', 'Ihminen tarkistaa kaiken'],
     heroP: 'Brändi, tuotteet, ohjelmistot ja automaatio startupeille, studioille ja perinteisille brändeille. Tekoäly kulkee mukana jokaisessa työvaiheessa, joten saat päivissä sen, mihin toimistot arvioivat viikkoja.',
     methodLabel: 'Menetelmä', methodTitle: 'Ensisilmäyksestä julkaisuun',
@@ -258,8 +258,8 @@ const T = {
       ]
     },
     meta: {
-      title: 'formai — AI-natiivi design-studio: brändi, verkkosivut, ohjelmistot ja automaatio',
-      description: 'formai on suomalainen AI-natiivi studio. Brändi-identiteetti, verkkosivut, ohjelmistot ja tekoälyautomaatio startupeille, studioille ja perinteisille brändeille päivissä. Pyydä maksuton auditointi yhdestä näkymästä.'
+      title: 'formai — AI-natiivi suunnittelu- ja teknologiayritys: brändi, verkkosivut, ohjelmistot ja automaatio',
+      description: 'formai on suomalainen AI-natiivi suunnittelu- ja teknologiayritys. Brändi-identiteetti, verkkosivut, ohjelmistot ja tekoälyautomaatio startupeille, studioille ja perinteisille brändeille päivissä. Pyydä maksuton auditointi yhdestä näkymästä.'
     },
     auditPoints: ['3 korjausta', '48 h', 'Maksuton'],
     au: {
@@ -340,10 +340,10 @@ const T = {
     prLinks: ['Näin käytämme tekoälyä', 'Kenelle tiedostot kuuluvat', 'Katso menetelmä'],
     live: { on: 'Helsingissä klo {t} · olemme töissä nyt', off: 'Helsingissä klo {t} · vastaamme seuraavana arkipäivänä' },
     teamLabel: 'Ihmiset', noteLabel: 'Miksi formai', teamPreview: 'Esimerkkitiimi, vain asettelua varten', photoSoon: 'KUVA',
-    foot: { services: 'Palvelut', studio: 'Studio', start: 'Aloita tästä', company: 'Yritys', map: 'Sivukartta', top: 'Takaisin ylös', businessId: 'Y-tunnus' },
+    foot: { services: 'Palvelut', studio: 'Tutustu', start: 'Aloita tästä', company: 'Yritys', map: 'Sivukartta', top: 'Takaisin ylös', businessId: 'Y-tunnus' },
     toolsLabel: 'Työkalut, joilla rakennamme',
-    aboutLabel: 'Keitä olemme', aboutTitle: 'Pieni studio, iso työkalupakki',
-    aboutP: 'formai on suomalainen suunnittelu- ja kehitysstudio. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi pieni tiimi pystyy toimittamaan brändin, tuotteen, ohjelmiston ja automaation ilman, että työ siirtyy toimistolta toiselle.',
+    aboutLabel: 'Keitä olemme', aboutTitle: 'Yksi tiimi brändistä ohjelmistoon',
+    aboutP: 'formai on suomalainen suunnittelu- ja teknologiayritys. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi tiimi toimittaa brändin, tuotteen, ohjelmiston ja automaation ilman, että työ siirtyy toimistolta toiselle.',
     aboutFacts: ['Suomesta', 'Suomeksi ja englanniksi', 'Ihmiset + tekoälyagentit'],
     principles: [
       { h: 'Ihmiset päättävät', p: 'Tekoäly luonnostelee, testaa ja rakentaa. Suunnittelija tai kehittäjä tarkistaa kaiken ennen kuin se päätyy sinulle.' },
