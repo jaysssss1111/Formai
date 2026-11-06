@@ -1498,3 +1498,6 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-wh-svc.is-static{cursor:default;padding:0 12px}
 .fm-wh-svc.is-static:hover{background:transparent;border-color:#8A8173;color:#26221E}
 .fm-root .fm-orange .fm-wh-svc.is-static:hover span{color:#26221E !important}
+
+/* How we do it / What you get: the list diamonds as thin orange outlines, not filled */
+.fm-wh-list li::before{width:8px;height:8px;top:.36em;box-sizing:border-box;background:transparent;border:1.25px solid #C85A20}
