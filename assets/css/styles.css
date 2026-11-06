@@ -1414,3 +1414,11 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-news-more:hover{background:var(--ink);color:var(--surface)}
 .fm-news-more:hover .fm-news-more-ic{color:#E2692B}
 @media (max-width:900px){.fm-news-side .fm-news-more,.fm-news-older .fm-news-more{align-self:stretch;justify-content:center;min-height:52px}}
+
+/* "More articles" sits in the filter row, at its right end; the list stays short */
+.fm-news-bar{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px 24px}
+.fm-news-bar .fm-news-filters{flex:1 1 auto}
+.fm-news-morebar:empty{display:none}
+.fm-news-more.is-chip{min-height:40px;font-size:12px}
+.fm-news-older-h:focus{outline:none}
+@media (max-width:900px){.fm-news-morebar{flex:1 1 100%}.fm-news-morebar .fm-news-more{width:100%;justify-content:center}}

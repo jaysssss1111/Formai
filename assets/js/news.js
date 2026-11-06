@@ -141,13 +141,8 @@
     // The lead and four more beside it; everything older (the rest of news.json and the
     // archive) opens under "More articles", grouped by month, newest first.
     var SHOW = 4, shown = rest.slice(0, SHOW), older = rest.slice(SHOW);
-    var btn = function (where) {
-      return '<button type="button" class="fm-news-more" data-news-more="' + where + '" aria-expanded="' + !!opts.all + '" aria-controls="fm-news-older">' +
-        '<svg class="fm-news-more-ic" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 3.5 H6 L7.5 5 H14.5 V13 H1.5 Z" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter;"></path><path d="M1.5 7 H14.5" style="fill: none; stroke: currentColor; stroke-width: 1.4;"></path></svg>' +
-        '<span>' + esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', older.length)) + '</span>' +
-        '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="' + (opts.all ? 'M2 8 L6 4 L10 8' : 'M2 4 L6 8 L10 4') + '" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>';
-    };
-    var more = older.length ? btn('side') : '';
+    var btn = function (where) { return moreBtn(older.length, tr, opts, where); };
+    var more = '';
     var olderHtml = '';
     if (opts.all && older.length) {
       var groups = [], cur = null;
@@ -165,6 +160,20 @@
     return '<div class="fm-news-lead" id="fm-news-lead" role="list" aria-live="polite">' + card(top, lead, tr, lang, true) + '</div>' +
       '<div class="fm-news-side"><div class="fm-news-list" role="list">' + shown.map(function (x, k) { return row(x, k + 1, tr, lang); }).join('') + '</div>' + more + '</div>' + olderHtml;
   }
+  // How many articles sit beyond the lead and the four beside it, for the same topic and pick.
+  function olderCount(items, opts) {
+    opts = opts || {};
+    var list = (items || []).filter(function (x) { return !opts.topic || x.topic === opts.topic; });
+    return Math.max(0, list.length - 5);
+  }
+  function moreBtn(count, tr, opts, where) {
+    if (!count) return '';
+    return '<button type="button" class="fm-news-more' + (where === 'chip' ? ' is-chip' : '') + '" data-news-more="' + where + '" aria-expanded="' + !!opts.all + '" aria-controls="fm-news-older">' +
+      '<svg class="fm-news-more-ic" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 3.5 H6 L7.5 5 H14.5 V13 H1.5 Z" style="fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: miter;"></path><path d="M1.5 7 H14.5" style="fill: none; stroke: currentColor; stroke-width: 1.4;"></path></svg>' +
+      '<span>' + esc(opts.all ? tr.newsLess : tr.newsMore.replace('{n}', count)) + '</span>' +
+      '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="' + (opts.all ? 'M2 8 L6 4 L10 8' : 'M2 4 L6 8 L10 4') + '" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>';
+  }
+  function moreButton(items, tr, opts, where) { return moreBtn(olderCount(items, opts), tr, opts || {}, where); }
   function filters(items, tr, active) {
     var have = {};
     (items || []).forEach(function (x) { have[x.topic] = (have[x.topic] || 0) + 1; });
@@ -205,5 +214,5 @@
     return (items || []).map(function (it, i) { return card(it, i, tr, lang); }).join('');
   }
 
-  root.FM_NEWS_UI = { cards: cards, layout: layout, filters: filters, stamp: stamp };
+  root.FM_NEWS_UI = { cards: cards, layout: layout, filters: filters, stamp: stamp, moreButton: moreButton };
 })(typeof window !== 'undefined' ? window : this);
