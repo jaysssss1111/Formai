@@ -1265,3 +1265,21 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
    its case cards switch to the page colour to keep standing out. */
 #work{background:var(--art);border-bottom:1px solid var(--line)}
 #work .fm-case{background:var(--raised)}
+
+/* ---------- Cookie bar: short first, details on request ----------
+   A first visit sees one sentence and Reject all / Accept all / Settings in a
+   bar along the bottom, so the hero is in view; Settings (or Cookie settings in
+   the footer) opens the full panel with the switches. */
+.fm-cookie-bar{position:fixed;left:16px;right:16px;bottom:16px;z-index:90;max-width:1040px;margin:0 auto;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;padding:16px 20px;background:var(--raised);color:var(--ink);border:1px solid var(--strong);border-top:2px solid var(--brand);box-shadow:0 12px 32px -16px rgba(0,0,0,.45)}
+.fm-ckb-text{flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.fm-ckb-label{font-family:'DM Mono',ui-monospace,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.fm-ckb-text p{margin:0;font-size:14px;line-height:1.5;font-weight:300;color:var(--ink)}
+.fm-ckb-actions{flex:none;display:flex;flex-wrap:wrap;gap:8px}
+.fm-ckb-actions .fm-ck-btn{min-height:40px;padding:0 16px;font-size:14px}
+@media (min-width:700px){.fm-cookie.fm-cookie-bar{left:24px !important;right:24px !important;bottom:24px !important}}
+@media (max-width:640px){
+  .fm-cookie-bar{left:10px;right:10px;bottom:10px;padding:14px 14px !important;gap:10px}
+  .fm-ckb-text p{font-size:13px}
+  .fm-ckb-actions{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .fm-ckb-actions .fm-ck-btn{padding:0 6px;font-size:13px;justify-content:center}
+}

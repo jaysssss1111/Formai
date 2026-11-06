@@ -404,6 +404,7 @@ const LEGAL = {
     rowLabels: { purpose: 'Purpose', type: 'Type', duration: 'Duration', category: 'Category' },
     ck: {
       label: 'Cookies', title: 'Your choice, your data',
+      short: 'We only use what the site needs to work. Anything more, like remembering your settings, needs your permission.', settingsBtn: 'Settings',
       intro: 'We only use what the site needs to work. Anything more, like remembering your settings or measuring visits, needs your permission. You can change your mind at any time from Cookie settings in the footer.',
       howTitle: 'How to choose',
       how: ['Accept all turns every category on.', 'Reject all keeps only the strictly necessary storage.', 'Or set the switches yourself and press Confirm choices.'],
@@ -494,6 +495,7 @@ const LEGAL = {
     rowLabels: { purpose: 'Tarkoitus', type: 'Tyyppi', duration: 'Säilytysaika', category: 'Luokka' },
     ck: {
       label: 'Evästeet', title: 'Sinun valintasi, sinun tietosi',
+      short: 'Käytämme vain sitä, mitä sivusto tarvitsee toimiakseen. Kaikkeen muuhun, kuten asetustesi muistamiseen, tarvitsemme luvan.', settingsBtn: 'Asetukset',
       intro: 'Käytämme vain sitä, mitä sivusto tarvitsee toimiakseen. Kaikkeen muuhun, kuten asetustesi muistamiseen tai käyntien mittaamiseen, tarvitsemme luvan. Voit muuttaa valintojasi milloin tahansa alatunnisteen Evästeasetukset-linkistä.',
       howTitle: 'Näin valitset',
       how: ['Hyväksy kaikki kytkee kaikki luokat päälle.', 'Hylkää kaikki jättää käyttöön vain välttämättömät.', 'Tai valitse itse liukukytkimillä ja paina Vahvista valinnat.'],

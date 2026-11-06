@@ -163,6 +163,17 @@
       { id: 'analytics', name: ck.an, desc: ck.anD, on: d.analytics },
       { id: 'marketing', name: ck.mk, desc: ck.mkD, on: d.marketing }
     ];
+    if (!state.ckMore) {
+      host.innerHTML = '<section class="fm-cookie fm-cookie-bar" role="region" aria-labelledby="fm-ck-title">' +
+        '<div class="fm-ckb-text"><span id="fm-ck-title" class="fm-ckb-label">' + esc(ck.label) + '</span>' +
+        '<p>' + esc(ck.short) + ' <button type="button" class="fm-inline-link" data-action="openCookies">' + esc(ck.cookiePolicy) + '</button></p></div>' +
+        '<div class="fm-ckb-actions">' +
+        '<button type="button" class="fm-btn fm-ck-btn" data-action="rejectAll">' + esc(ck.reject) + '</button>' +
+        '<button type="button" class="fm-btn fm-ck-btn" data-action="acceptAll">' + esc(ck.accept) + '</button>' +
+        '<button type="button" class="fm-btn fm-ck-btn fm-ckb-more" data-action="ckMore">' + esc(ck.settingsBtn) + '</button></div>' +
+        '</section>';
+      return;
+    }
     var html = '<section class="fm-cookie" role="region" aria-labelledby="fm-ck-title" style="position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 90; width: auto; max-width: 600px; max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; background: var(--raised); border: 1px solid var(--strong); border-top: 2px solid var(--brand); color: var(--ink); padding: 28px; display: flex; flex-direction: column; gap: 20px;">' +
       '<span style="' + LABEL + ' color: var(--accent);">' + esc(ck.label) + '</span>' +
       '<h2 id="fm-ck-title" style="margin: -8px 0 0; font-size: 28px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">' + esc(ck.title) + '</h2>' +
@@ -1619,8 +1630,12 @@
     acceptAll: function () { commitConsent(true, true, true); },
     rejectAll: function () { commitConsent(false, false, false); },
     confirmChoices: function () { commitConsent(state.draft.prefs, state.draft.analytics, state.draft.marketing); },
+    ckMore: function () {
+      state.ckMore = true; renderBanner();
+      var b = $('#fm-banner-root .fm-cookie'); if (b) { b.setAttribute('tabindex', '-1'); b.focus({ preventScroll: true }); }
+    },
     openSettings: function () {
-      state.bannerOpen = true;
+      state.bannerOpen = true; state.ckMore = true;
       state.draft = { prefs: !!(consent && consent.prefs), analytics: !!(consent && consent.analytics), marketing: !!(consent && consent.marketing) };
       renderBanner();
       var b = $('#fm-banner-root .fm-cookie'); if (b) { b.setAttribute('tabindex', '-1'); b.focus(); }
@@ -1798,6 +1813,21 @@
     }
   });
 
+  /* ---------- start at the top ----------
+     Browsers restore the old scroll position on a reload, so after the loading
+     animation the page could open halfway down. A load without a #section in the
+     address (and not from the language switch, which keeps its own spot) opens at
+     the top of the hero. */
+  var fromSwitch = !!carried;
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  function toTop() {
+    if (fromSwitch || location.hash.length > 1) return;
+    var html = document.documentElement, was = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); html.style.scrollBehavior = was;
+  }
+  toTop();
+  addEventListener('load', toTop);
+
   /* ---------- loader ---------- */
   function startLoader() {
     var loader = $('#fm-loader');
@@ -1809,6 +1839,7 @@
       loader.classList.add('is-done');
       applyChrome();
       renderBanner();
+      toTop();
     }
     if (!showLoader) { loader.classList.add('is-off'); done(); return; }
     var start = Date.now();
