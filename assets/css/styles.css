@@ -1283,3 +1283,6 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
   .fm-ckb-actions{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
   .fm-ckb-actions .fm-ck-btn{padding:0 6px;font-size:13px;justify-content:center}
 }
+/* Close the hairline at the screen edges on phones with fractional pixel
+   ratios, where the curtain footer could show through beside the page layer. */
+.fm-root main{box-shadow:3px 0 0 var(--surface),-3px 0 0 var(--surface),0 28px 40px -28px rgba(0,0,0,.55)}
