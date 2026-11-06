@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>formai — AI-native company</title>
 <meta name="description" content="formai is an AI-native design and technology company. Brand, product, software and automation for startups, studios and legacy brands, delivered in days.">
-<meta name="theme-color" content="#141210">
+<meta name="theme-color" content="#EDE6D8">
 <link rel="icon" type="image/svg+xml" href="assets/logos/formai-eye-mark-cream.svg">
 <link rel="preload" href="assets/fonts/DMSans-200.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/DMSans-300.woff2" as="font" type="font/woff2" crossorigin>
@@ -33,13 +33,17 @@
     var c = JSON.parse(sessionStorage.getItem('fm-lang-pos') || 'null');
     if (c && c.mode && Date.now() - c.t < 15000) m = c.mode;
     if (!m) m = 'light';   // first visit: the light theme
-    document.documentElement.setAttribute('data-theme', m === 'light' ? 'light' : 'dark');
+    var dark = m !== 'light';
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    // Browser bar / status bar colour from the first frame, so it never changes colour while loading.
+    var tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', dark ? '#141210' : '#EDE6D8');
   } catch (e) {}
 })();
 </script>
 </head>
 <body>
-<div id="top" class="fm-root fm-motion" data-theme="dark">
+<div id="top" class="fm-root fm-motion" data-theme="light">
+<script>document.getElementById('top').setAttribute('data-theme', document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');</script>
 
 <!-- LOADER -->
 <div class="fm-loader" id="fm-loader" role="status" aria-live="polite" style="position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--ink);">
