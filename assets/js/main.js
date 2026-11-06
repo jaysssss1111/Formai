@@ -1126,6 +1126,8 @@
     $$('.fm-svc-tab').forEach(function (b) {
       b.addEventListener('pointerenter', function (ev) {
         if (ev.pointerType !== 'mouse' || !svcWide.matches) return;
+        // Not while the page is scrolling to a service picked elsewhere (the list moves under the pointer).
+        if (Date.now() < (window.__fmSvcHold || 0)) return;
         clearTimeout(svcHover);
         svcHover = setTimeout(function () { pickService(b.closest('.fm-svc'), false); }, 140);
       });
@@ -1705,6 +1707,7 @@
       // A hero tile opens that service in the Services picker.
       var item = $$('.fm-svc')[Number(el.getAttribute('data-i'))];
       if (!item) return;
+      window.__fmSvcHold = Date.now() + 1600; clearTimeout(svcHover);
       pickService(item, false);
       var sec = $('#services');
       if (sec) sec.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
