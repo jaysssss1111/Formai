@@ -1338,3 +1338,25 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 @media (max-width:640px){.fm-mf-row{column-gap:16px}}
 /* 15 tools: a longer loop keeps the old pace. */
 .fm-motion .fm-tools-track{animation-duration:68s}
+
+/* ---------- AI news: Read is the only link out; a smaller article opens in the lead spot ---------- */
+#news .fm-news-link,#news .fm-news-link:hover{transform:none;border-color:var(--line);cursor:default}
+#news .fm-news-link:hover .fm-news-cover svg,#news .fm-news-link:hover .fm-news-cover img{transform:none}
+.fm-news-title:focus{outline:none}
+.fm-news-title:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.fm-news-btns{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+.fm-news-readbtn{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border:1px solid var(--ink);background:var(--ink);color:var(--surface);text-decoration:none;font-size:14px;font-weight:400;transition:background-color .15s linear,border-color .15s linear,color .15s linear}
+.fm-news-readbtn svg{transition:transform .18s linear}
+.fm-news-readbtn:hover{background:var(--brand);border-color:var(--brand);color:#000}
+.fm-news-readbtn:hover svg{transform:translate(2px,-2px)}
+.fm-news-readbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fm-news-rowlink{position:relative;cursor:pointer;padding-bottom:18px !important}
+.fm-news-pick{all:unset;cursor:pointer;display:inline}
+.fm-news-pick::after{content:"";position:absolute;inset:0}
+.fm-news-pick:focus-visible::after{outline:2px solid var(--accent);outline-offset:2px}
+.fm-news-rowlink:hover .fm-news-thumb{border-color:var(--strong)}
+.fm-news-rowlink:hover .fm-news-thumb img,.fm-news-rowlink:hover .fm-news-thumb svg{transform:scale(1.05)}
+.fm-news-thumb img,.fm-news-thumb svg{transition:transform .3s ease}
+@keyframes fm-news-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fm-news-lead.is-swap .fm-news-card{animation:fm-news-in .45s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.fm-news-lead.is-swap .fm-news-card{animation:none}.fm-news-rowlink:hover .fm-news-thumb img,.fm-news-rowlink:hover .fm-news-thumb svg{transform:none}}

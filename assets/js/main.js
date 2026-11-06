@@ -951,7 +951,7 @@
     if (!sec || !root || !UI) return;
     if (!news || !news.length) { sec.hidden = true; return; }
     sec.hidden = false;
-    var tr = t(), opts = { topic: state.newsTopic || '', all: !!state.newsAll };
+    var tr = t(), opts = { topic: state.newsTopic || '', all: !!state.newsAll, pick: state.newsPick || '' };
     var f = $('#fm-news-filters');
     if (f) { f.innerHTML = UI.filters(news, tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
     var st = $('#fm-news-stamp'); if (st) st.textContent = UI.stamp(news, tr, state.lang);
@@ -959,7 +959,20 @@
   }
   document.addEventListener('click', function (ev) {
     var c = ev.target.closest && ev.target.closest('[data-news-topic]');
-    if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; renderNews(); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
+    if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; state.newsPick = ''; renderNews(); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
+    var pk = ev.target.closest && ev.target.closest('[data-news-pick]');
+    if (pk) {
+      // A smaller article takes the lead story's place; the one it replaces goes back into the list.
+      state.newsPick = pk.getAttribute('data-news-pick'); renderNews();
+      var lead = $('#fm-news-lead');
+      if (lead) {
+        if (!reducedMotion) { lead.classList.remove('is-swap'); void lead.offsetWidth; lead.classList.add('is-swap'); }
+        var top = lead.getBoundingClientRect().top, head = 88;
+        if (top < head || top > innerHeight * 0.5) window.scrollTo({ top: scrollY + top - head, behavior: reducedMotion ? 'auto' : 'smooth' });
+        var h = lead.querySelector('.fm-news-title'); if (h) h.focus({ preventScroll: true });
+      }
+      return;
+    }
     var sh = ev.target.closest && ev.target.closest('[data-news-share]');
     if (sh) {
       // Share the article with our "For you" line: the share sheet where there is one, else copy both.
