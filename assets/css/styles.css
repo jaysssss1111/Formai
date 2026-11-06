@@ -1513,3 +1513,7 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
   .fm-root .fm-orange .fm-mf-row:hover .fm-mf-n{color:#EDE6D8 !important}
 }
 .fm-mf-row{-webkit-tap-highlight-color:transparent}
+
+/* A tapped (or clicked) line keeps the same highlight as hover, without moving anything */
+.fm-mf-row.is-on{background:rgba(0,0,0,.06);box-shadow:-12px 0 0 rgba(0,0,0,.06),12px 0 0 rgba(0,0,0,.06)}
+.fm-root .fm-orange .fm-mf-row.is-on .fm-mf-n{color:#EDE6D8 !important}

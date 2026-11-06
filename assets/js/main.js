@@ -1715,6 +1715,13 @@
     });
   })();
 
+  /* ---------- What we believe: tapping a line highlights it (phones have no hover) ---------- */
+  document.addEventListener('click', function (ev) {
+    var row = ev.target.closest && ev.target.closest('.fm-mf-row');
+    $$('.fm-mf-row.is-on').forEach(function (r) { if (r !== row) r.classList.remove('is-on'); });
+    if (row) row.classList.toggle('is-on');
+  });
+
   /* ---------- full re-render (language / theme change) ---------- */
   function renderAll() {
     applyText();
