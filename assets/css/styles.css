@@ -1286,3 +1286,14 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 /* Close the hairline at the screen edges on phones with fractional pixel
    ratios, where the curtain footer could show through beside the page layer. */
 .fm-root main{box-shadow:3px 0 0 var(--surface),-3px 0 0 var(--surface),0 28px 40px -28px rgba(0,0,0,.55)}
+
+/* ---------- Cookie bar and panel in the reversed colour scheme ----------
+   Dark on the light theme, light on the dark theme, so they never blend into
+   the page. Every colour inside comes from these tokens. */
+.fm-root[data-theme="light"] .fm-cookie{color-scheme:dark;
+  --surface:#141210;--raised:#1E1B18;--ink:#EDE6D8;--muted:#A39A8B;--line:#2B2722;--strong:#6E665A;--accent:#E2692B;--on-accent:#141210}
+.fm-root[data-theme="dark"] .fm-cookie{color-scheme:light;
+  --surface:#EDE6D8;--raised:#F5F0E6;--ink:#141210;--muted:#5E564B;--line:#D2C9B7;--strong:#8A8173;--accent:#A8461A;--on-accent:#EDE6D8}
+.fm-cookie{background:var(--raised) !important;color:var(--ink) !important;border-color:var(--strong) !important;border-top-color:#C85A20 !important}
+.fm-root[data-theme="light"] .fm-cookie{box-shadow:0 16px 40px -18px rgba(20,18,16,.6)}
+.fm-root[data-theme="dark"] .fm-cookie{box-shadow:0 16px 40px -18px rgba(0,0,0,.8)}

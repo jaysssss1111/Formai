@@ -32,7 +32,7 @@
     // Coming from the language switch: keep the theme the visitor had on (for this one page load).
     var c = JSON.parse(sessionStorage.getItem('fm-lang-pos') || 'null');
     if (c && c.mode && Date.now() - c.t < 15000) m = c.mode;
-    if (!m && window.matchMedia) m = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    if (!m) m = 'light';   // first visit: the light theme
     document.documentElement.setAttribute('data-theme', m === 'light' ? 'light' : 'dark');
   } catch (e) {}
 })();
