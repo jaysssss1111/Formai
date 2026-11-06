@@ -144,8 +144,9 @@
     allowPrefs = prefs;
     if (prefs) {
       save('fm-mode', state.mode); save('fm-lang', state.lang); save('fm-paused', state.paused ? '1' : '0');
+      if (typeof saveLikes === 'function') saveLikes();
     } else {
-      ['fm-mode', 'fm-lang', 'fm-paused', 'fm-ci-draft'].forEach(LS.del);
+      ['fm-mode', 'fm-lang', 'fm-paused', 'fm-ci-draft', 'fm-news-likes'].forEach(LS.del);
     }
     state.bannerOpen = false;
     state.draft = { prefs: prefs, analytics: an, marketing: mk };
@@ -946,6 +947,24 @@
 
   /* ---------- AI news carousel ---------- */
   var news = Array.isArray(window.FM_NEWS) ? window.FM_NEWS : null;
+  var NEWS_LIKES = 'fm-news-likes', likes = {};
+  try { if (allowPrefs) (JSON.parse(LS.get(NEWS_LIKES) || '[]') || []).forEach(function (u) { if (typeof u === 'string') likes[u] = true; }); } catch (e) {}
+  function saveLikes() {
+    var list = Object.keys(likes);
+    if (!allowPrefs) return;
+    if (list.length) LS.set(NEWS_LIKES, JSON.stringify(list)); else LS.del(NEWS_LIKES);
+  }
+  function syncLikes() {
+    var tr = t();
+    $$('[data-news-like]').forEach(function (b) {
+      var on = !!likes[b.getAttribute('data-news-like')];
+      b.setAttribute('aria-pressed', String(on)); b.classList.toggle('is-on', on);
+      b.title = on ? tr.newsLiked : tr.newsLike;
+    });
+    $$('.fm-news-row').forEach(function (r) {
+      var p = r.querySelector('[data-news-pick]'); r.classList.toggle('is-liked', !!(p && likes[p.getAttribute('data-news-pick')]));
+    });
+  }
   function renderNews() {
     var sec = $('#news'), root = $('#fm-news-root'), UI = window.FM_NEWS_UI;
     if (!sec || !root || !UI) return;
@@ -956,10 +975,19 @@
     if (f) { f.innerHTML = UI.filters(news, tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
     var st = $('#fm-news-stamp'); if (st) st.textContent = UI.stamp(news, tr, state.lang);
     root.innerHTML = UI.layout(news, tr, state.lang, opts);
+    syncLikes();
   }
   document.addEventListener('click', function (ev) {
     var c = ev.target.closest && ev.target.closest('[data-news-topic]');
     if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; state.newsPick = ''; renderNews(); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
+    var lk = ev.target.closest && ev.target.closest('[data-news-like]');
+    if (lk) {
+      var u = lk.getAttribute('data-news-like');
+      if (likes[u]) delete likes[u]; else likes[u] = true;
+      saveLikes(); syncLikes();
+      if (likes[u] && !reducedMotion) { lk.classList.remove('is-pop'); void lk.offsetWidth; lk.classList.add('is-pop'); }
+      return;
+    }
     var pk = ev.target.closest && ev.target.closest('[data-news-pick]');
     if (pk) {
       // A smaller article takes the lead story's place; the one it replaces goes back into the list.
