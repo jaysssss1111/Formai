@@ -1519,3 +1519,7 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 /* A tapped (or clicked) line keeps the same highlight as hover, without moving anything */
 .fm-mf-row.is-on{background:rgba(0,0,0,.06);box-shadow:-12px 0 0 rgba(0,0,0,.06),12px 0 0 rgba(0,0,0,.06)}
 .fm-root .fm-orange .fm-mf-row.is-on .fm-mf-n{color:#EDE6D8 !important}
+
+/* Service icons at 60% opacity; the open, hovered or focused one at full strength */
+.fm-root .fm-orange .fm-svc-ic{opacity:.6;transition:color .2s linear,opacity .2s linear}
+.fm-root .fm-orange .fm-svc.is-on .fm-svc-ic,.fm-root .fm-orange .fm-svc-tab:hover .fm-svc-ic,.fm-root .fm-orange .fm-svc-tab:focus-visible .fm-svc-ic{opacity:1}
