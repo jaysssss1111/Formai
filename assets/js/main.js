@@ -1674,12 +1674,29 @@
     addEventListener('resize', function () { pin(); check(); });
     pin(); check();
     var link = $('[data-foot-top]');
+    // Back to top: a smooth scroll over the whole page rushed every section past (and the
+    // curtain footer flickered under them). Instead: the diamond send-off, a short fade to the
+    // page colour, a jump to just below the hero, then fade back in while gliding to the top.
+    var jumpTo = function (y) { var h = document.documentElement, was = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; window.scrollTo(0, y); h.style.scrollBehavior = was; };
+    var land = function () { var c = $('#content'); if (c) c.focus({ preventScroll: true }); };
     if (link) link.addEventListener('click', function (ev) {
-      if (state.paused || reducedMotion) return;
       ev.preventDefault();
+      if (state.paused || reducedMotion) { jumpTo(0); land(); return; }
       link.classList.remove('is-go'); void link.offsetWidth; link.classList.add('is-go');
-      setTimeout(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); var c = $('#content'); if (c) c.focus({ preventScroll: true }); }, 380);
       setTimeout(function () { link.classList.remove('is-go'); }, 900);
+      setTimeout(function () {
+        if (window.scrollY < innerHeight * 1.5) { window.scrollTo({ top: 0, behavior: 'smooth' }); land(); return; }
+        var host = $('.fm-root') || document.body, veil = document.createElement('div');
+        veil.className = 'fm-totop-veil'; veil.setAttribute('aria-hidden', 'true'); host.appendChild(veil);
+        void veil.offsetWidth; veil.classList.add('is-on');
+        setTimeout(function () {
+          jumpTo(Math.round(innerHeight * 0.45));
+          veil.classList.remove('is-on'); veil.classList.add('is-off');
+          requestAnimationFrame(function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+          land();
+          setTimeout(function () { veil.remove(); }, 450);
+        }, 200);
+      }, 380);
     });
   })();
 

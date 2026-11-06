@@ -1427,3 +1427,8 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-motion .fm-cookie.is-still{animation:none}
 @keyframes fm-ck-swap{from{opacity:.55;transform:translateY(10px)}to{opacity:1;transform:none}}
 .fm-motion .fm-cookie.is-swap{animation:fm-ck-swap .24s cubic-bezier(.2,.7,.2,1) both}
+
+/* Back to top: a short veil in the page colour hides the long trip up */
+.fm-totop-veil{position:fixed;inset:0;z-index:85;background:var(--surface);opacity:0;pointer-events:none;transition:opacity .2s ease}
+.fm-totop-veil.is-on{opacity:1}
+.fm-totop-veil.is-off{opacity:0;transition:opacity .36s ease}
