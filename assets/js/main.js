@@ -1791,21 +1791,36 @@
         var el = svcWide.matches || !tab ? sec : tab;
         return el ? Math.max(0, Math.round(window.scrollY + el.getBoundingClientRect().top - (svcWide.matches ? 24 : 12))) : window.scrollY;
       };
-      var done = false, settleT = 0, giveUp = 0;
+      // html has scroll-behavior: smooth, which makes behavior 'auto' smooth too; switch it off to really jump.
+      var jumpTo = function (y) { var h = document.documentElement, was = h.style.scrollBehavior; h.style.scrollBehavior = 'auto'; window.scrollTo(0, y); h.style.scrollBehavior = was; };
+      var done = false, userMoved = false, settleT = 0, giveUp = 0;
+      var stopEvents = ['touchstart', 'wheel', 'keydown'];
+      var onUser = function () { userMoved = true; finish(); };
       var finish = function () {
         if (done) return; done = true;
         window.removeEventListener('scroll', onScroll);
+        stopEvents.forEach(function (e) { window.removeEventListener(e, onUser); });
         clearTimeout(settleT); clearTimeout(giveUp);
-        var y = target();
-        if (Math.abs(window.scrollY - y) > 6) window.scrollTo({ top: y, behavior: 'auto' });
         window.__fmSvcHold = Date.now() + 600;
+        if (userMoved) return;   // the visitor took over: do not pull the page back
+        var y = target();
+        if (Math.abs(window.scrollY - y) > 6) jumpTo(y);
         if (tab) tab.focus({ preventScroll: true });
       };
-      var onScroll = function () { clearTimeout(settleT); settleT = setTimeout(finish, 160); };
-      if (reducedMotion || Math.abs(window.scrollY - target()) < 4) { window.scrollTo({ top: target(), behavior: 'auto' }); finish(); return; }
+      var onScroll = function () { clearTimeout(settleT); settleT = setTimeout(finish, 140); };
+      var y0 = target();
+      if (reducedMotion || Math.abs(window.scrollY - y0) < 4) { jumpTo(y0); finish(); return; }
+      // A long smooth scroll gives the page time to shift (address bar, images) and reads as two
+      // moves on phones. Jump to just short of the spot, then glide the last stretch.
+      var lead = Math.round(Math.min(window.innerHeight * 0.6, 480)), from = window.scrollY;
+      if (Math.abs(from - y0) > lead) {
+        jumpTo(from > y0 ? y0 + lead : y0 - lead);
+        y0 = target();
+      }
       window.addEventListener('scroll', onScroll, { passive: true });
-      giveUp = setTimeout(finish, 3000);
-      window.scrollTo({ top: target(), behavior: 'smooth' });
+      stopEvents.forEach(function (e) { window.addEventListener(e, onUser, { passive: true }); });
+      giveUp = setTimeout(finish, 1500);
+      requestAnimationFrame(function () { window.scrollTo({ top: y0, behavior: 'smooth' }); });
     },
     quickSlot: function (el) {
       var b = state.bk, M = calModel();
