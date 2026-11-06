@@ -1461,3 +1461,14 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
    pure black; text on light backgrounds uses it too (12.7:1 on cream). Small text on the orange
    bands stays near-black (#0E0C0B) so it keeps 4.6:1; large headings there can be soft (3.7:1). */
 .fm-root .fm-orange h2,.fm-root .fm-orange h3,.fm-footer h2,.fm-footer h3{color:#26221E !important}
+
+/* ---------- Services: an icon per service in place of 01-06 ---------- */
+.fm-svc-ic{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;color:var(--accent)}
+.fm-svc-ic svg{display:block;width:26px;height:26px;transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+.fm-svc-tab:hover .fm-svc-ic svg,.fm-svc.is-on .fm-svc-ic svg{transform:scale(1.08)}
+@media (prefers-reduced-motion:reduce){.fm-svc-ic svg{transition:none}}
+
+/* ---------- "Write to us": the hero's own background (both themes) ---------- */
+.fm-root .fm-ct,.fm-root[data-theme="light"] .fm-ct{background:var(--surface-hero,#EDE6D8)}
+.fm-root[data-theme="light"] .fm-ct{--surface-hero:#EDE6D8;border-top-color:#D2C9B7}
+.fm-root[data-theme="dark"] .fm-ct{--surface-hero:#141210}
