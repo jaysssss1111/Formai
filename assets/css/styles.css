@@ -1244,9 +1244,10 @@ a.fm-social[href]:hover{background:#000;color:#C85A20}
 .fm-foot-a:hover,.fm-foot-a:focus-visible{transform:translateX(14px);text-decoration:none !important}
 .fm-foot-a:hover::before,.fm-foot-a:focus-visible::before{transform:rotate(45deg) scale(1)}
 .fm-foot-top-link{position:relative}
-.fm-foot-fly{position:absolute;right:2px;top:50%;width:8px;height:8px;margin-top:-4px;background:#000;transform:rotate(45deg);opacity:0;pointer-events:none}
+.fm-foot-fly{position:absolute;right:-5px;top:50%;width:22px;height:22px;margin-top:-11px;opacity:0;pointer-events:none}
+.fm-foot-fly svg{display:block;width:22px;height:22px}
 .fm-foot-top-link.is-go .fm-foot-fly{animation:fm-foot-fly .6s cubic-bezier(.5,0,.2,1) both}
-@keyframes fm-foot-fly{0%{opacity:0;transform:translateY(0) rotate(45deg) scale(.6)}20%{opacity:1}100%{opacity:0;transform:translateY(-120px) rotate(225deg) scale(1)}}
+@keyframes fm-foot-fly{0%{opacity:0;transform:translateY(0) scale(.5)}22%{opacity:1;transform:translateY(-14px) scale(1.15)}100%{opacity:0;transform:translateY(-120px) scale(1)}}
 @media (prefers-reduced-motion: reduce){.fm-foot-a:hover,.fm-foot-a:focus-visible{transform:none}}
 /* Footer social icons: a larger mark inside each frame. */
 .fm-social{width:48px;height:48px}
