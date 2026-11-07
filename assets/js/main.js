@@ -52,7 +52,7 @@
   var ICON_ALERT = '<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" style="flex: none;"><path d="M5 0 L10 5 L5 10 L0 5 Z" style="fill: var(--accent);"></path></svg>';
   var EYE_DRAW = '<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true" style="display: block;"><path class="fm-ld-lid" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: miter; stroke-miterlimit: 10;"></path><path d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path></svg>';
   var MONO = "font-family: 'DM Mono', ui-monospace, monospace;";
-  var LABEL = MONO + ' font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;';
+  var LABEL = MONO + ' font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase;';
   var BTN_SQ = 'display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; padding: 0; border: 1px solid var(--strong); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer;';
   var DLG = 'width: 100%; max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; background: var(--surface); border: 1px solid var(--strong); border-top: 2px solid var(--brand); color: var(--ink); padding: 40px; display: flex; flex-direction: column; gap: 24px;';
   var OVERLAY = 'position: fixed; inset: 0; background: rgba(20, 18, 16, 0.72); display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;';
@@ -130,6 +130,7 @@
   }
 
   /* ---------- theme, motion, menu ---------- */
+  var menuMQ = window.matchMedia('(max-width: 1140px)');
   function applyChrome() {
     var dark = state.mode !== 'light';
     var en = state.lang !== 'fi';
@@ -145,8 +146,31 @@
     $('#fm-pause-label').textContent = state.paused ? t().play : t().pause;
     $('#fm-nav').classList.toggle('is-open', state.menuOpen);
     $('.fm-menu-btn').setAttribute('aria-expanded', String(state.menuOpen));
+    document.documentElement.classList.toggle('fm-lock', state.menuOpen && menuMQ.matches);   // page stays put behind the open menu
     document.dispatchEvent(new CustomEvent('fm:motion', { detail: { paused: state.paused } }));
   }
+
+  (function stickyHeader() {
+    var hd = $('.fm-root > header'); if (!hd) return;
+    var last = window.pageYOffset, raf = 0;
+    function update() {
+      raf = 0;
+      var y = window.pageYOffset, h = hd.offsetHeight;
+      if (!menuMQ.matches || y <= h) { hd.classList.remove('is-compact', 'is-hidden'); last = y; return; }
+      hd.classList.add('is-compact');
+      if (state.menuOpen || y < last - 4) hd.classList.remove('is-hidden');
+      else if (y > last + 4) hd.classList.add('is-hidden');
+      last = y;
+    }
+    addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+    // Keyboard focus moving into the header brings it back; leaving the open menu closes it.
+    hd.addEventListener('focusin', function () { hd.classList.remove('is-hidden'); });
+    hd.addEventListener('focusout', function (ev) {
+      if (state.menuOpen && ev.relatedTarget && !hd.contains(ev.relatedTarget)) { state.menuOpen = false; applyChrome(); }
+    });
+    var onBp = function () { if (!menuMQ.matches && state.menuOpen) { state.menuOpen = false; applyChrome(); } update(); };
+    if (menuMQ.addEventListener) menuMQ.addEventListener('change', onBp); else if (menuMQ.addListener) menuMQ.addListener(onBp);
+  })();
 
   /* ---------- cookie banner ---------- */
   function commitConsent(prefs, an, mk) {
@@ -211,27 +235,27 @@
     }
     var html = '<section class="fm-cookie" role="region" aria-labelledby="fm-ck-title" style="position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 90; width: auto; max-width: 600px; max-height: calc(100vh - 32px); overflow-y: auto; box-sizing: border-box; background: var(--raised); border: 1px solid var(--strong); border-top: 2px solid var(--brand); color: var(--ink); padding: 28px; display: flex; flex-direction: column; gap: 20px;">' +
       '<span style="' + LABEL + ' color: var(--accent);">' + esc(ck.label) + '</span>' +
-      '<h2 id="fm-ck-title" style="margin: -8px 0 0; font-size: 28px; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">' + esc(ck.title) + '</h2>' +
-      '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(ck.intro) + '</p>' +
-      '<div style="display: flex; flex-direction: column; gap: 8px;"><span style="font-size: 15px; font-weight: 400;">' + esc(ck.howTitle) + '</span>' +
+      '<h2 id="fm-ck-title" style="margin: -8px 0 0; font-size: 1.75rem; line-height: 1.15; font-weight: 300; letter-spacing: -0.02em;">' + esc(ck.title) + '</h2>' +
+      '<p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(ck.intro) + '</p>' +
+      '<div style="display: flex; flex-direction: column; gap: 8px;"><span style="font-size: 0.9375rem; font-weight: 400;">' + esc(ck.howTitle) + '</span>' +
       '<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;">' +
       ck.how.map(function (x, i) {
-        return '<li style="display: flex; gap: 12px; font-size: 14px; line-height: 1.5; color: var(--muted);"><span style="' + MONO + ' font-size: 12px; color: var(--accent); flex: none; padding-top: 2px;">0' + (i + 1) + '</span><span>' + esc(x) + '</span></li>';
+        return '<li style="display: flex; gap: 12px; font-size: 0.875rem; line-height: 1.5; color: var(--muted);"><span style="' + MONO + ' font-size: 0.75rem; color: var(--accent); flex: none; padding-top: 2px;">0' + (i + 1) + '</span><span>' + esc(x) + '</span></li>';
       }).join('') + '</ol></div>' +
       '<div style="display: flex; flex-direction: column; border-top: 1px solid var(--line);">' +
       cats.map(function (c) {
         var txt = c.text || (c.on ? ck.on : ck.off);
         return '<div style="display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--line);">' +
-          '<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;"><span id="fm-ck-' + c.id + '" style="font-size: 16px; font-weight: 400;">' + esc(c.name) + '</span>' +
-          '<span style="font-size: 14px; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(c.desc) + '</span></div>' +
-          '<div style="display: flex; align-items: center; gap: 10px; flex: none;"><span aria-hidden="true" style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: right;">' + esc(txt) + '</span>' +
+          '<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;"><span id="fm-ck-' + c.id + '" style="font-size: 1rem; font-weight: 400;">' + esc(c.name) + '</span>' +
+          '<span style="font-size: 0.875rem; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(c.desc) + '</span></div>' +
+          '<div style="display: flex; align-items: center; gap: 10px; flex: none;"><span aria-hidden="true" style="' + MONO + ' font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: right;">' + esc(txt) + '</span>' +
           '<button type="button" role="switch" class="fm-switch' + (c.on ? ' is-on' : '') + '" aria-checked="' + c.on + '" aria-labelledby="fm-ck-' + c.id + '"' + (c.locked ? ' disabled' : ' data-action="toggleCat" data-cat="' + c.id + '"') + '><span class="fm-knob"></span></button></div></div>';
       }).join('') + '</div>' +
       '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' +
       '<button type="button" class="fm-btn fm-ck-btn" data-action="rejectAll">' + esc(ck.reject) + '</button>' +
       '<button type="button" class="fm-btn fm-ck-btn" data-action="acceptAll">' + esc(ck.accept) + '</button>' +
       '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="confirmChoices">' + esc(ck.confirm) + '</button></div>' +
-      '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(ck.more) + ' <button type="button" class="fm-inline-link" data-action="openCookies">' + esc(ck.cookiePolicy) + '</button>, <button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(ck.privacy) + '</button></p>' +
+      '<p style="margin: 0; font-size: 0.875rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(ck.more) + ' <button type="button" class="fm-inline-link" data-action="openCookies">' + esc(ck.cookiePolicy) + '</button>, <button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(ck.privacy) + '</button></p>' +
       '</section>';
     var focusCat = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-cat');
     host.innerHTML = html;
@@ -241,8 +265,8 @@
   /* ---------- policy dialog ---------- */
   function docSections(list) {
     return (list || []).map(function (s) {
-      return '<div style="display: flex; flex-direction: column; gap: 10px;"><h3 style="margin: 0; font-size: 20px; line-height: 1.3; font-weight: 400;">' + esc(s.h) + '</h3>' +
-        s.ps.map(function (p) { return '<p style="margin: 0; font-size: 15px; line-height: 1.65; font-weight: 300; color: var(--muted);">' + esc(p) + '</p>'; }).join('') + '</div>';
+      return '<div style="display: flex; flex-direction: column; gap: 10px;"><h3 style="margin: 0; font-size: 1.25rem; line-height: 1.3; font-weight: 400;">' + esc(s.h) + '</h3>' +
+        s.ps.map(function (p) { return '<p style="margin: 0; font-size: 0.9375rem; line-height: 1.65; font-weight: 300; color: var(--muted);">' + esc(p) + '</p>'; }).join('') + '</div>';
     }).join('');
   }
   function renderDoc() {
@@ -252,15 +276,15 @@
     var doc = state.dialog === 'privacy' ? tr.privacyDoc : tr.cookieDoc;
     var rows = doc.rows ? '<div style="display: flex; flex-direction: column; border-top: 1px solid var(--line);">' + doc.rows.map(function (r) {
       return '<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 0; border-bottom: 1px solid var(--line);">' +
-        '<span style="' + MONO + ' font-size: 13px; font-weight: 400; color: var(--ink);">' + esc(r.name) + '</span>' +
-        '<span style="font-size: 14px; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(tr.rowLabels.purpose) + ': ' + esc(r.purpose) + '</span>' +
-        '<span style="font-size: 14px; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(tr.rowLabels.type) + ': ' + esc(r.type) + ' · ' + esc(tr.rowLabels.duration) + ': ' + esc(r.duration) + ' · ' + esc(tr.rowLabels.category) + ': ' + esc(r.category) + '</span></div>';
+        '<span style="' + MONO + ' font-size: 0.8125rem; font-weight: 400; color: var(--ink);">' + esc(r.name) + '</span>' +
+        '<span style="font-size: 0.875rem; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(tr.rowLabels.purpose) + ': ' + esc(r.purpose) + '</span>' +
+        '<span style="font-size: 0.875rem; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(tr.rowLabels.type) + ': ' + esc(r.type) + ' · ' + esc(tr.rowLabels.duration) + ': ' + esc(r.duration) + ' · ' + esc(tr.rowLabels.category) + ': ' + esc(r.category) + '</span></div>';
     }).join('') + '</div>' : '';
     host.innerHTML = '<div data-overlay="doc" style="' + OVERLAY + ' z-index: 150;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-dlg-title" tabindex="-1" style="' + DLG + ' max-width: 760px;">' +
       '<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(doc.updated) + '</span>' +
       '<button type="button" class="fm-mode" data-action="closeDoc" aria-label="' + esc(tr.ck.close) + '" style="' + BTN_SQ + '">' + ICON_CLOSE + '</button></div>' +
-      '<h2 id="fm-dlg-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(doc.title) + '</h2>' +
+      '<h2 id="fm-dlg-title" style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(doc.title) + '</h2>' +
       docSections(doc.a) + rows + docSections(doc.b) + '</div></div>';
   }
   function openDoc(kind) {
@@ -315,7 +339,7 @@
       input + (err ? '<span id="' + id + '-err" class="fm-err">' + esc(err) + '</span>' : '') + '</div>';
   }
   function errorSummary() {
-    return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSummary) + '</div>';
+    return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 0.875rem; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSummary) + '</div>';
   }
   // The company inbox, or '' while config.js still holds the placeholder.
   function realEmail() {
@@ -350,7 +374,7 @@
   }
   function privacyLine() {
     var tr = t();
-    return '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + '<button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(tr.ck.privacy) + '</button></p>';
+    return '<p style="margin: 0; font-size: 0.875rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + '<button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(tr.ck.privacy) + '</button></p>';
   }
   function interestPicker(selected, form) {
     var cf = t().cf;
@@ -370,14 +394,14 @@
     var body;
     if (c.sent) {
       body = '<div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 8px 0 4px;">' + EYE_DRAW +
-        '<h2 id="fm-cf-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h2>' +
-        '<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.thanksText) + '</p>' +
+        '<h2 id="fm-cf-title" style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h2>' +
+        '<p style="margin: 0; font-size: 1rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.thanksText) + '</p>' +
         '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="closeContact" style="flex: none;">' + esc(cf.done) + '</button></div>';
     } else {
       var e = c.tried ? cfErrors() : { name: '', email: '', message: '' };
       var hasErr = !!(e.name || e.email || e.message);
-      body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-cf-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.title) + '</h2>' +
-        '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.intro) + '</p></div>' +
+      body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-cf-title" style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.title) + '</h2>' +
+        '<p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.intro) + '</p></div>' +
         (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox(c === state.ci ? 'fm-ci-form' : 'fm-cf-form', 'formai: ' + String(c.data.name || '').trim(), String(c.data.message || '') + (c.data.link ? '\n\n' + c.data.link : '')) : '') +
         '<form id="fm-cf-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 20px; margin: 0;">' + HONEYPOT +
         field('fm-cf-name', cf.name, { key: 'name', required: true, ac: 'name', value: c.data.name, err: e.name }) +
@@ -433,7 +457,7 @@
     if (c.sent) {
       var AR = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>';
       host.innerHTML = '<div role="status" class="fm-ci-done" tabindex="-1">' + EYE_DRAW +
-        '<h3 style="margin: 0; font-size: clamp(28px, 3.4vw, 40px); line-height: 1.05; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h3>' +
+        '<h3 style="margin: 0; font-size: clamp(1.75rem, 3.4vw, 2.5rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h3>' +
         (c.recap ? '<div class="fm-ci-recap"><span>' + esc(C.youWrote) + '</span><p>' + esc(c.recap) + '</p></div>' : '') +
         '<p class="fm-ci-when' + (liveOn ? '' : ' is-closed') + '">' + (liveOn ? liveMark(true) + esc(C.liveOn) : '<span>' + esc(C.liveOff) + '</span>' + liveMark(false)) + '</p>' +
         '<div class="fm-ci-wait"><span>' + esc(C.wait) + '</span><div>' +
@@ -565,13 +589,13 @@
     var tr = t(), A = tr.au, cf = tr.cf, a = state.au, body;
     if (a.sent) {
       body = '<div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 8px 0 4px;">' + EYE_DRAW +
-        '<h2 id="fm-au-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.thanksTitle) + '</h2>' +
-        '<p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.thanksText) + '</p>' +
+        '<h2 id="fm-au-title" style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.thanksTitle) + '</h2>' +
+        '<p style="margin: 0; font-size: 1rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.thanksText) + '</p>' +
         '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="closeAudit" style="flex: none;">' + esc(cf.done) + '</button></div>';
     } else {
       var e = a.tried ? auErrors() : { url: '', email: '' };
-      body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-au-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.title) + '</h2>' +
-        '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.intro) + '</p></div>' +
+      body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-au-title" style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.title) + '</h2>' +
+        '<p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.intro) + '</p></div>' +
         ((e.url || e.email) ? errorSummary() : '') + (a.sendError ? sendErrorBox('fm-au-form', 'formai: audit ' + normUrl(a.data.url), normUrl(a.data.url) + (a.data.note ? '\n\n' + a.data.note : '')) : '') +
         '<form id="fm-au-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 20px; margin: 0;">' + HONEYPOT +
         field('fm-au-url', A.url, { key: 'url', required: true, type: 'url', ac: 'url', hint: A.urlHint, value: a.data.url, err: e.url }) +
@@ -804,8 +828,8 @@
     var days = openDays(M);
     $('#fm-cal').innerHTML =
       '<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">' +
-      '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.stripTitle) + '</h3>' +
-      '<span style="' + MONO + ' font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">' + esc(B.tzNote) + '</span></div>' +
+      '<h3 style="margin: 0; font-size: 1.5rem; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.stripTitle) + '</h3>' +
+      '<span style="' + MONO + ' font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">' + esc(B.tzNote) + '</span></div>' +
       '<div class="fm-daystrip" role="group" aria-label="' + esc(B.stripTitle) + '">' + days.map(function (ms) {
         var id = dayId(ms), sel = id === b.date, d = new Date(ms);
         return '<button type="button" class="fm-sday' + (sel ? ' is-sel' : '') + (ms === M.todayUTC ? ' is-today' : '') + '" data-action="pickDay" data-date="' + id + '" aria-pressed="' + sel + '" aria-label="' + esc(capFirst(M.longDate(ms))) + '">' +
@@ -852,16 +876,16 @@
       cells += '<button type="button" class="' + cls + '"' + (open ? ' data-action="pickDay" data-date="' + id + '"' : ' disabled') +
         ' aria-pressed="' + sel + '" aria-label="' + esc(M.longDate(ms) + (open ? '' : ', ' + B.unavailable)) + '">' + d + '</button>';
     }
-    var legend = MONO + ' font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);';
+    var legend = MONO + ' font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);';
     $('#fm-cal').innerHTML =
       '<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">' +
-      '<h3 aria-live="polite" style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(monthName) + '</h3>' +
+      '<h3 aria-live="polite" style="margin: 0; font-size: 1.5rem; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(monthName) + '</h3>' +
       '<div style="display: flex; gap: 8px;">' +
       '<button type="button" class="fm-mode" data-action="calPrev"' + (prevDisabled ? ' disabled' : '') + ' aria-label="' + esc(B.prev) + '" style="' + BTN_SQ + '">' + ICON_BACK + '</button>' +
       '<button type="button" class="fm-mode" data-action="calNext"' + (nextDisabled ? ' disabled' : '') + ' aria-label="' + esc(B.next) + '" style="' + BTN_SQ + '"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 7 H12 M8 3 L12 7 L8 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg></button>' +
       '</div></div>' +
       '<div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px;">' +
-      B.weekdays.map(function (w) { return '<span style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 4px 0;">' + esc(w) + '</span>'; }).join('') + '</div>' +
+      B.weekdays.map(function (w) { return '<span style="' + MONO + ' font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 4px 0;">' + esc(w) + '</span>'; }).join('') + '</div>' +
       '<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px;">' + cells + '</div>' +
       '<div style="display: flex; flex-wrap: wrap; gap: 20px; padding-top: 4px;">' +
       '<span style="display: inline-flex; align-items: center; gap: 8px; ' + legend + '">' + esc(B.tzNote) + '</span></div>';
@@ -874,15 +898,15 @@
     if (step === 'none') {
       html = '<div class="fm-bk-call">' +
         '<div style="display: flex; flex-direction: column; gap: 6px;">' +
-        '<h3 style="margin: 0; font-size: clamp(26px, 2.6vw, 32px); line-height: 1.1; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.callTitle) + '</h3></div>' +
+        '<h3 style="margin: 0; font-size: clamp(1.625rem, 2.6vw, 2rem); line-height: 1.1; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.callTitle) + '</h3></div>' +
         '<ul class="fm-bk-points">' + B.callPoints.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
         '<div class="fm-bk-meta">' + B.callMeta.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>';
     } else if (step === 'slots') {
       var ms = Date.parse(b.date + 'T00:00:00Z');
       var selMin = b.slot ? Number(b.slot) : null;
       html = '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(B.slotsFor) + '</span>' +
-        '<h3 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(capFirst(M.longDate(ms))) + '</h3></div>' +
-        (b.takenNotice ? '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(B.takenNotice) + '</div>' : '') +
+        '<h3 style="margin: 0; font-size: 1.5rem; line-height: 1.2; font-weight: 300; letter-spacing: -0.02em;">' + esc(capFirst(M.longDate(ms))) + '</h3></div>' +
+        (b.takenNotice ? '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 0.875rem; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(B.takenNotice) + '</div>' : '') +
         (localTime(b.date, 11 * 60) ? '<span class="fm-bk-tzline">' + esc(B.tzNote + ' · ' + B.yourTime + ': ' + tzCity()) + '</span>' : '') +
         '<div role="group" aria-label="' + esc(B.slotsFor) + '" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;">' +
         M.freeSlots(ms).map(function (m) {
@@ -893,15 +917,15 @@
           return '<button type="button" class="fm-slot' + (sel ? ' is-sel' : '') + '" aria-pressed="' + sel + '" aria-label="' + esc(M.slotRange(m)) + '" data-action="pickSlot" data-slot="' + id + '">' + esc(M.hhmm(m)) + (localTime(b.date, m) ? '<span class="fm-slot-local">' + esc(localTime(b.date, m)) + '</span>' : '') + '</button>';
         }).join('') + '</div>' +
         '<div class="fm-bk-foot" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 16px; border-top: 1px solid var(--line); margin-top: auto;">' +
-        '<span aria-live="polite" style="font-size: 15px; line-height: 1.4; font-weight: 400;">' + esc(b.slot && selMin != null ? M.slotRange(selMin) : B.noneYet) + (b.slot && bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</span>' +
+        '<span aria-live="polite" style="font-size: 0.9375rem; line-height: 1.4; font-weight: 400;">' + esc(b.slot && selMin != null ? M.slotRange(selMin) : B.noneYet) + (b.slot && bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</span>' +
         '<button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="toDetails"' + (b.slot ? '' : ' disabled') + ' style="flex: none;">' + esc(B.cont) + ' ' + ICON_ARROW + '</button></div>';
     } else if (step === 'details') {
       var f = b.data;
       var eName = b.tried && !String(f.name).trim();
       var eEmail = b.tried && !EMAIL_RE.test(String(f.email).trim());
       html = '<button type="button" class="fm-link fm-textbtn" data-action="bkBack" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="margin-right: 8px;"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' + esc(B.back) + '</button>' +
-        '<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface);"><span style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">' + esc(B.selected) + '</span>' +
-        '<span style="font-size: 16px; line-height: 1.4; font-weight: 400;">' + esc(bkSummary(M)) + '</span>' + (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</div>' +
+        '<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface);"><span style="' + MONO + ' font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">' + esc(B.selected) + '</span>' +
+        '<span style="font-size: 1rem; line-height: 1.4; font-weight: 400;">' + esc(bkSummary(M)) + '</span>' + (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</div>' +
         (eName || eEmail ? errorSummary() : '') + (b.sendError ? sendErrorBox('fm-bk-form', 'formai: ' + bkSummary(M), bkSummary(M) + (f.topic ? '\n\n' + f.topic : '')) : '') +
         '<form id="fm-bk-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
         field('fm-bk-name', cf.name, { key: 'name', required: true, ac: 'name', value: f.name, err: eName ? cf.errName : '' }) +
@@ -916,13 +940,13 @@
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;"' + (b.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(B.confirm, b.sending) + '</button></form>';
     } else {
       html = '<div role="status" id="fm-bk-done" style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">' + EYE_DRAW +
-        '<h3 id="fm-bk-done-title" tabindex="-1" style="margin: 0; font-size: clamp(32px, 4vw, 44px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(B.doneTitle) + '</h3>' +
-        '<span style="font-size: 18px; line-height: 1.4; font-weight: 400;">' + esc(b.doneSummary) + '</span>' +
+        '<h3 id="fm-bk-done-title" tabindex="-1" style="margin: 0; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(B.doneTitle) + '</h3>' +
+        '<span style="font-size: 1.125rem; line-height: 1.4; font-weight: 400;">' + esc(b.doneSummary) + '</span>' +
         (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') +
-        '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.doneText) + '</p>' +
+        '<p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.doneText) + '</p>' +
         '<div style="display: flex; flex-wrap: wrap; gap: 12px;">' + (b.date && b.slot ? '<a class="fm-btn fm-ck-btn fm-ck-primary" download="formai-call.ics" href="' + icsHref(b.date, Number(b.slot)) + '" style="flex: none;">' + esc(B.addCal) + ' ' + ICON_ARROW + '</a>' : '') +
         '<button type="button" class="fm-btn fm-ck-btn" data-action="bkAgain" style="flex: none;">' + esc(B.again) + '</button></div>' +
-        '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.changeNote) + '</p></div>';
+        '<p style="margin: 0; font-size: 0.875rem; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.changeNote) + '</p></div>';
     }
     $('#fm-bk-panel').innerHTML = html;
     renderQuick();
@@ -1827,7 +1851,10 @@
     setEn: function () { switchLang('en'); },
     setFi: function () { switchLang('fi'); },
     togglePause: function () { state.paused = !state.paused; save('fm-paused', state.paused ? '1' : '0'); applyChrome(); },
-    toggleMenu: function () { state.menuOpen = !state.menuOpen; applyChrome(); },
+    toggleMenu: function () {
+      state.menuOpen = !state.menuOpen; applyChrome();
+      if (state.menuOpen) { var l = $('#fm-nav a'); if (l) l.focus({ preventScroll: true }); }
+    },
     closeMenu: function () { if (state.menuOpen) { state.menuOpen = false; applyChrome(); } },
     toggleCat: function (el) { var k = el.getAttribute('data-cat'); state.draft[k] = !state.draft[k]; renderBanner(); },
     acceptAll: function () { commitConsent(true, true, true); },
