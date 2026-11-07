@@ -5,7 +5,7 @@ const T = {
     langLabel: 'Language', loading: 'Loading', home: 'formai, home', navLabel: 'Main', menu: 'Menu', skip: 'Skip to content', pause: 'Pause animations', play: 'Play animations',navServices: 'Services', navMethod: 'Method', navAudit: 'Audit', cta: 'Get a free audit', cta2: 'See what we make',
     heroTiles: ['Identity: see the service', 'Interfaces: see the service', 'Film: see the service', 'Development: see the service', 'Automation: see the service', 'Intelligence: see the service'],
     h1: 'From brand to product.', h2: 'Built to', h3: 'ship.',
-    heroP: 'Brand, product, software and automation for startups, studios and legacy brands. AI runs through every step of how we work, so you get in days what agencies quote in weeks.',
+    heroP: 'We design brands and build websites, software and AI automation for growing companies, in days, not weeks.',
     methodLabel: 'Method', 
     m1: 'Audit', m1p: 'We study your product, brand and workflows, then send the three changes that matter most. Before any contract.',
     m2: 'Sprint', m2p: 'People and AI agents work in the same loop. Designs, code and automations arrive as working files, not decks.',
@@ -48,7 +48,6 @@ const T = {
     g1: 'Startups', 
     g2: 'Studios', 
     g3: 'Legacy brands', 
-    email: '[YOUR EMAIL]',
     film: {
       play: 'Play film', pause: 'Pause film', replay: 'Replay film', script: 'Read the script',
       ann: ['CTA BELOW THE FOLD', 'NINE FORM FIELDS', '4.2 S TO LOAD'], fold: 'FOLD',
@@ -75,8 +74,8 @@ const T = {
       ]
     },
     meta: {
-      title: 'formai — AI-native design and technology company for brand, web, software and automation',
-      description: 'formai is an AI-native design and technology company in Finland. Brand identity, websites, software and AI automation for startups, studios and legacy brands, delivered in days. Get a free audit of one screen.'
+      title: 'formai – Design and AI development company in Finland',
+      description: 'Brand, websites, software and AI automation for growing companies, designed and built in days by a Finnish design and AI team. Start with a free audit.'
     },
     au: {
       label: 'Free audit', title: 'Get three fixes for one screen',
@@ -153,6 +152,8 @@ const T = {
     toolTips: ['Interfaces, design systems and prototypes, with AI for the first drafts.', 'Image generation for moodboards and concept art.', 'AI video for motion, edits and our film work.', 'Claude models for research, writing and agent work.', 'Language and image models inside the products we build.', 'Google\'s models for images, video and long documents.', 'Writing, refactoring and reviewing code with an agent.', 'Coding agents for well-defined programming tasks.', 'An AI code editor for everyday development.', 'An agent-first coding environment for building and testing.', 'Workflows and AI agents that connect your tools.', 'Where your code lives, with its full history, and stays yours.', 'Hosting and previews, so you see every change live.', 'Database, sign-in and storage for the apps we build.', 'Domains, security and fast delivery worldwide.'], toolNames: ['Figma', 'Midjourney', 'Runway', 'Anthropic', 'OpenAI', 'Gemini', 'Claude Code', 'Codex', 'Cursor', 'Antigravity', 'n8n', 'GitHub', 'Vercel', 'Supabase', 'Cloudflare'],
     live: { on: '{t} in Helsinki · we are working now', off: '{t} in Helsinki · we reply on the next working day' },
     teamLabel: 'The people', noteLabel: 'Why formai', teamPreview: 'Sample team, for layout only', photoSoon: 'PHOTO',
+    notFound: { title: 'Page not found', text: 'This address has no page. It may have moved, or the link has a typo.', home: 'Go to the front page' },
+    social: { label: 'Social media', x: 'formai on X', instagram: 'formai on Instagram', linkedin: 'formai on LinkedIn', facebook: 'formai on Facebook' },
     foot: { services: 'Services', studio: 'Explore', start: 'Start here', company: 'Company', map: 'Site map', top: 'Back to top', businessId: 'Business ID' },
     toolsLabel: 'Tools we build with',
     aboutLabel: 'Who we are', 
@@ -181,7 +182,7 @@ const T = {
     langLabel: 'Kieli', loading: 'Ladataan', home: 'formai, etusivu', navLabel: 'Päävalikko', menu: 'Valikko', skip: 'Siirry sisältöön', pause: 'Pysäytä animaatiot', play: 'Käynnistä animaatiot',navServices: 'Palvelut', navMethod: 'Menetelmä', navAudit: 'Auditointi', cta: 'Pyydä maksuton auditointi', cta2: 'Katso mitä teemme',
     heroTiles: ['Identiteetti: katso palvelu', 'Käyttöliittymät: katso palvelu', 'Video: katso palvelu', 'Ohjelmistokehitys: katso palvelu', 'Automaatio: katso palvelu', 'Älykkyys: katso palvelu'],
     h1: 'Brändistä tuotteeksi.', h2: 'Valmiina', h3: 'julkaisuun.',
-    heroP: 'Brändi, tuotteet, ohjelmistot ja automaatio startupeille, studioille ja perinteisille brändeille. Tekoäly kulkee mukana jokaisessa työvaiheessa, joten saat päivissä sen, mihin toimistot arvioivat viikkoja.',
+    heroP: 'Suunnittelemme brändit ja rakennamme verkkosivut, ohjelmistot ja tekoälyautomaatiot kasvaville yrityksille – päivissä, ei viikoissa.',
     methodLabel: 'Menetelmä', 
     m1: 'Auditointi', m1p: 'Tutkimme tuotteesi, brändisi ja työnkulkusi ja lähetämme kolme tärkeintä muutosta. Jo ennen sopimusta.',
     m2: 'Sprintti', m2p: 'Ihmiset ja tekoälyagentit työskentelevät samassa silmukassa. Suunnitelmat, koodi ja automaatiot tulevat toimivina tiedostoina, eivät esityksinä.',
@@ -224,7 +225,6 @@ const T = {
     g1: 'Startupit', 
     g2: 'Studiot', 
     g3: 'Perinteiset brändit', 
-    email: '[SÄHKÖPOSTIOSOITTEESI]',
     film: {
       play: 'Toista video', pause: 'Pysäytä video', replay: 'Toista video uudelleen', script: 'Lue käsikirjoitus',
       ann: ['CTA TAITTEEN ALLA', 'YHDEKSÄN KENTTÄÄ', 'LATAUS 4,2 S'], fold: 'TAITE',
@@ -251,8 +251,8 @@ const T = {
       ]
     },
     meta: {
-      title: 'formai — AI-natiivi suunnittelu- ja teknologiayritys: brändi, verkkosivut, ohjelmistot ja automaatio',
-      description: 'formai on suomalainen AI-natiivi suunnittelu- ja teknologiayritys. Brändi-identiteetti, verkkosivut, ohjelmistot ja tekoälyautomaatio startupeille, studioille ja perinteisille brändeille päivissä. Pyydä maksuton auditointi yhdestä näkymästä.'
+      title: 'formai – design- ja tekoälykehitysyritys Suomessa',
+      description: 'Brändi, verkkosivut, ohjelmistot ja tekoälyautomaatio kasvaville yrityksille päivissä suomalaiselta design- ja tekoälytiimiltä. Pyydä maksuton auditointi.'
     },
     au: {
       label: 'Maksuton auditointi', title: 'Saat kolme korjausta yhteen näkymään',
@@ -329,6 +329,8 @@ const T = {
     toolTips: ['Käyttöliittymät, design-järjestelmät ja prototyypit, tekoäly apuna ensimmäisissä luonnoksissa.', 'Kuvagenerointi tunnelmatauluihin ja konseptikuviin.', 'Tekoälyvideo liikkeeseen, editointiin ja videotöihimme.', 'Claude-mallit tutkimukseen, kirjoittamiseen ja agenttityöhön.', 'Kieli- ja kuvamallit rakentamiemme tuotteiden sisällä.', 'Googlen mallit kuviin, videoon ja pitkiin dokumentteihin.', 'Koodin kirjoittaminen, uudistaminen ja tarkistus agentin kanssa.', 'Koodausagentit tarkasti rajattuihin ohjelmointitehtäviin.', 'Tekoälyavusteinen koodieditori päivittäiseen kehitykseen.', 'Agenttilähtöinen koodausympäristö rakentamiseen ja testaamiseen.', 'Työnkulut ja tekoälyagentit, jotka yhdistävät työkalusi.', 'Koodisi koti koko historioineen, ja se pysyy sinun.', 'Julkaisu ja esikatselut, joten näet jokaisen muutoksen heti.', 'Tietokanta, kirjautuminen ja tallennus rakentamiimme sovelluksiin.', 'Verkkotunnukset, tietoturva ja nopea jakelu maailmanlaajuisesti.'], toolNames: ['Figma', 'Midjourney', 'Runway', 'Anthropic', 'OpenAI', 'Gemini', 'Claude Code', 'Codex', 'Cursor', 'Antigravity', 'n8n', 'GitHub', 'Vercel', 'Supabase', 'Cloudflare'],
     live: { on: 'Helsingissä klo {t} · olemme töissä nyt', off: 'Helsingissä klo {t} · vastaamme seuraavana arkipäivänä' },
     teamLabel: 'Ihmiset', noteLabel: 'Miksi formai', teamPreview: 'Esimerkkitiimi, vain asettelua varten', photoSoon: 'KUVA',
+    notFound: { title: 'Sivua ei löytynyt', text: 'Tässä osoitteessa ei ole sivua. Se on ehkä siirtynyt, tai linkissä on kirjoitusvirhe.', home: 'Siirry etusivulle' },
+    social: { label: 'Sosiaalinen media', x: 'formai X:ssä', instagram: 'formai Instagramissa', linkedin: 'formai LinkedInissä', facebook: 'formai Facebookissa' },
     foot: { services: 'Palvelut', studio: 'Tutustu', start: 'Aloita tästä', company: 'Yritys', map: 'Sivukartta', top: 'Takaisin ylös', businessId: 'Y-tunnus' },
     toolsLabel: 'Työkalut, joilla rakennamme',
     aboutLabel: 'Keitä olemme', 
@@ -425,7 +427,7 @@ const LEGAL = {
         { name: 'fm-news-likes', purpose: 'Remembers which AI news articles you liked, so your heart stays filled (the shared count stores no visitor data)', type: 'Local storage', duration: 'Until you clear it or withdraw consent', category: 'Preferences' }
       ],
       b: [
-        { h: 'Third parties', ps: ['Fonts are hosted on our own server, so no data is sent to third parties when the page opens.', 'We do not currently use analytics or marketing cookies. If we add them, we will update this list and ask for your consent before anything is stored.'] },
+        { h: 'Third parties', ps: ['Fonts are hosted on our own server. A few other services do receive requests from the page: Supabase, which stores booked call times and article like counts (no names or emails); Formspree, which delivers the forms you send; and the publishers of the articles in AI news (for example Medium, MIT Technology Review and TechCrunch), whose images load from their own servers. Like any website you visit, these services can see your IP address and browser details. None of them get names or messages from us except Formspree, and only when you send a form.', 'We do not currently use analytics or marketing cookies. If we add them, we will update this list and ask for your consent before anything is stored.'] },
         { h: 'Changing your choices', ps: ['Open Cookie settings in the footer at any time to change or withdraw your consent. Withdrawing consent deletes the preference data immediately. You can also clear stored data in your browser settings.'] },
         { h: 'Contact', ps: ['Questions about cookies: [YOUR EMAIL].'] }
       ]
@@ -515,7 +517,7 @@ const LEGAL = {
         { name: 'fm-news-likes', purpose: 'Muistaa, mistä tekoälyuutisista tykkäsit, jotta sydämesi pysyy täytettynä (yhteinen määrä ei tallenna kävijän tietoja)', type: 'Paikallinen tallennustila', duration: 'Kunnes tyhjennät sen tai peruutat suostumuksen', category: 'Asetukset' }
       ],
       b: [
-        { h: 'Kolmannet osapuolet', ps: ['Fontit ladataan omalta palvelimeltamme, joten sivun avautuessa tietoja ei välity kolmansille osapuolille.', 'Emme tällä hetkellä käytä analytiikka- tai markkinointievästeitä. Jos otamme niitä käyttöön, päivitämme tämän luettelon ja pyydämme suostumuksesi ennen kuin mitään tallennetaan.'] },
+        { h: 'Kolmannet osapuolet', ps: ['Fontit ladataan omalta palvelimeltamme. Sivu lähettää kuitenkin pyyntöjä muutamaan muuhun palveluun: Supabase tallentaa varatut puheluajat ja artikkelien tykkäysmäärät (ei nimiä eikä sähköposteja), Formspree välittää lähettämäsi lomakkeet, ja Tekoälyuutisten artikkelien kuvat ladataan julkaisijoiden omilta palvelimilta (esimerkiksi Medium, MIT Technology Review ja TechCrunch). Kuten mikä tahansa vierailemasi sivusto, nämä palvelut näkevät IP-osoitteesi ja selaimesi tiedot. Nimiä tai viestejä niille ei välity, paitsi Formspreelle silloin, kun lähetät lomakkeen.', 'Emme tällä hetkellä käytä analytiikka- tai markkinointievästeitä. Jos otamme niitä käyttöön, päivitämme tämän luettelon ja pyydämme suostumuksesi ennen kuin mitään tallennetaan.'] },
         { h: 'Valintojen muuttaminen', ps: ['Voit muuttaa tai peruuttaa suostumuksesi milloin tahansa alatunnisteen Evästeasetukset-linkistä. Kun peruutat suostumuksen, asetustiedot poistetaan heti. Voit myös tyhjentää tallennetut tiedot selaimesi asetuksista.'] },
         { h: 'Yhteystiedot', ps: ['Evästeitä koskevat kysymykset: [SÄHKÖPOSTIOSOITTEESI].'] }
       ]
