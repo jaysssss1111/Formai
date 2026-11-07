@@ -492,7 +492,7 @@
       host.innerHTML = '<div role="status" class="fm-ci-done" tabindex="-1">' + EYE_DRAW +
         '<h3 style="margin: 0; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.05; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.thanksTitle) + '</h3>' +
         (c.recap ? '<div class="fm-ci-recap"><span>' + esc(C.youWrote) + '</span><p>' + esc(c.recap) + '</p></div>' : '') +
-        '<p class="fm-ci-when' + (liveOn ? '' : ' is-closed') + '">' + (liveOn ? liveMark(true) + esc(C.liveOn) : '<span>' + esc(C.liveOff) + '</span>' + liveMark(false)) + '</p>' +
+        '<p class="fm-ci-when">' + (liveOn ? liveMark(true) + esc(C.liveOn) : esc(C.liveOff)) + '</p>' +
         '<div class="fm-ci-wait"><span>' + esc(C.wait) + '</span><div>' +
         '<button type="button" class="fm-ct-altlink" data-action="openAudit"><span>' + esc(C.waitAudit) + '</span> ' + AR + '</button>' +
         '<a class="fm-ct-altlink" href="#book"><span>' + esc(C.waitBook) + '</span> ' + AR + '</a></div></div>' +
@@ -1718,10 +1718,9 @@
     // Only a mouse leaving clears the caption: on touch the pointer "leaves" as the finger lifts.
     if (win) win.addEventListener('pointerleave', function (ev) { if (ev.pointerType === 'mouse') setToolCap(null); });
   })();
-  // Open: the diamond dot. Closed (evenings, nights, weekends): a small battery charging, four blocks.
+  // Open: the diamond dot. Closed (evenings, nights, weekends): the text alone.
   function liveMark(on) {
-    return on ? '<span class="fm-live-dot is-on" aria-hidden="true"></span>'
-              : '<span class="fm-batt" aria-hidden="true"><i></i><i></i><i></i><i></i></span>';
+    return on ? '<span class="fm-live-dot is-on" aria-hidden="true"></span>' : '';
   }
   function renderLive() {
     var el = $('#fm-live');
@@ -1731,11 +1730,10 @@
     var on = wd >= 1 && wd <= 5 && min >= 8 * 60 && min < 15 * 60;   // open Mon-Fri 08.00-15.00 Helsinki time
     var time = String(h.h).padStart(2, '0') + (en ? ':' : '.') + String(h.mi).padStart(2, '0');
     // Open: the dot before the text. Closed: the text, with the charging battery below it.
-    el.classList.toggle('is-closed', !on);
-    el.innerHTML = on ? liveMark(on) + esc(tr.live.on.replace('{t}', time)) : '<span>' + esc(tr.live.off.replace('{t}', time)) + '</span>' + liveMark(on);
+    el.innerHTML = liveMark(on) + esc((on ? tr.live.on : tr.live.off).replace('{t}', time));
     liveOn = on;
     var ct = $('#fm-ct-live');
-    if (ct && tr.ci) { ct.classList.toggle('is-closed', !on); ct.innerHTML = on ? liveMark(on) + esc(tr.ci.liveOn) : '<span>' + esc(tr.ci.liveOff) + '</span>' + liveMark(on); }
+    if (ct && tr.ci) ct.innerHTML = liveMark(on) + esc(on ? tr.ci.liveOn : tr.ci.liveOff);
   }
   var liveOn = false;
   renderLive();
