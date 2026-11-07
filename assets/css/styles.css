@@ -1264,8 +1264,8 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-root > header::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:var(--surface);z-index:-1}
 /* Work on the lighter brand band, so it no longer runs into Method below it;
    its case cards switch to the page colour to keep standing out. */
-#work{background:var(--art);border-bottom:1px solid var(--line)}
-#work .fm-case{background:var(--raised)}
+#work{background:var(--raised);border-bottom:1px solid var(--line)}   /* the same tone as the unsolicited audit */
+#work .fm-case{background:var(--surface)}   /* cards on the page colour so they stand out from it */
 
 /* ---------- Cookie bar: short first, details on request ----------
    A first visit sees one sentence and Reject all / Accept all / Settings in a
