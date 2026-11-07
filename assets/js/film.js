@@ -24,6 +24,12 @@
   var DONE_T = [11.6, 13.1, 14.6];
   var FILE_T = [11.9, 13.4, 14.9];
   var FILE_X = [300, 425, 550];
+  // Phones: a taller canvas with labels about 2.2x larger, the side lists moved under the screens,
+  // so the words inside the film can be read (they were 5-7 px). Desktop is unchanged.
+  var MQ = window.matchMedia ? window.matchMedia('(max-width: 640px)') : null;
+  var compact = false;
+  function fileX(i) { return compact ? [236, 402, 568][i] : FILE_X[i]; }
+  function chipY() { return compact ? 664 : 456; }
 
   /* ---------- math ---------- */
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
@@ -57,7 +63,7 @@
   function label(x, y, text, opts) {
     opts = opts || {};
     return '<text x="' + x + '" y="' + y + '"' + (opts.anchor ? ' text-anchor="' + opts.anchor + '"' : '') +
-      ' style="' + MONO + ' font-size: ' + (opts.size || 14) + 'px; letter-spacing: ' + (opts.ls || '0.1em') + '; fill: var(--' + (opts.color || 'muted') + ');">' + esc(text) + '</text>';
+      ' style="' + MONO + ' font-size: ' + f2((opts.size || 14) * (compact ? 2.2 : 1)) + 'px; letter-spacing: ' + (compact ? '0.03em' : (opts.ls || '0.1em')) + '; fill: var(--' + (opts.color || 'muted') + ');">' + esc(text) + '</text>';
   }
   function box(x, y, w, h, color, extra) {
     return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" style="fill: var(--' + color + ');' + (extra || '') + '"></rect>';
@@ -70,6 +76,7 @@
     var mark = check
       ? '<rect x="-7" y="-7" width="14" height="14" style="fill: var(--ink);"></rect><path d="M-4 0 L-1 3 L4 -3" style="fill: none; stroke: var(--surface); stroke-width: 1.6; stroke-linecap: square;"></path>'
       : '<path d="M0 -6 L6 0 L0 6 L-6 0 Z" style="fill: var(--brand);"></path>';
+    if (compact) return '<g data-k="' + key + i + '" opacity="0"><g transform="scale(1.8)">' + mark + '</g>' + label(26, 10, '0' + (i + 1) + ' ' + text, { color: 'ink', size: 13 }) + '</g>';
     return '<g data-k="' + key + i + '" opacity="0">' + mark + label(16, 5, '0' + (i + 1) + '  ' + text, { color: 'ink', size: 13 }) + '</g>';
   }
 
@@ -78,15 +85,17 @@
     for (var i = 0; i < 9; i++) form += outline(130, 240 + i * 16, 200, 10);
 
     // Deliverable chips, centred under the shipped screen.
-    var widths = F.deliver.map(function (d) { return 44 + d.length * 8.4; });
-    var total = widths.reduce(function (a, b) { return a + b; }, 0) + 12 * (widths.length - 1);
+    var widths = F.deliver.map(function (d) { return compact ? 62 + d.length * 17 : 44 + d.length * 8.4; });
+    var gap = compact ? 16 : 12;
+    var total = widths.reduce(function (a, b) { return a + b; }, 0) + gap * (widths.length - 1);
     var cx = 480 - total / 2;
     var chips = F.deliver.map(function (d, i) {
-      var x = cx; cx += widths[i] + 12;
-      return '<g data-k="chip' + i + '" opacity="0" transform="translate(' + f2(x) + ' 456)">' +
-        '<rect x="0" y="0" width="' + f2(widths[i]) + '" height="32" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>' +
-        '<path d="M12 16 L15.5 19.5 L22 12.5" style="fill: none; stroke: var(--brand); stroke-width: 1.8; stroke-linecap: square;"></path>' +
-        label(30, 21, d, { color: 'ink', size: 13, ls: '0.12em' }) + '</g>';
+      var x = cx; cx += widths[i] + gap;
+      var hh = compact ? 48 : 32;
+      return '<g data-k="chip' + i + '" opacity="0" transform="translate(' + f2(x) + ' ' + chipY() + ')">' +
+        '<rect x="0" y="0" width="' + f2(widths[i]) + '" height="' + hh + '" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>' +
+        '<path d="M12 16 L15.5 19.5 L22 12.5"' + (compact ? ' transform="translate(2 2) scale(1.5)"' : '') + ' style="fill: none; stroke: var(--brand); stroke-width: 1.8; stroke-linecap: square;"></path>' +
+        label(compact ? 46 : 30, compact ? 34 : 21, d, { color: 'ink', size: 13, ls: '0.12em' }) + '</g>';
     }).join('');
 
     var files = [
@@ -94,9 +103,9 @@
       box(12, 12, 32, 5, 'brand') + box(50, 12, 46, 5, 'ink') + box(20, 24, 58, 5, 'muted') + box(20, 36, 40, 5, 'ink'),
       '<rect x="12" y="20" width="12" height="12" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect><path d="M24 26 H48 M62 26 H84" style="stroke: var(--strong); stroke-width: 1.5;"></path><path d="M55 19 L62 26 L55 33 L48 26 Z" style="fill: var(--brand);"></path><rect x="84" y="20" width="12" height="12" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect>'
     ].map(function (art, i) {
-      return '<g data-k="file' + i + '" opacity="0" transform="translate(' + FILE_X[i] + ' 400)">' +
-        '<rect x="0" y="0" width="110" height="76" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>' + art +
-        label(12, 64, F.files[i], { size: 12, ls: '0.04em' }) + '</g>';
+      return '<g data-k="file' + i + '" opacity="0" transform="translate(' + fileX(i) + ' 400)">' +
+        '<rect x="0" y="0" width="' + (compact ? 156 : 110) + '" height="' + (compact ? 96 : 76) + '" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>' + art +
+        label(12, compact ? 84 : 64, F.files[i], { size: compact ? 10 : 12, ls: '0.04em' }) + '</g>';
     }).join('');
 
     var tokens = [0, 1, 2].map(function (i) {
@@ -104,10 +113,11 @@
         '<g data-k="tkR' + i + '"><path data-k="tkD' + i + '" d="' + DIAMOND + '" style="fill: var(--brand);"></path>' +
         '<path data-k="tkS' + i + '" d="' + DIAMOND + '" opacity="0" style="fill: var(--ink);"></path></g>' +
         '<path data-k="tkC' + i + '" d="M-5 0 L-1.5 3.5 L5 -3.5" opacity="0" style="fill: none; stroke: var(--surface); stroke-width: 2; stroke-linecap: square;"></path>' +
-        '<g data-k="tkN' + i + '">' + label(0, -20, '0' + (i + 1), { anchor: 'middle', color: 'ink', size: 12 }) + '</g></g>';
+        '<g data-k="tkN' + i + '">' + label(0, compact ? -24 : -20, '0' + (i + 1), { anchor: 'middle', color: 'ink', size: 12 }) + '</g></g>';
     }).join('');
 
-    return '<svg class="fm-film-svg" viewBox="0 0 960 540" aria-hidden="true" focusable="false">' +
+    var cmpX = compact ? 510 : 560;   // the comparison starts further left on phones so long lines fit
+    return '<svg class="fm-film-svg' + (compact ? ' is-compact' : '') + '" viewBox="0 0 960 ' + (compact ? 760 : 540) + '" aria-hidden="true" focusable="false">' +
       '<defs><clipPath id="fm-film-clip"><rect x="110" y="108" width="460" height="352"></rect></clipPath></defs>' +
 
       /* ---- 01 audit ---- */
@@ -128,25 +138,25 @@
         '<path data-k="eyeLid" d="M-28 0 Q0 -24 28 0 Q0 24 -28 0 Z" pathLength="1" style="fill: none; stroke: var(--ink); stroke-width: 1.25; stroke-linejoin: miter; stroke-miterlimit: 10; stroke-dasharray: 1 1; stroke-dashoffset: 1;"></path>' +
         '<g data-k="pupil"><path d="M0 -8 L8 0 L0 8 L-8 0 Z" style="fill: var(--brand);"></path></g></g></g>' +
       F.ann.map(function (a, i) { return listItem('ann', i, a, false); }).join('') +
-      '<g data-k="card" opacity="0"><rect x="0" y="0" width="280" height="96" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>' + box(0, 0, 280, 2, 'brand') +
-        label(18, 30, F.cardLabel, { color: 'accent', size: 12, ls: '0.12em' }) +
-        '<text x="18" y="72" style="' + SANS + ' font-size: 28px; font-weight: 200; letter-spacing: -0.02em; fill: var(--ink);">' + esc(F.cardText) + '</text></g>' +
+      '<g data-k="card" opacity="0"><rect x="0" y="0" width="' + (compact ? 372 : 280) + '" height="' + (compact ? 128 : 96) + '" style="fill: var(--raised); stroke: var(--strong); stroke-width: 1;"></rect>' + box(0, 0, compact ? 372 : 280, 2, 'brand') +
+        label(18, compact ? 40 : 30, F.cardLabel, { color: 'accent', size: compact ? 11 : 12, ls: '0.12em' }) +
+        '<text x="18" y="' + (compact ? 100 : 72) + '" style="' + SANS + ' font-size: ' + (compact ? 36 : 28) + 'px; font-weight: 200; letter-spacing: -0.02em; fill: var(--ink);">' + esc(F.cardText) + '</text></g>' +
 
       /* ---- 02 sprint ---- */
       '<g data-k="day" opacity="0">' + label(60, 64, F.day, { size: 13, ls: '0.12em' }) +
         '<text data-k="dayN" x="56" y="134" style="' + SANS + ' font-size: 72px; font-weight: 200; letter-spacing: -0.04em; fill: var(--ink);">01</text></g>' +
-      '<g data-k="cmp" opacity="0">' + label(560, 58, F.agency, { size: 13, ls: '0.04em' }) + box(560, 68, 340, 6, 'line') +
-        '<rect data-k="cmpA" x="560" y="68" width="0" height="6" style="fill: var(--strong);"></rect>' +
-        label(560, 100, F.us, { color: 'accent', size: 13, ls: '0.04em' }) +
-        '<rect data-k="cmpB" x="560" y="110" width="0" height="6" style="fill: var(--brand);"></rect></g>' +
+      '<g data-k="cmp" opacity="0">' + label(cmpX, compact ? 50 : 58, F.agency, { size: compact ? 11 : 13, ls: '0.04em' }) + box(cmpX, compact ? 64 : 68, 340, 6, 'line') +
+        '<rect data-k="cmpA" x="' + cmpX + '" y="' + (compact ? 64 : 68) + '" width="0" height="6" style="fill: var(--strong);"></rect>' +
+        label(cmpX, compact ? 116 : 100, F.us, { color: 'accent', size: compact ? 11 : 13, ls: '0.04em' }) +
+        '<rect data-k="cmpB" x="' + cmpX + '" y="' + (compact ? 130 : 110) + '" width="0" height="6" style="fill: var(--brand);"></rect></g>' +
       '<path data-k="loop" d="M300 180 H660 V360 H300 Z" pathLength="1" style="fill: none; stroke: var(--strong); stroke-width: 1.5; stroke-dasharray: 1 1; stroke-dashoffset: 1;"></path>' +
       '<g data-k="nodeP" opacity="0" transform="translate(300 270)"><rect data-k="nodePbox" x="-34" y="-34" width="68" height="68" style="fill: var(--raised); stroke: var(--ink); stroke-width: 1.5;"></rect>' +
         '<rect x="-7" y="-20" width="14" height="14" style="fill: none; stroke: var(--ink); stroke-width: 1.5;"></rect><path d="M-16 18 V6 H16 V18" style="fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: square;"></path>' +
-        label(0, 58, F.people, { anchor: 'middle', size: 13, ls: '0.12em' }) + '</g>' +
+        label(0, compact ? 70 : 58, F.people, { anchor: 'middle', size: 13, ls: '0.12em' }) + '</g>' +
       '<g data-k="nodeA" opacity="0" transform="translate(660 270)"><rect data-k="nodeAbox" x="-34" y="-34" width="68" height="68" style="fill: var(--raised); stroke: var(--ink); stroke-width: 1.5;"></rect>' +
         '<path d="M-20 0 Q0 -17 20 0 Q0 17 -20 0 Z" style="fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: miter;"></path>' +
         '<g data-k="nodeApupil"><path d="M0 -6 L6 0 L0 6 L-6 0 Z" style="fill: var(--brand);"></path></g>' +
-        label(0, 58, F.agents, { anchor: 'middle', size: 13, ls: '0.12em' }) + '</g>' +
+        label(0, compact ? 70 : 58, F.agents, { anchor: 'middle', size: 13, ls: '0.12em' }) + '</g>' +
       '<g data-k="pkt" opacity="0">' + box(-6, -6, 12, 12, 'brand') + '</g>' +
       files +
 
@@ -173,6 +183,7 @@
   }
 
   function build() {
+    compact = !!(MQ && MQ.matches);
     var T = tx(), F = T.film;
     var names = [T.m1, T.m2, T.m3];
     var chapters = names.map(function (n, i) {
@@ -255,10 +266,11 @@
     for (i = 0; i < 3; i++) {
       var ai = ek(t, MK_T[i] + 0.2, MK_T[i] + 0.6);
       op(r['ann' + i], Math.min(ai, 1 - ek(t, 7.8, 8.4)));
-      tr(r['ann' + i], 640 + (1 - ai) * 14, 262 + i * 36);
+      if (compact) tr(r['ann' + i], 130 + (1 - ai) * 14, 522 + i * 56);   // under the screen
+      else tr(r['ann' + i], 640 + (1 - ai) * 14, 262 + i * 36);
     }
     op(r.card, win(t, 5.4, 6.2, 7.8, 8.4));
-    tr(r.card, 640, 372 + (1 - ek(t, 5.4, 6.2)) * 16);
+    tr(r.card, compact ? 578 : 640, (compact ? 240 : 372) + (1 - ek(t, 5.4, 6.2)) * 16);
 
     // 02 sprint: people and AI agents in one loop, tasks become files.
     var s2out = 1 - ek(t, 17.6, 18.4);
@@ -283,7 +295,7 @@
     for (i = 0; i < 3; i++) {
       var fa = ek(t, FILE_T[i], FILE_T[i] + 0.5), fo = ek(t, 17.6, 18.4);
       op(r['file' + i], Math.min(fa, 1 - fo));
-      tr(r['file' + i], FILE_X[i], 400 + (1 - fa) * 12 - 120 * fo);
+      tr(r['file' + i], fileX(i), 400 + (1 - fa) * 12 - 120 * fo);
     }
 
     // 03 ship: the product, rebuilt with every fix, goes live.
@@ -293,7 +305,9 @@
     op(r.fincontent, ek(t, 19.0, 19.8)); tr(r.fincontent, 0, (1 - ek(t, 19.0, 19.8)) * 10);
     for (i = 0; i < 3; i++) {
       var xi = ek(t, 19.8 + i * 0.4, 20.2 + i * 0.4);
-      op(r['fx' + i], xi); tr(r['fx' + i], 728 + (1 - xi) * 14, 252 + i * 40);
+      op(r['fx' + i], xi);
+      if (compact) tr(r['fx' + i], 270 + (1 - xi) * 14, 486 + i * 54);   // under the shipped screen
+      else tr(r['fx' + i], 728 + (1 - xi) * 14, 252 + i * 40);
     }
     var cp = ek(t, 20.9, 21.8);
     var press = (t > 21.9 && t < 22.2) ? 1 - 0.15 * Math.sin(k(t, 21.9, 22.2) * Math.PI) : 1;
@@ -306,7 +320,7 @@
       var ci = ek(t, 22.8 + i * 0.3, 23.2 + i * 0.3);
       op(r['chip' + i], ci);
       var base = r['chip' + i].getAttribute('transform').match(/translate\(([-\d.]+)/);
-      tr(r['chip' + i], base ? Number(base[1]) : 0, 456 + (1 - ci) * 10);
+      tr(r['chip' + i], base ? Number(base[1]) : 0, chipY() + (1 - ci) * 10);
     }
 
     // The three audit findings travel through the whole story.
@@ -451,6 +465,7 @@
   });
 
   document.addEventListener('fm:lang', function () { build(); draw(); });
+  if (MQ) { var onMQ = function () { build(); draw(); }; if (MQ.addEventListener) MQ.addEventListener('change', onMQ); else if (MQ.addListener) MQ.addListener(onMQ); }
   document.addEventListener('fm:motion', function (ev) {
     globalPaused = !!(ev.detail && ev.detail.paused);
     if (globalPaused) pause(); else maybeAutoplay();
@@ -468,6 +483,9 @@
       });
     }, { threshold: [0, 0.45, 0.7] }).observe(host);
   }
+
+  // Jump to a moment and hold it (used for checks and stills): FM_FILM.seek(seconds).
+  window.FM_FILM = { seek: function (s) { userPaused = true; pause(); seek(s); } };
 
   build();
   draw();
