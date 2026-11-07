@@ -111,10 +111,9 @@
     return cover(item.topic, i) +
       (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '');
   }
+  // Rows show one meta line; the "New" mark is kept for the lead story only.
   function metaLine(item, tr, lang) {
-    var topic = (tr.newsTopics && tr.newsTopics[item.topic]) || '';
-    return '<div class="fm-news-meta">' + (isNew(item) ? '<span class="fm-news-new">' + esc(tr.newsNew) + '</span>' : '') +
-      (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') +
+    return '<div class="fm-news-meta">' +
       '<span>' + esc(item.source) + (item.date ? ' · ' + esc(formatDate(item.date, lang)) : '') + '</span></div>';
   }
   // A compact row for the list beside the lead story.
@@ -197,7 +196,7 @@
       (item.image ? '<img src="' + esc(item.image) + '" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">' : '') +
       '</div>' +
       '<div class="fm-news-body">' +
-      '<div class="fm-news-meta">' + (isNew(item) ? '<span class="fm-news-new">' + esc(tr.newsNew) + '</span>' : '') + (topic ? '<span class="fm-news-topic">' + esc(topic) + '</span>' : '') + '<span>' + meta + '</span></div>' +
+      '<div class="fm-news-meta">' + (isNew(item) ? '<span class="fm-news-new">' + esc(tr.newsNew) + '</span>' : '') + '<span>' + meta + '</span></div>' +
       '<h3 class="fm-news-title" tabindex="-1">' + esc(item.title) + '</h3>' +
       (item.summary ? '<p class="fm-news-summary">' + esc(item.summary) + '</p>' : '') + take(item, tr, lang) +
       '</div></div>' + actions(item, tr) + '</article>';

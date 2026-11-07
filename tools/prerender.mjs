@@ -27,7 +27,7 @@ const NEWS = fs.existsSync('assets/data/news.json') ? JSON.parse(fs.readFileSync
 
 const esc = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const get = (o, p) => p.split('.').reduce((a, k) => (a == null ? a : a[k]), o);
-const TAG = "font-family: 'DM Mono', ui-monospace, monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; padding: 8px 12px; border: 1px solid var(--strong); color: var(--muted);";
+const TAG = "";   // tags take their look from .fm-tags span (DESIGN.md)
 
 function render(lang) {
   const tr = Object.assign({}, T[lang], LEGAL[lang]);
@@ -48,7 +48,7 @@ function render(lang) {
   // Tag lists.
   html = html.replace(/(<div\b[^>]*\sdata-list="([^"]+)"[^>]*>)\s*(<\/div>)/g, (m, open, key, close) => {
     const list = get(tr, key);
-    return Array.isArray(list) ? open + list.map((t) => `<span style="${TAG}">${esc(t)}</span>`).join('') + close : m;
+    return Array.isArray(list) ? open + list.map((t) => `<span>${esc(t)}</span>`).join('') + close : m;
   });
 
   // AI news: lead story, list and filters in the HTML, data inline so the page needs no extra request.
