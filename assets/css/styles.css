@@ -1722,3 +1722,8 @@ html.fm-lock{overflow:hidden}
 /* Paused or reduced motion: end states only */
 .fm-root:not(.fm-motion) .fm-mf-n,.fm-root:not(.fm-motion) .fm-mf-row::after,.fm-root:not(.fm-motion) .fm-tool{transition:none}
 @media (prefers-reduced-motion: reduce){.fm-mf-n,.fm-mf-row::after,.fm-tool{transition:none}.fm-wh-list li::before,.fm-tools-cap,.fm-clock > span{animation:none !important}}
+
+/* Hours line: "10:31 in Helsinki" stays together; "· we reply …" moves down as one piece when it does not fit */
+.fm-live{flex-wrap:wrap;column-gap:.6em;row-gap:4px}
+.fm-live-a,.fm-live-b{white-space:nowrap}
+@media (max-width:360px){.fm-live-b{white-space:normal}}
