@@ -1568,7 +1568,7 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-batt::after{content:"";position:absolute;right:-4.5px;top:50%;width:2.5px;height:5px;margin-top:-2.5px;background:currentColor}
 .fm-batt i{display:block;flex:1;height:5px;background:currentColor;opacity:.15}
 .fm-batt i:nth-child(-n+2){opacity:1}
-.fm-motion .fm-batt i{opacity:.15;animation:3s steps(1,end) infinite}
+.fm-motion .fm-batt i{opacity:.15;animation:4s steps(1,end) infinite}   /* 75% of the earlier 3 s pace */
 .fm-motion .fm-batt i:nth-child(1){animation-name:fm-batt1}
 .fm-motion .fm-batt i:nth-child(2){animation-name:fm-batt2}
 .fm-motion .fm-batt i:nth-child(3){animation-name:fm-batt3}
@@ -1581,3 +1581,7 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 .fm-ci-when .fm-batt{margin:0 12px 0 2px}
 .fm-ct .fm-batt{color:var(--accent)}
 .fm-ct-card .fm-batt{color:#C85A20}
+
+/* Closed hours: the battery sits on its own line below the text */
+.fm-live.is-closed,.fm-ct-live.is-closed{flex-direction:column;align-items:flex-start;gap:10px}
+.fm-ci-when.is-closed .fm-batt{display:flex;margin:10px 0 0 2px}
