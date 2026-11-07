@@ -164,7 +164,7 @@ const T = {
     toolsLabel: 'Tools we build with',
     aboutLabel: 'Who we are', aboutTitle: 'Agencies sell hours. We sell results.',
     aboutP: 'formai is a design and technology company based in Finland. Our goal: every company, from a two-person startup to a hundred-year-old brand, gets agency-level brand, product and software at the speed AI makes possible. Designers and developers work side by side with AI agents, so one team takes you from first idea to live product, with no hand-offs.',
-    aboutFacts: ['Based in Finland', 'English and Finnish', 'People + AI agents'],
+    aboutFacts: ['Based in Finland', 'People + AI agents'],
     mfLabel: 'What we believe', mfMore: 'Read more', mfLess: 'Close',
     mf: [
       { h: 'Working things, not slide decks.', p: 'Within days you click, test and comment on the real thing, not a presentation about it.', d: 'Every sprint produces the real thing from the start: a clickable prototype, a page on a preview link, a workflow you can run. You react to what you can actually see and use, every few days, so decisions rest on the work itself, not on promises about it.' },
@@ -352,7 +352,7 @@ const T = {
     toolsLabel: 'Työkalut, joilla rakennamme',
     aboutLabel: 'Keitä olemme', aboutTitle: 'Toimistot myyvät tunteja. Me myymme tuloksia.',
     aboutP: 'formai on suomalainen suunnittelu- ja teknologiayritys. Tavoitteemme: jokainen yritys, kahden hengen startupista satavuotiaaseen brändiin, saa toimistotason brändin, tuotteen ja ohjelmiston sillä nopeudella, jonka tekoäly tekee mahdolliseksi. Suunnittelijat ja kehittäjät työskentelevät rinnakkain tekoälyagenttien kanssa, joten yksi tiimi vie sinut ensimmäisestä ideasta julkaistuun tuotteeseen ilman välikäsiä.',
-    aboutFacts: ['Suomesta', 'Suomeksi ja englanniksi', 'Ihmiset + tekoälyagentit'],
+    aboutFacts: ['Suomesta', 'Ihmiset + tekoälyagentit'],
     mfLabel: 'Mihin uskomme', mfMore: 'Lue lisää', mfLess: 'Sulje',
     mf: [
       { h: 'Toimivia asioita, ei diaesityksiä.', p: 'Päivien sisällä klikkaat, testaat ja kommentoit oikeaa asiaa, et esitystä siitä.', d: 'Jokainen sprintti tuottaa alusta asti oikeaa työtä: klikattavan prototyypin, sivun esikatselulinkissä tai työnkulun, jota voi ajaa. Kommentoit sitä, mitä näet ja voit käyttää, muutaman päivän välein, joten päätökset perustuvat itse työhön eivätkä lupauksiin siitä.' },
