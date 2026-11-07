@@ -1704,15 +1704,22 @@
   function setToolCap(k) {
     var cap = $('#fm-tools-cap'), tr = t();
     if (!cap) return;
-    cap.textContent = k == null ? '' : tr.toolNames[k] + ': ' + tr.toolTips[k];
+    var text = k == null ? '' : tr.toolNames[k] + ': ' + tr.toolTips[k];
+    if (cap.textContent === text) return;
+    cap.textContent = text;
     cap.classList.toggle('is-on', k != null);
+    if (k != null) { cap.classList.remove('is-swap'); void cap.offsetWidth; cap.classList.add('is-swap'); }
   }
   (function () {
     // Both copies of the strip (the second keeps the loop seamless) answer a mouse hover and a tap.
     $$('.fm-tools-track [data-tool]').forEach(function (li) {
       var k = Number(li.getAttribute('data-tool'));
       li.addEventListener('pointerenter', function (ev) { if (ev.pointerType === 'mouse') setToolCap(k); });
-      li.addEventListener('click', function () { setToolCap(k); });
+      li.addEventListener('click', function () {
+        setToolCap(k);
+        li.classList.remove('is-hit'); void li.offsetWidth; li.classList.add('is-hit');
+        clearTimeout(li._hit); li._hit = setTimeout(function () { li.classList.remove('is-hit'); }, 700);
+      });
     });
     var win = $('.fm-tools-window');
     // Only a mouse leaving clears the caption: on touch the pointer "leaves" as the finger lifts.
@@ -1722,6 +1729,7 @@
   function liveMark(on) {
     return on ? '<span class="fm-live-dot is-on" aria-hidden="true"></span>' : '';
   }
+  var lastClock = '';
   function renderLive() {
     var el = $('#fm-live');
     if (!el) return;
@@ -1729,15 +1737,19 @@
     var wd = new Date(Date.UTC(h.y, h.m - 1, h.d)).getUTCDay(), min = h.h * 60 + h.mi;
     var on = wd >= 1 && wd <= 5 && min >= 8 * 60 && min < 15 * 60;   // open Mon-Fri 08.00-15.00 Helsinki time
     var time = String(h.h).padStart(2, '0') + (en ? ':' : '.') + String(h.mi).padStart(2, '0');
-    // Open: the dot before the text. Closed: the text, with the charging battery below it.
-    el.innerHTML = liveMark(on) + esc((on ? tr.live.on : tr.live.off).replace('{t}', time));
+    // Open: the dot before the text. Closed: the text alone. A new minute rolls up into place.
+    var parts = (on ? tr.live.on : tr.live.off).split('{t}');
+    var roll = lastClock && lastClock !== time && root.classList.contains('fm-motion') && !reducedMotion;
+    el.innerHTML = liveMark(on) + esc(parts[0]) + '<span class="fm-clock"><span' + (roll ? ' class="is-roll"' : '') + '>' + esc(time) + '</span></span>' + esc(parts.slice(1).join(time));
+    lastClock = time;
     liveOn = on;
     var ct = $('#fm-ct-live');
     if (ct && tr.ci) ct.innerHTML = liveMark(on) + esc(on ? tr.ci.liveOn : tr.ci.liveOff);
   }
   var liveOn = false;
   renderLive();
-  setInterval(renderLive, 30000);
+  // Redraw right after each minute turns, so the clock changes when the real one does.
+  (function tick() { setTimeout(function () { renderLive(); tick(); }, 60500 - Date.now() % 60000); })();
 
 
   /* ---------- Who we work with: a picker of three kinds of team ---------- */
@@ -1890,6 +1902,16 @@
         }, 920);
       }, 160);
     });
+  })();
+
+  (function () {
+    var cards = $$('.fm-wh-card'); if (!cards.length) return;
+    var still = reducedMotion || !('IntersectionObserver' in window);
+    if (still) { cards.forEach(function (c) { c.classList.add('is-ticked'); }); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-ticked'); io.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    cards.forEach(function (c) { io.observe(c); });
   })();
 
   /* ---------- What we believe: a line opens to show the detail behind its claim ----------

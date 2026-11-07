@@ -1692,3 +1692,33 @@ html.fm-lock{overflow:hidden}
 .fm-orange .fm-svc.is-on .fm-svc-tab{box-shadow:inset 4px 0 0 var(--on-brand)}
 .fm-orange .fm-svc.is-on .fm-svc-tab .fm-svc-title{transform:translateX(12px)}
 .fm-timeline .fm-step-title{overflow-wrap:anywhere}
+
+/* ================= Who we are: micro-animations ================= */
+/* 1. Opening a belief: the // slide apart and a line draws in under the row */
+.fm-mf-n{display:inline-block;white-space:nowrap;transition:color .2s linear,letter-spacing .35s cubic-bezier(.2,.7,.2,1)}
+.fm-mf-row.is-on .fm-mf-n{letter-spacing:.4em}
+@media (max-width:640px){.fm-mf-row.is-on .fm-mf-n{letter-spacing:.22em}}
+.fm-mf-row::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--on-brand);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.fm-mf-row.is-on::after{transform:scaleX(1)}
+/* 2. The cards' list markers fill one after another, like items being checked off */
+@keyframes fm-tick{0%{transform:rotate(45deg) scale(1)}45%{transform:rotate(45deg) scale(1.4)}100%{transform:rotate(45deg) scale(1)}}
+.fm-wh-card.is-ticked .fm-wh-list li::before{background:#C85A20}
+.fm-motion .fm-wh-card.is-ticked .fm-wh-list li::before{animation:fm-tick .4s cubic-bezier(.2,.7,.2,1) both;transition:background-color .2s linear}
+.fm-motion .fm-wh-card.is-ticked .fm-wh-list li:nth-child(2)::before{animation-delay:.12s;transition-delay:.12s}
+.fm-motion .fm-wh-card.is-ticked .fm-wh-list li:nth-child(3)::before{animation-delay:.24s;transition-delay:.24s}
+.fm-motion .fm-wh-card.is-ticked .fm-wh-list li:nth-child(4)::before{animation-delay:.36s;transition-delay:.36s}
+.fm-motion .fm-wh-card.is-ticked .fm-wh-list li:nth-child(5)::before{animation-delay:.48s;transition-delay:.48s}
+/* 3. Tools: the tapped logo fills for a moment; the caption slides up when it changes */
+.fm-tool{transition:background-color .2s linear,color .2s linear}
+.fm-tool.is-hit{background:var(--soft-black);color:#C85A20}
+.fm-root .fm-orange .fm-tool.is-hit span{color:#C85A20 !important}
+@keyframes fm-cap-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fm-motion .fm-tools-cap.is-swap{animation:fm-cap-in .3s cubic-bezier(.2,.7,.2,1)}
+/* 4. The clock: a new minute rolls up into place */
+.fm-clock{display:inline-block;clip-path:inset(0)}
+.fm-clock > span{display:inline-block}
+@keyframes fm-roll{from{transform:translateY(100%)}to{transform:none}}
+.fm-motion .fm-clock > span.is-roll{animation:fm-roll .45s cubic-bezier(.2,.7,.2,1)}
+/* Paused or reduced motion: end states only */
+.fm-root:not(.fm-motion) .fm-mf-n,.fm-root:not(.fm-motion) .fm-mf-row::after,.fm-root:not(.fm-motion) .fm-tool{transition:none}
+@media (prefers-reduced-motion: reduce){.fm-mf-n,.fm-mf-row::after,.fm-tool{transition:none}.fm-wh-list li::before,.fm-tools-cap,.fm-clock > span{animation:none !important}}
