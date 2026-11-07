@@ -199,7 +199,6 @@
 
     host.innerHTML =
       '<div class="fm-film-frame">' +
-        '<div class="fm-film-top"><span>' + esc(F.label) + '</span><span data-k="chap" aria-hidden="true"></span></div>' +
         '<div class="fm-film-stage">' + svgMarkup(F) +
           '<div class="fm-film-end" data-k="end" aria-hidden="true">' +
             '<svg width="96" height="96" viewBox="0 0 64 64" aria-hidden="true"><path class="fm-blink" d="M4 32 Q32 8 60 32 Q32 56 4 32 Z" style="fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: miter; stroke-miterlimit: 10;"></path><path d="M32 23 L41 32 L32 41 L23 32 Z" style="fill: var(--brand);"></path></svg>' +
@@ -365,7 +364,7 @@
     for (var i = 0; i < 3; i++) refs['pg' + i].style.width = f2(k(t, CH[i], CH[i] + 9) * 100) + '%';
     if (ch !== chapIdx) {
       chapIdx = ch;
-      refs.chap.textContent = '0' + (ch + 1) + ' / ' + names[ch];
+      if (refs.chap) refs.chap.textContent = '0' + (ch + 1) + ' / ' + names[ch];
       Array.prototype.forEach.call(host.querySelectorAll('.fm-film-ch'), function (b, j) {
         b.classList.toggle('is-on', j === ch);
         if (j === ch) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');

@@ -327,7 +327,7 @@
   }
   function privacyLine() {
     var tr = t();
-    return '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(tr.cf.privacy) + ' <button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(tr.ck.privacy) + '</button></p>';
+    return '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + '<button type="button" class="fm-inline-link" data-action="openPrivacy">' + esc(tr.ck.privacy) + '</button></p>';
   }
   function interestPicker(selected, form) {
     var cf = t().cf;
@@ -424,11 +424,10 @@
     var msg = String(c.data.message).trim();
     var PLUS = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6 H11 M6 1 V11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>';
     host.innerHTML =
-      '<h3 class="fm-ci-title">' + esc(C.formTitle) + '</h3>' +
       (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox() : '') +
       '<form id="fm-ci-form" class="fm-ci-form" novalidate>' + HONEYPOT +
       field('fm-ci-message', cf.message, { key: 'message', required: true, textarea: true, rows: 3, value: c.data.message, err: e.message }) +
-      '<div class="fm-ci-starters" role="group" aria-label="' + esc(C.startersLabel) + '"><span>' + esc(C.startersShort) + '</span>' +
+      '<div class="fm-ci-starters" role="group" aria-label="' + esc(C.startersLabel) + '">' +
       C.starters.map(function (x, k) {
         var on = msg.indexOf(x) !== -1;
         return '<button type="button" class="fm-ci-chip' + (on ? ' is-on' : '') + '" aria-pressed="' + on + '" data-action="ciStarter" data-i="' + k + '" title="' + esc(x) + '">' + esc(C.starterChips[k]) + '</button>';
@@ -441,8 +440,7 @@
         : '<button type="button" class="fm-ci-more" data-action="ciMore">' + PLUS + esc(C.addLink) + '</button>') +
       '<div class="fm-ci-foot">' + privacyLine() +
       '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div>' +
-      '<span class="fm-ci-meta">' + esc(cf.required) +
-      '<span class="fm-ci-saved" id="fm-ci-saved"' + (allowPrefs && String(c.data.message || c.data.name || '').trim() ? '' : ' hidden') + '> · ' + esc(C.saved) + '</span></span>' +
+      '<span class="fm-ci-meta fm-ci-saved" id="fm-ci-saved"' + (allowPrefs && String(c.data.message || c.data.name || '').trim() ? '' : ' hidden') + '>' + esc(C.saved) + '</span>' +
       '</form>';
   }
   function submitInline() {
@@ -761,27 +759,13 @@
     var B = M.B;
     return p.ms === M.todayUTC ? B.today : p.ms === M.todayUTC + DAY ? B.tomorrow : capFirst(M.fmt({ weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(p.ms)));
   }
-  // Hero: "Next free call: Tomorrow 11:00", one click picks it in the booking form.
-  function renderHeroNext(M, picks) {
-    var el = $('#fm-hero-next');
-    if (!el) return;
-    var p = picks[0];
-    if (!p) { el.hidden = true; return; }
-    el.hidden = false;
-    el.setAttribute('data-date', p.date); el.setAttribute('data-slot', String(p.min));
-    el.setAttribute('data-action', 'heroNext');
-    el.innerHTML = '<span class="fm-hero-dot" aria-hidden="true"></span><span>' + esc(t().heroNext.replace('{t}', quickDay(M, p) + ' ' + M.hhmm(p.min))) + '</span>' + ICON_ARROW;
-    el.setAttribute('aria-label', t().heroNext.replace('{t}', capFirst(M.longDate(p.ms)) + ', ' + M.slotRange(p.min) + ' (' + M.B.tzNote + ')'));
-  }
   function renderQuick() {
     var host = $('#fm-bk-quick');
     if (!host) return;
     var M = calModel(), B = M.B, b = state.bk;
     var picks = nextFree(M, 3);
-    renderHeroNext(M, picks);
     if (!picks.length || b.step === 'done') { host.innerHTML = ''; return; }
-    host.innerHTML = '<span class="fm-bk-quick-label">' + esc(B.quickLabel) + '</span>' +
-      '<div class="fm-bk-quick-row">' + picks.map(function (p) {
+    host.innerHTML = '<div class="fm-bk-quick-row">' + picks.map(function (p) {
         var day = quickDay(M, p);
         var sel = b.date === p.date && b.slot === String(p.min);
         return '<button type="button" class="fm-bk-pick' + (sel ? ' is-sel' : '') + '" data-action="quickSlot" data-date="' + p.date + '" data-slot="' + p.min + '" aria-pressed="' + sel + '"' +
@@ -855,8 +839,6 @@
       B.weekdays.map(function (w) { return '<span style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 4px 0;">' + esc(w) + '</span>'; }).join('') + '</div>' +
       '<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px;">' + cells + '</div>' +
       '<div style="display: flex; flex-wrap: wrap; gap: 20px; padding-top: 4px;">' +
-      '<span style="display: inline-flex; align-items: center; gap: 8px; ' + legend + '"><svg width="8" height="8" viewBox="0 0 8 8" aria-hidden="true"><path d="M4 0 L8 4 L4 8 L0 4 Z" style="fill: var(--brand);"></path></svg>' + esc(B.legendOpen) + '</span>' +
-      '<span style="display: inline-flex; align-items: center; gap: 8px; ' + legend + '"><span aria-hidden="true" style="display: inline-block; width: 12px; height: 12px; background: var(--ink);"></span>' + esc(B.legendSel) + '</span>' +
       '<span style="display: inline-flex; align-items: center; gap: 8px; ' + legend + '">' + esc(B.tzNote) + '</span></div>';
   }
 
@@ -866,11 +848,10 @@
     var step = b.step === 'done' ? 'done' : b.step === 'details' ? 'details' : b.date ? 'slots' : 'none';
     if (step === 'none') {
       html = '<div class="fm-bk-call">' +
-        '<div style="display: flex; flex-direction: column; gap: 6px;"><span style="' + LABEL + ' color: var(--accent);">' + esc(B.callLabel) + '</span>' +
+        '<div style="display: flex; flex-direction: column; gap: 6px;">' +
         '<h3 style="margin: 0; font-size: clamp(26px, 2.6vw, 32px); line-height: 1.1; font-weight: 300; letter-spacing: -0.02em;">' + esc(B.callTitle) + '</h3></div>' +
         '<ul class="fm-bk-points">' + B.callPoints.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
-        '<div class="fm-bk-meta">' + B.callMeta.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' +
-        '<p style="margin: 0; font-size: 14px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.callPick) + '</p></div>';
+        '<div class="fm-bk-meta">' + B.callMeta.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('') + '</div></div>';
     } else if (step === 'slots') {
       var ms = Date.parse(b.date + 'T00:00:00Z');
       var selMin = b.slot ? Number(b.slot) : null;
@@ -1043,7 +1024,6 @@
     var tr = t(), opts = { topic: state.newsTopic || '', all: !!state.newsAll, pick: state.newsPick || '' };
     var f = $('#fm-news-filters');
     if (f) { f.innerHTML = UI.filters(allNews(), tr, opts.topic); f.setAttribute('aria-label', tr.newsFilter); }
-    var st = $('#fm-news-stamp'); if (st) st.textContent = UI.stamp(news, tr, state.lang);
     root.innerHTML = UI.layout(allNews(), tr, state.lang, opts);
     var mb = $('#fm-news-morebar'); if (mb) mb.innerHTML = UI.moreButton(allNews(), tr, opts, 'chip');
     syncLikes();
@@ -1398,7 +1378,7 @@
     items.forEach(function (d) { var g = d.getAttribute('data-group'); counts[g] = (counts[g] || 0) + 1; });
     var chip = function (g, label, n, cls) {
       var on = faqState.group === g;
-      return '<button type="button" class="fm-chip fm-faq-chip' + (cls ? ' ' + cls : '') + (on ? ' is-on' : '') + '" data-faq-group="' + g + '" aria-pressed="' + on + '">' + esc(label) + ' <span>' + n + '</span></button>';
+      return '<button type="button" class="fm-chip fm-faq-chip' + (cls ? ' ' + cls : '') + (on ? ' is-on' : '') + '" data-faq-group="' + g + '" aria-pressed="' + on + '">' + esc(label) + '</button>';
     };
     // "Most asked" sits right after All, in brand orange, and shows the questions tagged as most asked.
     var top = items.filter(function (d) { return d.querySelector('.fm-faq-top'); }).length;
@@ -1542,7 +1522,7 @@
   function setToolCap(k) {
     var cap = $('#fm-tools-cap'), tr = t();
     if (!cap) return;
-    cap.textContent = k == null ? tr.toolsHint : tr.toolNames[k] + ': ' + tr.toolTips[k];
+    cap.textContent = k == null ? '' : tr.toolNames[k] + ': ' + tr.toolTips[k];
     cap.classList.toggle('is-on', k != null);
   }
   (function () {
@@ -1887,12 +1867,6 @@
     },
     calPrev: function () { state.bk.calOff = Math.max(0, state.bk.calOff - 1); renderCalendar(); },
     calNext: function () { state.bk.calOff += 1; renderCalendar(); },
-    heroNext: function (el, ev) {
-      if (ev) ev.preventDefault();
-      actions.quickSlot(el);
-      var bk = $('#book');
-      if (bk && !bkNarrow.matches) bk.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
-    },
     heroService: function (el) {
       // A hero tile opens that service in the Services picker.
       var item = $$('.fm-svc')[Number(el.getAttribute('data-i'))];

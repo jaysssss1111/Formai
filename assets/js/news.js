@@ -185,13 +185,6 @@
     };
     return chip('', tr.newsAll) + keys.map(function (k) { return chip(k, tr.newsTopics[k]); }).join('');
   }
-  function stamp(items, tr, lang) {
-    var list = sorted(items);
-    if (!list.length || !tr.newsStamp) return '';
-    var fresh = list.filter(isNew).length;
-    return tr.newsStamp.replace('{d}', formatDate(list[0].date, lang)).replace('{n}', list.length) +
-      (fresh && tr.newsStampNew ? tr.newsStampNew.replace('{k}', fresh) : '');
-  }
 
   // tr: the language's copy (needs newsRead and newsTopics); lang: 'en' or 'fi'.
   function card(item, i, tr, lang, lead) {
@@ -214,5 +207,5 @@
     return (items || []).map(function (it, i) { return card(it, i, tr, lang); }).join('');
   }
 
-  root.FM_NEWS_UI = { cards: cards, layout: layout, filters: filters, stamp: stamp, moreButton: moreButton };
+  root.FM_NEWS_UI = { cards: cards, layout: layout, filters: filters, moreButton: moreButton };
 })(typeof window !== 'undefined' ? window : this);
