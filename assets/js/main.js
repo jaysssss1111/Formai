@@ -1708,18 +1708,15 @@
     cap.classList.toggle('is-on', k != null);
   }
   (function () {
-    $$('.fm-tools-main [data-tool]').forEach(function (li) {
+    // Both copies of the strip (the second keeps the loop seamless) answer a mouse hover and a tap.
+    $$('.fm-tools-track [data-tool]').forEach(function (li) {
       var k = Number(li.getAttribute('data-tool'));
-      li.addEventListener('pointerenter', function () { setToolCap(k); });
-      li.addEventListener('focus', function () { setToolCap(k); });
+      li.addEventListener('pointerenter', function (ev) { if (ev.pointerType === 'mouse') setToolCap(k); });
       li.addEventListener('click', function () { setToolCap(k); });
     });
-    // The copy in the second (decorative) track answers the pointer too.
-    $$('.fm-tools-track[aria-hidden="true"] .fm-tool').forEach(function (li, k) {
-      li.addEventListener('pointerenter', function () { setToolCap(k); });
-    });
     var win = $('.fm-tools-window');
-    if (win) win.addEventListener('pointerleave', function () { setToolCap(null); });
+    // Only a mouse leaving clears the caption: on touch the pointer "leaves" as the finger lifts.
+    if (win) win.addEventListener('pointerleave', function (ev) { if (ev.pointerType === 'mouse') setToolCap(null); });
   })();
   // Open: the diamond dot. Closed (evenings, nights, weekends): a small battery charging, four blocks.
   function liveMark(on) {
