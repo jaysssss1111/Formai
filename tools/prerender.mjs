@@ -46,7 +46,7 @@ function render(lang) {
     return Array.isArray(list) ? open + list.map((t) => `<span style="${TAG}">${esc(t)}</span>`).join('') + close : m;
   });
 
-  // AI news: lead story, list, filters and stamp in the HTML, data inline so the page needs no extra request.
+  // AI news: lead story, list and filters in the HTML, data inline so the page needs no extra request.
   if (NEWS.length) {
     html = html.replace('<section id="news" class="fm-grain" hidden', '<section id="news" class="fm-grain"');
     const UI = ctx.window.FM_NEWS_UI;
@@ -54,7 +54,6 @@ function render(lang) {
     html = html.replace('<div class="fm-news-filters" id="fm-news-filters" role="group"></div>',
       '<div class="fm-news-filters" id="fm-news-filters" role="group" aria-label="' + esc(tr.newsFilter) + '">' + UI.filters(NEWS, tr, '') + '</div>');
     html = html.replace('<div class="fm-news-morebar" id="fm-news-morebar"></div>', '<div class="fm-news-morebar" id="fm-news-morebar">' + UI.moreButton(NEWS, tr, {}, 'chip') + '</div>');
-    html = html.replace('<span class="fm-news-stamp" id="fm-news-stamp"></span>', '<span class="fm-news-stamp" id="fm-news-stamp">' + esc(UI.stamp(NEWS, tr, lang)) + '</span>');
   }
   html = html.replace('<script src="assets/js/news.js', '<script>window.FM_NEWS=' + JSON.stringify(NEWS).replace(/</g, '\\u003c') + ';</script>\n<script src="assets/js/news.js');
 
