@@ -195,9 +195,9 @@ const T = {
     servicesLabel: 'Palvelut', 
     svcAsk: 'Kysy tästä',
     s1: 'Identiteetti', s1p: 'Logo, typografia, värit ja elävä design-järjestelmä tiedostoina, joiden päälle ihmiset ja tekoälyagentit voivat rakentaa.',
-    s2: 'Käyttöliittymät', s2p: 'Laskeutumissivut, sovellusnäkymät ja UI-järjestelmät, suunniteltuina ja luovutettuina klikattavina prototyyppeinä.',
+    s2: 'Käyttö­liittymät', s2p: 'Laskeutumissivut, sovellusnäkymät ja UI-järjestelmät, suunniteltuina ja luovutettuina klikattavina prototyyppeinä.',
     s3: 'Video', s3p: 'Lanseerausvideot, somemateriaalit ja tuote-esittelyt, joissa identiteetti näkyy ensimmäisestä ruudusta lähtien.',
-    s4: 'Ohjelmistokehitys', s4p: 'Verkkosovellukset, sisäiset työkalut ja integraatiot samalle design-järjestelmälle rakennettuina, joten se mikä suunnitellaan, myös julkaistaan.',
+    s4: 'Ohjelmisto­kehitys', s4p: 'Verkkosovellukset, sisäiset työkalut ja integraatiot samalle design-järjestelmälle rakennettuina, joten se mikä suunnitellaan, myös julkaistaan.',
     s5: 'Automaatio', s5p: 'Tekoälyagentit ja automatisoidut työnkulut, jotka vievät toistuvan työn tiimiltäsi ja toimivat jo käyttämiesi työkalujen kanssa.',
     s6: 'Älykkyys', s6p: 'Avustajat, älykäs haku ja tekoälyominaisuudet, joita asiakkaasi käyttävät, suunniteltuina ja rakennettuina tuotteeseesi ja testattuina ennen julkaisua.',
     tags6: ['Tekoälyavustajat', 'Älykäs haku', 'Suositukset', 'Keskustelukäyttöliittymät', 'LLM-integraatiot', 'Laadun arviointi'],
@@ -322,7 +322,7 @@ const T = {
     caseCta: ['Pyydä vastaava maksuton auditointi', 'Kysy brändin uudistuksesta', 'Varaa 30 minuutin puhelu'],
     caseTag: 'Konsepti', caseProblem: 'Ongelma', caseApproach: 'Ratkaisu', caseDeliver: 'Saat',
     cases: [
-      { title: 'Suomalainen retkeilyvarustekauppa', problem: 'Mobiilikävijät putoavat pois tuotesivun ja kassan välillä.', approach: 'Tuotesivun auditointi, mobiiliasettelu, jossa ostopainike on hinnan vieressä, ja kassa, joka kysyy vain tarpeellisen.', deliver: ['Auditointi', 'Mobiili-UI', 'Kassapolku'] },
+      { title: 'Suomalainen retkeily­varuste­kauppa', problem: 'Mobiilikävijät putoavat pois tuotesivun ja kassan välillä.', approach: 'Tuotesivun auditointi, mobiiliasettelu, jossa ostopainike on hinnan vieressä, ja kassa, joka kysyy vain tarpeellisen.', deliver: ['Auditointi', 'Mobiili-UI', 'Kassapolku'] },
       { title: '60-vuotias perheleipomo', problem: 'Luotettu nimi, vanhentunut ilme ja tilaukset vain puhelimitse.', approach: 'Merkin uudistus sen muotoa menettämättä, pieni design-järjestelmä ja verkon ennakkotilaukset suoraan kuhunkin leipomoon.', deliver: ['Ilmeen uudistus', 'Design-järjestelmä', 'Tilausautomaatio'] },
       { title: 'B2B-ohjelmistoyritys ennen siemenkierrosta', problem: 'Toimiva tuote ilman brändiä ja tukisähköposti, joka vie perustajien ajan.', approach: 'Identiteetti ja laskeutumissivu yhdessä sprintissä, sitten tekoälyavustaja, joka vastaa tavallisiin tukikysymyksiin tuotedokumentaation pohjalta.', deliver: ['Identiteetti', 'Laskeutumissivu', 'Tekoälyavustaja'] }
     ],
@@ -389,7 +389,7 @@ const LEGAL = {
       errName: 'Please enter your name.',
       errEmail: 'Please enter a valid email address, like name@company.com.',
       errMessage: 'Tell us briefly what you need (at least 10 characters).',
-      sending: 'Sending…', errSend: 'Sending failed. Check your connection and try again, or email us directly.',
+      sending: 'Sending…', errSend: 'Sending failed. Check your connection and try again.', retry: 'Try again', errMail: 'Email us instead',
       thanksTitle: 'Thanks, message received', thanksText: 'We will get back to you by email.', done: 'Close'
     },
     rowLabels: { purpose: 'Purpose', type: 'Type', duration: 'Duration', category: 'Category' },
@@ -478,7 +478,7 @@ const LEGAL = {
       errName: 'Kirjoita nimesi.',
       errEmail: 'Kirjoita toimiva sähköpostiosoite, esim. nimi@yritys.fi.',
       errMessage: 'Kerro lyhyesti, mitä tarvitset (vähintään 10 merkkiä).',
-      sending: 'Lähetetään…', errSend: 'Lähetys epäonnistui. Tarkista yhteys ja yritä uudelleen, tai lähetä meille sähköpostia.',
+      sending: 'Lähetetään…', errSend: 'Lähetys epäonnistui. Tarkista yhteys ja yritä uudelleen.', retry: 'Yritä uudelleen', errMail: 'Lähetä sähköpostilla',
       thanksTitle: 'Kiitos, viesti vastaanotettu', thanksText: 'Palaamme asiaan sähköpostilla.', done: 'Sulje'
     },
     rowLabels: { purpose: 'Tarkoitus', type: 'Tyyppi', duration: 'Säilytysaika', category: 'Luokka' },
