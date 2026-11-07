@@ -1665,3 +1665,8 @@ html.fm-lock{overflow:hidden}
 #fm-faq-q::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-left:8px;cursor:pointer;background:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3 L13 13 M13 3 L3 13' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3 L13 13 M13 3 L3 13' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat}
 /* Scrolling to a section or a focused control stops below the sticky header */
 @media (max-width:1140px){html{scroll-padding-top:88px}}
+
+/* After a sent audit: a quiet confirmation under the one-field starts */
+.fm-start-ok{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:0.9375rem;line-height:1.5;color:var(--ink)}
+.fm-start-ok::before{content:'';flex:none;width:8px;height:8px;background:var(--brand);transform:rotate(45deg)}
+.fm-motion .fm-footer.is-now .fm-foot-map > .fm-foot-col,.fm-motion .fm-footer.is-now .fm-foot-row3{transition:none}

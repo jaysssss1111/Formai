@@ -687,6 +687,16 @@
     }
     if (a.sending) return;
     var done = function () {
+      ['fm-hero-url', 'fm-au-start-url'].forEach(function (id) {
+        var i = document.getElementById(id); if (!i) return;
+        i.value = ''; startError(i, '');
+        var form = i.closest('form'), sid = id + '-ok', s = document.getElementById(sid);
+        if (!s) {
+          s = document.createElement('span'); s.id = sid; s.className = 'fm-start-ok'; s.setAttribute('role', 'status');
+          if (form.id === 'fm-hero-start') form.insertAdjacentElement('afterend', s); else form.appendChild(s);
+        }
+        s.textContent = t().au.sentNote;
+      });
       state.au = { open: true, sent: true, tried: false, sending: false, sendError: false, kind: -1, data: { url: '', email: '', name: '', company: '', note: '' } };
       renderAudit();
       var dlg = $('#fm-audit-root .fm-dlg'); if (dlg) dlg.focus();
@@ -917,9 +927,50 @@
     if (bkNarrow.addEventListener) bkNarrow.addEventListener('change', re); else bkNarrow.addListener(re);
   })();
 
+  // Roving focus: in each group only one button is a tab stop (the chosen one, else the first);
+  // arrow keys move inside the group. Grids count their cells, so Up/Down move a week (or a row of times).
+  var ROVE = [
+    { sel: '#fm-cal [data-action="pickDay"]', cols: 7 },
+    { sel: '#fm-cal .fm-sday', cols: 0 },
+    { sel: '#fm-bk-panel [data-action="pickSlot"]', cols: 3 },
+    { sel: '#fm-bk-quick [data-action="quickSlot"]', cols: 0 }
+  ];
+  function roveInit() {
+    ROVE.forEach(function (g) {
+      var items = $$(g.sel); if (!items.length) return;
+      var cur = items.filter(function (b) { return b.getAttribute('aria-pressed') === 'true'; })[0] || items[0];
+      items.forEach(function (b) { b.tabIndex = b === cur ? 0 : -1; });
+    });
+  }
+  document.addEventListener('keydown', function (ev) {
+    var k = ev.key; if (!/^(ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Home|End)$/.test(k)) return;
+    var el = ev.target, g = null;
+    ROVE.forEach(function (x) { if (!g && el.matches && el.matches(x.sel)) g = x; });
+    if (!g) return;
+    var items = $$(g.sel), next = null;
+    if (k === 'Home') next = items[0];
+    else if (k === 'End') next = items[items.length - 1];
+    else if (!g.cols || k === 'ArrowLeft' || k === 'ArrowRight') {
+      if (!g.cols && (k === 'ArrowUp' || k === 'ArrowDown')) return;
+      next = items[items.indexOf(el) + (k === 'ArrowLeft' || k === 'ArrowUp' ? -1 : 1)];
+    } else {
+      // Up/Down: same column a row away; if that cell is closed, the nearest open one beyond it.
+      var cells = [].slice.call(el.parentElement.children), at = cells.indexOf(el), step = k === 'ArrowUp' ? -g.cols : g.cols;
+      for (var i = at + step; i >= 0 && i < cells.length && !next; i += (step > 0 ? 1 : -1)) {
+        if (items.indexOf(cells[i]) >= 0 && (Math.abs(i - at) >= g.cols)) next = cells[i];
+      }
+    }
+    if (!next) return;
+    ev.preventDefault();
+    items.forEach(function (b) { b.tabIndex = b === next ? 0 : -1; });
+    next.focus();
+    if (g.cols === 0 && next.scrollIntoView) next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  });
+
   function renderCalendar() {
     var M = calModel(), B = M.B, b = state.bk;
     renderQuick(); renderBkStatus();
+    setTimeout(roveInit, 0);
     if (bkNarrow.matches) { renderStrip(M); return; }
     var first = Date.UTC(M.hel.y, M.hel.m - 1 + b.calOff, 1);
     var fd = new Date(first);
@@ -1015,6 +1066,7 @@
     }
     $('#fm-bk-panel').innerHTML = html;
     renderQuick();
+    roveInit();
   }
   function renderBooking() { renderCalendar(); renderPanel(); }
 
@@ -1803,6 +1855,13 @@
     addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(check); }, { passive: true });
     addEventListener('resize', function () { pin(); check(); });
     pin(); check();
+    foot.addEventListener('focusin', function (ev) {
+      foot.classList.add('is-in', 'is-now');   // keyboard focus: show the columns at once, no fade
+      var r = ev.target.getBoundingClientRect(), cover = main.getBoundingClientRect().bottom, dy = 0;
+      if (r.top < cover + 16) dy = cover + 16 - r.top;            // still under the page: lift the page off it
+      else if (r.bottom > innerHeight - 16) dy = r.bottom - innerHeight + 16;
+      if (dy) window.scrollTo({ top: window.pageYOffset + dy, behavior: 'instant' });
+    });
     var link = $('[data-foot-top]');
     // Back to top: a smooth scroll over the whole page rushed every section past (and the
     // curtain footer flickered under them). Instead: the diamond send-off, a short fade to the
@@ -2125,7 +2184,11 @@
   }
   document.addEventListener('input', function (ev) {
     var el = ev.target;
-    if (el.id === 'fm-hero-url' || el.id === 'fm-au-start-url') { startError(el, ''); return; }
+    if (el.id === 'fm-hero-url' || el.id === 'fm-au-start-url') {
+      startError(el, '');
+      ['fm-hero-url-ok', 'fm-au-start-url-ok'].forEach(function (id) { var s = document.getElementById(id); if (s) s.remove(); });
+      return;
+    }
     var key = el.getAttribute && el.getAttribute('data-field');
     if (!key) return;
     var errs = null;
@@ -2134,6 +2197,13 @@
     else if (el.closest('#fm-bk-form')) { state.bk.data[key] = el.value; if (state.bk.tried) errs = bkErrors(); }
     else if (el.closest('#fm-au-form')) { state.au.data[key] = el.value; if (state.au.tried) errs = auErrors(); }
     if (errs && key in errs && el.hasAttribute('aria-invalid')) setFieldError(el, errs[key]);
+  });
+
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href="#book"]');
+    if (!a) return;
+    var first = $('#fm-bk-quick [data-action="quickSlot"]') || $('#fm-cal [data-action="pickDay"]:not([disabled])') || $('#fm-cal .fm-sday');
+    if (first) setTimeout(function () { first.focus({ preventScroll: true }); }, 0);   // the page still scrolls to the section
   });
 
   document.addEventListener('submit', function (ev) {
