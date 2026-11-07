@@ -146,7 +146,7 @@
     $('#fm-pause-label').textContent = state.paused ? t().play : t().pause;
     $('#fm-nav').classList.toggle('is-open', state.menuOpen);
     $('.fm-menu-btn').setAttribute('aria-expanded', String(state.menuOpen));
-    document.documentElement.classList.toggle('fm-lock', state.menuOpen && menuMQ.matches);   // page stays put behind the open menu
+    syncLock();
     document.dispatchEvent(new CustomEvent('fm:motion', { detail: { paused: state.paused } }));
   }
 
@@ -271,7 +271,7 @@
   }
   function renderDoc() {
     var host = $('#fm-doc-root');
-    if (!state.dialog) { host.innerHTML = ''; return; }
+    if (!state.dialog) { unpaintDialog(host); return; }
     var tr = t();
     var doc = state.dialog === 'privacy' ? tr.privacyDoc : tr.cookieDoc;
     var rows = doc.rows ? '<div style="display: flex; flex-direction: column; border-top: 1px solid var(--line);">' + doc.rows.map(function (r) {
@@ -280,12 +280,12 @@
         '<span style="font-size: 0.875rem; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(tr.rowLabels.purpose) + ': ' + esc(r.purpose) + '</span>' +
         '<span style="font-size: 0.875rem; line-height: 1.5; font-weight: 300; color: var(--muted);">' + esc(tr.rowLabels.type) + ': ' + esc(r.type) + ' · ' + esc(tr.rowLabels.duration) + ': ' + esc(r.duration) + ' · ' + esc(tr.rowLabels.category) + ': ' + esc(r.category) + '</span></div>';
     }).join('') + '</div>' : '';
-    host.innerHTML = '<div data-overlay="doc" style="' + OVERLAY + ' z-index: 150;">' +
+    paintDialog(host, '<div data-overlay="doc" style="' + OVERLAY + ' z-index: 150;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-dlg-title" tabindex="-1" style="' + DLG + ' max-width: 760px;">' +
       '<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(doc.updated) + '</span>' +
       '<button type="button" class="fm-mode" data-action="closeDoc" aria-label="' + esc(tr.ck.close) + '" style="' + BTN_SQ + '">' + ICON_CLOSE + '</button></div>' +
       '<h2 id="fm-dlg-title" style="margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(doc.title) + '</h2>' +
-      docSections(doc.a) + rows + docSections(doc.b) + '</div></div>';
+      docSections(doc.a) + rows + docSections(doc.b) + '</div></div>');
   }
   function openDoc(kind) {
     opener = document.activeElement;
@@ -298,7 +298,36 @@
     renderDoc();
     restoreFocus();
   }
-  function visible(el) { return !!(el && document.contains(el) && el.getClientRects().length); }
+  function visible(el) {
+    if (!el || !document.contains(el) || !el.getClientRects().length) return false;
+    return el.checkVisibility ? el.checkVisibility({ visibilityProperty: true }) : getComputedStyle(el).visibility !== 'hidden';
+  }
+  // Page scroll stays put while a dialog or the phone menu is open.
+  function syncLock() {
+    var on = !!(state.dialog || state.au.open || state.contactOpen || (state.menuOpen && menuMQ.matches));
+    document.documentElement.classList.toggle('fm-lock', on);
+  }
+  // Draw a dialog. A redraw of an open dialog keeps its scroll position and skips the entrance animation.
+  function paintDialog(host, html) {
+    var ov = host.firstElementChild, old = ov && !ov.classList.contains('is-closing') ? host.querySelector('.fm-dlg') : null;
+    var st = old ? old.scrollTop : 0;
+    host.innerHTML = html;
+    if (old) {
+      var nov = host.firstElementChild, dlg = host.querySelector('.fm-dlg');
+      if (nov) nov.classList.add('is-still');
+      if (dlg) { dlg.classList.add('is-still'); dlg.scrollTop = st; }
+    }
+    syncLock();
+  }
+  // Remove a dialog: a short fade and drop, then gone.
+  function unpaintDialog(host) {
+    var ov = host.firstElementChild;
+    if (!ov || reducedMotion || !root.classList.contains('fm-motion')) { host.innerHTML = ''; syncLock(); return; }
+    if (ov.classList.contains('is-closing')) return;
+    ov.classList.add('is-closing');
+    syncLock();
+    setTimeout(function () { if (host.firstElementChild === ov) host.innerHTML = ''; }, 200);
+  }
   function restoreFocus() {
     var o = opener; opener = null;
     setTimeout(function () {
@@ -309,6 +338,10 @@
     }, 0);
   }
   // After a redraw, put keyboard focus back where the person was working.
+  function lockFields(formSel) {
+    $$(formSel + ' input:not([type="hidden"]), ' + formSel + ' textarea').forEach(function (e) { e.readOnly = true; });
+    $$(formSel + ' .fm-chip').forEach(function (e) { e.disabled = true; });
+  }
   function focusIn(sel) {
     var el = $(sel); if (!el) return;
     if (!el.hasAttribute('tabindex') && !/^(A|BUTTON|INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) el.setAttribute('tabindex', '-1');
@@ -330,7 +363,8 @@
     var req = opts.required ? ' <span aria-hidden="true" style="color: var(--accent);">*</span>' : ' <span style="color: var(--muted); font-weight: 300;">(' + esc(cf.optional) + ')</span>';
     var err = opts.err;
     var describedBy = [opts.hint ? id + '-hint' : '', opts.required ? id + '-err' : ''].filter(Boolean).join(' ');
-    var attrs = ' id="' + id + '" class="fm-input" data-field="' + opts.key + '"' + (opts.required ? ' aria-required="true" aria-invalid="' + (err ? 'true' : 'false') + '"' : '') + (describedBy ? ' aria-describedby="' + describedBy + '"' : '');
+    var MAX = { name: 100, email: 254, company: 120, url: 2048, link: 2048, message: 5000, topic: 5000, note: 5000 };
+    var attrs = ' id="' + id + '" class="fm-input" data-field="' + opts.key + '"' + (MAX[opts.key] ? ' maxlength="' + MAX[opts.key] + '"' : '') + (opts.locked ? ' readonly' : '') + (opts.required ? ' aria-required="true" aria-invalid="' + (err ? 'true' : 'false') + '"' : '') + (describedBy ? ' aria-describedby="' + describedBy + '"' : '');
     var input = opts.textarea
       ? '<textarea' + attrs + ' rows="' + (opts.rows || 5) + '"' + (opts.style ? ' style="' + opts.style + '"' : '') + '>' + esc(opts.value) + '</textarea>'
       : '<input' + attrs + ' type="' + (opts.type || 'text') + '"' + (opts.type === 'email' ? ' inputmode="email"' : '') + (opts.ac ? ' autocomplete="' + opts.ac + '"' : '') + ' value="' + esc(opts.value) + '">';
@@ -339,7 +373,7 @@
       input + (err ? '<span id="' + id + '-err" class="fm-err">' + esc(err) + '</span>' : '') + '</div>';
   }
   function errorSummary() {
-    return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 0.875rem; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSummary) + '</div>';
+    return '<div role="alert" class="fm-err-sum" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 0.875rem; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSummary) + '</div>';
   }
   // The company inbox, or '' while config.js still holds the placeholder.
   function realEmail() {
@@ -389,7 +423,7 @@
   }
   function renderContact() {
     var host = $('#fm-contact-root');
-    if (!state.contactOpen) { host.innerHTML = ''; return; }
+    if (!state.contactOpen) { unpaintDialog(host); return; }
     var tr = t(), cf = tr.cf, c = state.cf;
     var body;
     if (c.sent) {
@@ -413,11 +447,11 @@
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
     }
-    host.innerHTML = '<div data-overlay="contact" style="' + OVERLAY + ' z-index: 140;">' +
+    paintDialog(host, '<div data-overlay="contact" style="' + OVERLAY + ' z-index: 140;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-cf-title" tabindex="-1" style="' + DLG + ' max-width: 600px;">' +
       '<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--accent);">' + esc(cf.label) + '</span>' +
       '<button type="button" class="fm-mode" data-action="closeContact" aria-label="' + esc(tr.ck.close) + '" style="' + BTN_SQ + '">' + ICON_CLOSE + '</button></div>' +
-      body + '</div></div>';
+      body + '</div></div>');
   }
   /* ---------- Contact section: the form in the page ----------
      Name, email and message, with message starters that fill the box. Sends
@@ -516,7 +550,7 @@
       link: String(d.link || '').trim(),
       source: 'contact section', language: state.lang
     };
-    c.sending = true; c.sendError = false; renderInline(); focusIn('#fm-ci-form [type="submit"]');
+    c.sending = true; c.sendError = false; renderInline(); lockFields('#fm-ci-form'); focusIn('#fm-ci-form [type="submit"]');
     postForm((window.FM_CONFIG || {}).contactEndpoint, payload).then(done, function () {
       c.sending = false; c.sendError = true; renderInline();
       focusIn('#fm-ci-root [data-action="retrySend"]');
@@ -560,7 +594,7 @@
       language: state.lang
     };
     state.cf.sending = true; state.cf.sendError = false;
-    renderContact(); focusIn('#fm-cf-form [type="submit"]');
+    renderContact(); lockFields('#fm-cf-form'); focusIn('#fm-cf-form [type="submit"]');
     postForm((window.FM_CONFIG || {}).contactEndpoint, payload).then(done, function () {
       state.cf.sending = false; state.cf.sendError = true;
       renderContact();
@@ -575,17 +609,28 @@
     if (!v) return '';
     return /^https?:\/\//i.test(v) ? v : 'https://' + v;
   }
+  function validUrl(v) { return /^https?:\/\/[^\s/$.?#]+\.[^\s]{2,}$/i.test(normUrl(v)); }
+  // Error line under the one-field audit starts (hero and audit section).
+  function startError(input, msg) {
+    var id = input.id + '-err', sp = document.getElementById(id), form = input.closest('form');
+    input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    if (!msg) { if (sp) sp.remove(); input.removeAttribute('aria-describedby'); return; }
+    if (!sp) {
+      sp = document.createElement('span'); sp.id = id; sp.className = 'fm-err fm-start-err'; sp.setAttribute('role', 'alert');
+      if (form.id === 'fm-hero-start') form.insertAdjacentElement('afterend', sp); else form.appendChild(sp);
+    }
+    sp.textContent = msg; input.setAttribute('aria-describedby', id);
+  }
   function auErrors() {
     var tr = t(), d = state.au.data;
-    var url = normUrl(d.url);
     return {
-      url: /^https?:\/\/[^\s/$.?#]+\.[^\s]{2,}$/i.test(url) ? '' : tr.au.urlErr,
+      url: validUrl(d.url) ? '' : tr.au.urlErr,
       email: EMAIL_RE.test(String(d.email).trim()) ? '' : tr.cf.errEmail
     };
   }
   function renderAudit() {
     var host = $('#fm-audit-root');
-    if (!state.au.open) { host.innerHTML = ''; return; }
+    if (!state.au.open) { unpaintDialog(host); return; }
     var tr = t(), A = tr.au, cf = tr.cf, a = state.au, body;
     if (a.sent) {
       body = '<div role="status" style="display: flex; flex-direction: column; align-items: flex-start; gap: 20px; padding: 8px 0 4px;">' + EYE_DRAW +
@@ -616,11 +661,11 @@
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
         '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (a.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(A.send, a.sending) + '</button></div></form>';
     }
-    host.innerHTML = '<div data-overlay="audit" style="' + OVERLAY + ' z-index: 140;">' +
+    paintDialog(host, '<div data-overlay="audit" style="' + OVERLAY + ' z-index: 140;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-au-title" tabindex="-1" style="' + DLG + ' max-width: 600px;">' +
       '<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--accent);">' + esc(A.label) + '</span>' +
       '<button type="button" class="fm-mode" data-action="closeAudit" aria-label="' + esc(tr.ck.close) + '" style="' + BTN_SQ + '">' + ICON_CLOSE + '</button></div>' +
-      body + '</div></div>';
+      body + '</div></div>');
   }
   function openAudit() {
     opener = document.activeElement;
@@ -656,7 +701,7 @@
       note: String(a.data.note).trim(),
       language: state.lang
     };
-    a.sending = true; a.sendError = false; renderAudit(); focusIn('#fm-au-form [type="submit"]');
+    a.sending = true; a.sendError = false; renderAudit(); lockFields('#fm-au-form'); focusIn('#fm-au-form [type="submit"]');
     var cfg = window.FM_CONFIG || {};
     postForm(cfg.auditEndpoint || cfg.contactEndpoint, payload).then(done, function () {
       a.sending = false; a.sendError = true; renderAudit();
@@ -704,6 +749,7 @@
   /* Booked times, shared by every visitor through Supabase (see assets/js/config.js). */
   var TAKEN = {};
   var takenLoadedAt = 0;
+  var takenState = 'idle';   // idle (no database set) · loading · ok · error
   function key24(m) { return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); }
   function markTaken(date, time) { (TAKEN[date] = TAKEN[date] || {})[time] = true; }
   function sbConfig() { var c = window.FM_CONFIG || {}; return c.supabaseUrl && c.supabaseKey ? c : null; }
@@ -716,16 +762,35 @@
     var c = sbConfig();
     if (!c || (!force && Date.now() - takenLoadedAt < 30000)) return;
     takenLoadedAt = Date.now();
+    var first = takenState !== 'ok';   // later refreshes stay quiet
+    if (first) { takenState = 'loading'; renderBkStatus(); }
     var from = new Date(calModel().todayUTC).toISOString().slice(0, 10);
     sbRequest(c, 'booked_slots?select=date,time&date=gte.' + from)
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (rows) {
         TAKEN = {};
         rows.forEach(function (row) { markTaken(row.date, row.time); });
+        takenState = 'ok';
         renderCalendar();
         if (state.bk.step !== 'details') renderPanel();
+        renderBkStatus();
       })
-      .catch(function () {});
+      .catch(function () { if (first) { takenState = 'error'; takenLoadedAt = 0; renderBkStatus(); } });
+  }
+  // One line above the calendar: checking times, could not check, or nothing free.
+  function renderBkStatus() {
+    var el = $('#fm-bk-status'), bk = $('.fm-booker'), q = $('#fm-bk-quick');
+    if (!el) return;
+    var B = t().bk, cf = t().cf, loading = takenState === 'loading';
+    var none = !loading && $('#fm-cal') && !openDays(calModel()).length;
+    if (bk) { bk.classList.toggle('is-loading', loading); bk.setAttribute('aria-busy', String(loading)); }
+    if (q) q.classList.toggle('is-loading', loading);
+    if (loading) el.innerHTML = '<span class="fm-spin" aria-hidden="true"></span><span>' + esc(B.loadingTimes) + '</span>';
+    else if (takenState === 'error') el.innerHTML = '<span>' + esc(B.timesErr) + '</span><button type="button" class="fm-btn fm-ck-btn" data-action="retryTimes">' + esc(cf.retry) + '</button>';
+    else if (none) el.innerHTML = '<span>' + esc(B.noTimes) + '</span><button type="button" class="fm-btn fm-ck-btn fm-ck-primary" data-action="openContact">' + esc(t().ci.label) + '</button>';
+    else { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.classList.toggle('is-error', takenState === 'error');
   }
   // Claim a time for everyone. A second booking of the same time is refused by the database.
   function reserveSlot(date, time) {
@@ -854,7 +919,7 @@
 
   function renderCalendar() {
     var M = calModel(), B = M.B, b = state.bk;
-    renderQuick();
+    renderQuick(); renderBkStatus();
     if (bkNarrow.matches) { renderStrip(M); return; }
     var first = Date.UTC(M.hel.y, M.hel.m - 1 + b.calOff, 1);
     var fd = new Date(first);
@@ -988,7 +1053,7 @@
     };
     var date = b.date, time = key24(Number(b.slot)), claim = date + ' ' + time;
     b.sending = true; b.sendError = false;
-    renderPanel(); focusIn('#fm-bk-form [type="submit"]');
+    renderPanel(); lockFields('#fm-bk-form'); focusIn('#fm-bk-form [type="submit"]');
     // Reserve first so two visitors cannot book the same time; skip if this visitor already holds it.
     (b.reserved === claim ? Promise.resolve() : reserveSlot(date, time))
       .then(function () { b.reserved = claim; return postForm((window.FM_CONFIG || {}).bookingEndpoint, payload); })
@@ -1050,7 +1115,11 @@
     sbRequest(c, 'rpc/news_like', { method: 'POST', body: JSON.stringify({ u: u, d: d }) })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function (n) { if (typeof n === 'number') { COUNTS[u] = n; syncLikes(); } })
-      .catch(function () { COUNTS[u] = Math.max(0, (COUNTS[u] || 0) - d); syncLikes(); });
+      .catch(function () {
+        COUNTS[u] = Math.max(0, (COUNTS[u] || 0) - d);
+        if (d > 0) delete likes[u]; else likes[u] = true;
+        saveLikes(); syncLikes();
+      });
   }
   function syncLikes() {
     var tr = t();
@@ -1069,6 +1138,15 @@
       var p = r.querySelector('[data-news-pick]'); r.classList.toggle('is-liked', !!(p && likes[p.getAttribute('data-news-pick')]));
     });
   }
+  function smoothHeight(el, fn) {
+    if (!el || reducedMotion || !root.classList.contains('fm-motion')) { fn(); return; }
+    var h0 = el.offsetHeight; fn(); var h1 = el.offsetHeight;
+    if (Math.abs(h1 - h0) < 2) return;
+    el.style.height = h0 + 'px'; el.style.overflow = 'hidden'; void el.offsetHeight;
+    el.style.transition = 'height .3s cubic-bezier(.2,.7,.2,1)'; el.style.height = h1 + 'px';
+    var done = function () { el.style.height = ''; el.style.overflow = ''; el.style.transition = ''; el.removeEventListener('transitionend', done); };
+    el.addEventListener('transitionend', done); setTimeout(done, 450);
+  }
   function renderNews() {
     var sec = $('#news'), root = $('#fm-news-root'), UI = window.FM_NEWS_UI;
     if (!sec || !root || !UI) return;
@@ -1083,7 +1161,7 @@
   }
   document.addEventListener('click', function (ev) {
     var c = ev.target.closest && ev.target.closest('[data-news-topic]');
-    if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; state.newsPick = ''; renderNews(); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
+    if (c) { state.newsTopic = c.getAttribute('data-news-topic'); state.newsAll = false; state.newsPick = ''; smoothHeight($('#fm-news-root'), renderNews); var again = $('[data-news-topic="' + state.newsTopic + '"]'); if (again) again.focus(); return; }
     var lk = ev.target.closest && ev.target.closest('[data-news-like]');
     if (lk) {
       var u = lk.getAttribute('data-news-like');
@@ -1125,7 +1203,7 @@
     var m = ev.target.closest && ev.target.closest('[data-news-more]');
     if (m) {
       var fromEnd = m.getAttribute('data-news-more') === 'end';
-      state.newsAll = !state.newsAll; renderNews();
+      state.newsAll = !state.newsAll; smoothHeight($('#fm-news-root'), renderNews);
       var chip = $('[data-news-more="chip"]'), older = $('#fm-news-older');
       if (state.newsAll && older) {
         // Opened from the filter row: glide down to the earlier articles.
@@ -2010,6 +2088,7 @@
       var b = state.bk; b.step = ''; b.date = ''; b.slot = ''; b.doneSummary = ''; renderBooking();
       focusIn($('#fm-bk-quick [data-action]') ? '#fm-bk-quick [data-action]' : '#book [data-action="pickDay"]');
     },
+    retryTimes: function () { loadTaken(true); },
     retrySend: function (el) {
       var f = document.getElementById(el.getAttribute('data-form'));
       if (f) { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })); }
@@ -2029,13 +2108,32 @@
     else if (ov === 'audit') closeAudit();
   });
 
+  function bkErrors() {
+    var f = state.bk.data, cf = t().cf;
+    return { name: String(f.name).trim() ? '' : cf.errName, email: EMAIL_RE.test(String(f.email).trim()) ? '' : cf.errEmail };
+  }
+  // Update one field's error in place, without redrawing the form.
+  function setFieldError(el, msg) {
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    var sp = document.getElementById(el.id + '-err');
+    if (msg) {
+      if (!sp) { sp = document.createElement('span'); sp.id = el.id + '-err'; sp.className = 'fm-err'; el.insertAdjacentElement('afterend', sp); }
+      sp.textContent = msg;
+    } else if (sp) sp.remove();
+    var form = el.closest('form'), scope = form && form.parentElement;
+    if (form && !form.querySelector('[aria-invalid="true"]') && scope) { var s = scope.querySelector('.fm-err-sum'); if (s) s.remove(); }
+  }
   document.addEventListener('input', function (ev) {
-    var el = ev.target, key = el.getAttribute && el.getAttribute('data-field');
+    var el = ev.target;
+    if (el.id === 'fm-hero-url' || el.id === 'fm-au-start-url') { startError(el, ''); return; }
+    var key = el.getAttribute && el.getAttribute('data-field');
     if (!key) return;
-    if (el.closest('#fm-cf-form')) state.cf.data[key] = el.value;
-    else if (el.closest('#fm-ci-form')) { state.ci.data[key] = el.value; ciSaveDraft(); }
-    else if (el.closest('#fm-bk-form')) state.bk.data[key] = el.value;
-    else if (el.closest('#fm-au-form')) state.au.data[key] = el.value;
+    var errs = null;
+    if (el.closest('#fm-cf-form')) { state.cf.data[key] = el.value; if (state.cf.tried) errs = cfErrors(); }
+    else if (el.closest('#fm-ci-form')) { state.ci.data[key] = el.value; ciSaveDraft(); if (state.ci.tried) errs = ciErrors(); }
+    else if (el.closest('#fm-bk-form')) { state.bk.data[key] = el.value; if (state.bk.tried) errs = bkErrors(); }
+    else if (el.closest('#fm-au-form')) { state.au.data[key] = el.value; if (state.au.tried) errs = auErrors(); }
+    if (errs && key in errs && el.hasAttribute('aria-invalid')) setFieldError(el, errs[key]);
   });
 
   document.addEventListener('submit', function (ev) {
@@ -2045,14 +2143,16 @@
     else if (ev.target.id === 'fm-au-form') { ev.preventDefault(); submitAudit(); }
     else if (ev.target.id === 'fm-hero-start') {
       ev.preventDefault();
-      var hv = String(($('#fm-hero-url') || {}).value || '').trim();
+      var hi = $('#fm-hero-url'), hv = String((hi || {}).value || '').trim();
+      if (hv && !validUrl(hv)) { startError(hi, t().au.urlErr); hi.focus(); return; }
       if (hv) state.au.data.url = hv;
       openAudit();
     }
     else if (ev.target.id === 'fm-au-start') {
       // 1) The one-field start: carry the address into the audit dialog.
       ev.preventDefault();
-      var v = String(($('#fm-au-start-url') || {}).value || '').trim();
+      var si = $('#fm-au-start-url'), v = String((si || {}).value || '').trim();
+      if (v && !validUrl(v)) { startError(si, t().au.urlErr); si.focus(); return; }
       if (v) state.au.data.url = v;
       openAudit();
     }

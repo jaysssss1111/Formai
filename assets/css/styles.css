@@ -89,7 +89,6 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 .fm-navlinks .fm-navlink-cta{display:inline-flex !important}
 .fm-navcta{display:none !important}
 .fm-menu-btn{display:flex !important}
-html.fm-lock{overflow:hidden}
 }
 @media (max-width:640px){.fm-navlinks{padding:0 20px}}
 @media (max-width:400px){
@@ -207,7 +206,7 @@ html.fm-lock{overflow:hidden}
 @keyframes fm-spin{from{opacity:0;transform:rotate(-90deg) scale(.6)}to{opacity:1;transform:none}}
 .fm-mode{transition:border-color .18s linear}
 .fm-mode:hover{border-color:var(--ink) !important}
-.fm-motion .fm-mode svg{animation:fm-spin .3s cubic-bezier(.2,.7,.2,1) both}
+.fm-motion #fm-mode-btn svg{animation:fm-spin .3s cubic-bezier(.2,.7,.2,1) both}
 .fm-root{transition:background-color .2s linear,color .2s linear}
 @media (prefers-reduced-motion: reduce){.fm-root *,.fm-root *::before,.fm-root *::after{animation:none !important;transition:none !important}}
 
@@ -1613,3 +1612,56 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 /* Who we work with: tabs keep three across at normal text size and stack when text is enlarged */
 @media (max-width:900px){.fm-seg-tabs{grid-template-columns:repeat(auto-fit,minmax(min(100%,5.5em),1fr))}.fm-seg-name{overflow-wrap:break-word}}
 @media (max-width:360px){.fm-seg-tab{padding-left:8px;padding-right:8px}}
+
+/* Dialogs: fade in once, stay still on redraws, fade and drop out on close; page locked behind */
+html.fm-lock{overflow:hidden}
+@keyframes fm-fade{from{opacity:0}to{opacity:1}}
+@keyframes fm-fade-out{from{opacity:1}to{opacity:0}}
+@keyframes fm-sink{from{opacity:1;transform:none}to{opacity:0;transform:translateY(16px)}}
+.fm-motion [data-overlay]{animation:fm-fade .2s linear both}
+.fm-motion [data-overlay].is-still,.fm-motion .fm-dlg.is-still{animation:none}
+.fm-motion [data-overlay].is-closing{animation:fm-fade-out .2s linear both;pointer-events:none}
+.fm-motion [data-overlay].is-closing .fm-dlg{animation:fm-sink .2s cubic-bezier(.4,0,1,1) both}
+
+/* Pressed: every control moves down a pixel and darkens slightly, so a tap is felt */
+.fm-btn:active:not([disabled]):not([aria-disabled="true"]),.fm-ck-btn:active:not([disabled]):not([aria-disabled="true"]),.fm-chip:active:not([disabled]):not([aria-disabled="true"]),.fm-slot:active:not([disabled]):not([aria-disabled="true"]),.fm-day:active:not([disabled]):not([aria-disabled="true"]),.fm-sday:active:not([disabled]):not([aria-disabled="true"]),.fm-bk-pick:active:not([disabled]):not([aria-disabled="true"]),.fm-mode:active:not([disabled]):not([aria-disabled="true"]),.fm-menu-btn:active:not([disabled]):not([aria-disabled="true"]),.fm-lang button:active:not([disabled]):not([aria-disabled="true"]),.fm-news-chip:active:not([disabled]):not([aria-disabled="true"]),.fm-faq-chip:active:not([disabled]):not([aria-disabled="true"]),.fm-news-like:active:not([disabled]):not([aria-disabled="true"]),.fm-news-share:active:not([disabled]):not([aria-disabled="true"]),.fm-news-readbtn:active:not([disabled]):not([aria-disabled="true"]),.fm-news-more:active:not([disabled]):not([aria-disabled="true"]),.fm-news-pick:active:not([disabled]):not([aria-disabled="true"]),.fm-seg-tab:active:not([disabled]):not([aria-disabled="true"]),.fm-seg-cta:active:not([disabled]):not([aria-disabled="true"]),.fm-svc-ask:active:not([disabled]):not([aria-disabled="true"]),.fm-case-cta:active:not([disabled]):not([aria-disabled="true"]),.fm-step-cta:active:not([disabled]):not([aria-disabled="true"]),.fm-faq-ask-btn:active:not([disabled]):not([aria-disabled="true"]),.fm-faq-act:active:not([disabled]):not([aria-disabled="true"]),.fm-ci-chip:active:not([disabled]):not([aria-disabled="true"]),.fm-foot-a:active:not([disabled]):not([aria-disabled="true"]),.fm-textbtn:active:not([disabled]):not([aria-disabled="true"]),.fm-navlink:active:not([disabled]):not([aria-disabled="true"]),.fm-pr-link:active:not([disabled]):not([aria-disabled="true"]),.fm-hero-more:active:not([disabled]):not([aria-disabled="true"]),.fm-seg-link:active:not([disabled]):not([aria-disabled="true"]),.fm-ci-more:active:not([disabled]):not([aria-disabled="true"]),.fm-au-more:active:not([disabled]):not([aria-disabled="true"]),.fm-inline-link:active:not([disabled]):not([aria-disabled="true"]),.fm-switch:active:not([disabled]):not([aria-disabled="true"]),.fm-sa-toggle:active:not([disabled]):not([aria-disabled="true"]),.fm-pause:active:not([disabled]):not([aria-disabled="true"]),.fm-hx-btn:active:not([disabled]):not([aria-disabled="true"]){transform:translateY(1px);filter:brightness(.9)}
+@media (hover:hover){
+.fm-inline-link:hover,.fm-ci-more:hover,.fm-au-more:hover{color:var(--ink)}
+.fm-textbtn:hover{text-decoration:underline;text-underline-offset:4px}
+.fm-switch:hover{border-color:var(--ink)}
+.fm-mode:hover:not([disabled]),.fm-menu-btn:hover{border-color:var(--ink)}
+.fm-lang button[aria-pressed="false"]:hover{background:var(--raised)}
+}
+
+/* Sending: the button keeps its colour and shows a turning diamond; fields are read-only */
+@keyframes fm-turn{to{transform:rotate(405deg)}}
+.fm-ck-btn[aria-busy="true"]{opacity:1 !important;background:var(--accent) !important;color:var(--on-accent) !important;border-color:var(--accent) !important;cursor:progress}
+.fm-ck-btn[aria-busy="true"]::before,.fm-spin{content:'';display:inline-block;flex:none;width:8px;height:8px;margin-right:12px;border:1.5px solid currentColor;transform:rotate(45deg);animation:fm-turn .9s cubic-bezier(.5,0,.5,1) infinite}
+.fm-input[readonly]{opacity:.7}
+@media (prefers-reduced-motion: reduce){.fm-ck-btn[aria-busy="true"]::before,.fm-spin{animation:none}}
+
+/* Booking times: status line, and a calm pulse on the calendar while times load */
+.fm-bk-status{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin:0 0 16px;padding:12px 16px;border:1px solid var(--strong);background:var(--raised);font-size:0.9375rem;line-height:1.5;color:var(--ink)}
+.fm-bk-status[hidden]{display:none}
+.fm-bk-status.is-error{border-color:var(--accent)}
+.fm-bk-status .fm-spin{margin-right:0;color:var(--accent)}
+.fm-bk-status .fm-ck-btn{flex:none}
+@keyframes fm-pulse{50%{opacity:.45}}
+.fm-booker.is-loading #fm-cal button,.fm-booker.is-loading #fm-bk-panel .fm-slot,.fm-bk-quick.is-loading button{pointer-events:none;animation:fm-pulse 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.fm-booker.is-loading #fm-cal button,.fm-bk-quick.is-loading button{animation:none;opacity:.5}}
+
+/* Who we work with: all panels share one cell, so switching tabs never changes the height */
+.fm-seg{display:grid;grid-template-columns:minmax(0,1fr)}
+.fm-seg > .fm-seg-panel{grid-row:2;grid-column:1}
+.fm-seg > .fm-seg-panel[hidden]{display:grid !important;visibility:hidden}
+
+/* Like button: room for the count from the start */
+.fm-news-like{min-width:64px}
+
+/* Error line under the one-field audit starts */
+.fm-start-err{display:block;margin-top:8px}
+
+/* FAQ search: the clear button in the site's own style */
+#fm-faq-q::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-left:8px;cursor:pointer;background:var(--ink);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3 L13 13 M13 3 L3 13' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 3 L13 13 M13 3 L3 13' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") center/contain no-repeat}
+/* Scrolling to a section or a focused control stops below the sticky header */
+@media (max-width:1140px){html{scroll-padding-top:88px}}
