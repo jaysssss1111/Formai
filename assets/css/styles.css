@@ -1560,3 +1560,24 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
 /* Method film on phones: the compact canvas is taller, so let its height follow it (a fixed
    240 px height would shrink it to fit and undo the larger labels). */
 .fm-me-grid .fm-film-svg.is-compact{height:auto}
+
+/* ---------- Closed hours: a small battery charging block by block ----------
+   Outline with a terminal cap, four blocks that fill one after another and reset (3 s loop).
+   Static at two blocks with paused animations or reduced motion. Takes the text colour. */
+.fm-batt{position:relative;flex:none;display:inline-flex;align-items:center;gap:1.5px;width:22px;height:11px;padding:0 2px;box-sizing:border-box;border:1.5px solid currentColor;vertical-align:-1px}
+.fm-batt::after{content:"";position:absolute;right:-4.5px;top:50%;width:2.5px;height:5px;margin-top:-2.5px;background:currentColor}
+.fm-batt i{display:block;flex:1;height:5px;background:currentColor;opacity:.15}
+.fm-batt i:nth-child(-n+2){opacity:1}
+.fm-motion .fm-batt i{opacity:.15;animation:3s steps(1,end) infinite}
+.fm-motion .fm-batt i:nth-child(1){animation-name:fm-batt1}
+.fm-motion .fm-batt i:nth-child(2){animation-name:fm-batt2}
+.fm-motion .fm-batt i:nth-child(3){animation-name:fm-batt3}
+.fm-motion .fm-batt i:nth-child(4){animation-name:fm-batt4}
+@keyframes fm-batt1{0%{opacity:.15}12%{opacity:1}88%{opacity:.15}}
+@keyframes fm-batt2{0%{opacity:.15}32%{opacity:1}88%{opacity:.15}}
+@keyframes fm-batt3{0%{opacity:.15}52%{opacity:1}88%{opacity:.15}}
+@keyframes fm-batt4{0%{opacity:.15}72%{opacity:1}88%{opacity:.15}}
+@media (prefers-reduced-motion:reduce){.fm-motion .fm-batt i{animation:none}.fm-motion .fm-batt i:nth-child(-n+2){opacity:1}}
+.fm-ci-when .fm-batt{margin:0 12px 0 2px}
+.fm-ct .fm-batt{color:var(--accent)}
+.fm-ct-card .fm-batt{color:#C85A20}
