@@ -136,8 +136,7 @@
     var en = state.lang !== 'fi';
     root.setAttribute('data-theme', dark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    var tc = $('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', dark ? '#141210' : '#EDE6D8');
-    var fav = $('link[rel="icon"]'); if (fav) fav.setAttribute('href', fav.getAttribute('href').replace(/[^/]*$/, '') + 'formai-eye-mark-' + (dark ? 'cream' : 'charcoal') + '.svg');
+    $$('meta[name="theme-color"]').forEach(function (tc) { tc.setAttribute('content', dark ? '#141210' : '#EDE6D8'); });
     var label = dark ? (en ? 'Switch to light mode' : 'Vaihda vaaleaan tilaan') : (en ? 'Switch to dark mode' : 'Vaihda tummaan tilaan');
     var mb = $('#fm-mode-btn'); mb.setAttribute('aria-label', label); mb.setAttribute('title', label);
     root.classList.toggle('fm-motion', !state.paused);
@@ -1831,6 +1830,7 @@
       (C.street ? '<span>' + esc(C.street) + '</span>' : '') + (C.city ? '<span>' + esc(C.city) + '</span>' : '') + mail + '</address>';
   }
   renderCompany();
+  (function () { var n = $('#fm-copy-name'), C = (window.FM_CONFIG || {}).company || {}; if (n && C.name) n.textContent = C.name; })();
 
   /* ---------- Footer motion ----------
      The columns arrive one after another once enough of the footer shows
