@@ -73,7 +73,6 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 @media (min-width:700px){.fm-cookie{left:24px !important;right:auto !important;bottom:24px !important}}
 @media (max-width:640px){.fm-dlg{padding:24px !important}.fm-cookie{padding:20px !important}}
 .fm-navlink{display:inline-flex;align-items:center;min-height:44px;background-position:0 calc(50% + 11px) !important}
-.fm-navlink-cta{display:none !important}
 /* Header: desktop shows the short link list between logo and controls; narrower screens use the menu */
 .fm-root > header > .fm-hctl{order:3}
 .fm-root > header > .fm-navlinks{order:2}
@@ -86,8 +85,6 @@ textarea.fm-input{min-height:132px;resize:vertical;line-height:1.5}
 .fm-navlinks{display:flex !important;order:3 !important;position:absolute;top:100%;left:0;right:0;padding:0 40px;box-sizing:border-box;background:var(--surface);flex-direction:column;align-items:stretch !important;gap:0 !important;max-height:0;overflow:hidden;opacity:0;visibility:hidden;transition:max-height .3s cubic-bezier(.2,.7,.2,1),opacity .2s linear,visibility 0s linear .3s}
 .fm-navlinks.is-open{max-height:calc(100vh - 81px);max-height:calc(100dvh - 81px);overflow-y:auto;opacity:1;visibility:visible;border-top:1px solid var(--line);border-bottom:1px solid var(--line);transition:max-height .3s cubic-bezier(.2,.7,.2,1),opacity .2s linear,visibility 0s}
 .fm-navlinks .fm-navlink{min-height:52px;border-bottom:1px solid var(--line);background:none !important}
-.fm-navlinks .fm-navlink-cta{display:inline-flex !important}
-.fm-navcta{display:none !important}
 .fm-menu-btn{display:flex !important}
 }
 @media (max-width:640px){.fm-navlinks{padding:0 20px}}
