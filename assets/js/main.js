@@ -1710,13 +1710,27 @@
     cap.classList.toggle('is-on', k != null);
     if (k != null) { cap.classList.remove('is-swap'); void cap.offsetWidth; cap.classList.add('is-swap'); }
   }
+  // A caption opened by a tap clears once its logo has moved out of view, or after 4 seconds.
+  var capWatch = 0, capTimer = 0;
+  function watchCap(li) {
+    cancelAnimationFrame(capWatch); clearTimeout(capTimer);
+    var win = $('.fm-tools-window'), cap = $('#fm-tools-cap'), text = cap ? cap.textContent : '';
+    var stop = function () { cancelAnimationFrame(capWatch); clearTimeout(capTimer); if (cap && cap.textContent === text) setToolCap(null); };
+    capTimer = setTimeout(stop, 4000);
+    (function check() {
+      if (!win || !cap || cap.textContent !== text) return;   // another logo took over, or it was cleared
+      var r = li.getBoundingClientRect(), w = win.getBoundingClientRect();
+      if (r.right < w.left + 8 || r.left > w.right - 8) { stop(); return; }
+      capWatch = requestAnimationFrame(check);
+    })();
+  }
   (function () {
     // Both copies of the strip (the second keeps the loop seamless) answer a mouse hover and a tap.
     $$('.fm-tools-track [data-tool]').forEach(function (li) {
       var k = Number(li.getAttribute('data-tool'));
       li.addEventListener('pointerenter', function (ev) { if (ev.pointerType === 'mouse') setToolCap(k); });
       li.addEventListener('click', function () {
-        setToolCap(k);
+        setToolCap(k); watchCap(li);
         li.classList.remove('is-hit'); void li.offsetWidth; li.classList.add('is-hit');
         clearTimeout(li._hit); li._hit = setTimeout(function () { li.classList.remove('is-hit'); }, 700);
       });
@@ -1738,9 +1752,13 @@
     var on = wd >= 1 && wd <= 5 && min >= 8 * 60 && min < 15 * 60;   // open Mon-Fri 08.00-15.00 Helsinki time
     var time = String(h.h).padStart(2, '0') + (en ? ':' : '.') + String(h.mi).padStart(2, '0');
     // Open: the dot before the text. Closed: the text alone. A new minute rolls up into place.
-    var parts = (on ? tr.live.on : tr.live.off).split('{t}');
+    // Two pieces that never break inside: "10:31 in Helsinki" and "· we reply on the next working day".
+    var text = on ? tr.live.on : tr.live.off, cut = text.indexOf(' · ');
+    var place = cut < 0 ? text : text.slice(0, cut), rest = cut < 0 ? '' : text.slice(cut + 1);
     var roll = lastClock && lastClock !== time && root.classList.contains('fm-motion') && !reducedMotion;
-    el.innerHTML = liveMark(on) + esc(parts[0]) + '<span class="fm-clock"><span' + (roll ? ' class="is-roll"' : '') + '>' + esc(time) + '</span></span>' + esc(parts.slice(1).join(time));
+    var clock = '<span class="fm-clock"><span' + (roll ? ' class="is-roll"' : '') + '>' + esc(time) + '</span></span>';
+    el.innerHTML = liveMark(on) + '<span class="fm-live-a">' + place.split('{t}').map(esc).join(clock) + '</span>' +
+      (rest ? '<span class="fm-live-b">' + esc(rest.trim()) + '</span>' : '');
     lastClock = time;
     liveOn = on;
     var ct = $('#fm-ct-live');
