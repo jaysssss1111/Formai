@@ -136,7 +136,7 @@
     root.setAttribute('data-theme', dark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     var tc = $('meta[name="theme-color"]'); if (tc) tc.setAttribute('content', dark ? '#141210' : '#EDE6D8');
-    var fav = $('link[rel="icon"]'); if (fav) fav.setAttribute('href', 'assets/logos/formai-eye-mark-' + (dark ? 'cream' : 'charcoal') + '.svg');
+    var fav = $('link[rel="icon"]'); if (fav) fav.setAttribute('href', fav.getAttribute('href').replace(/[^/]*$/, '') + 'formai-eye-mark-' + (dark ? 'cream' : 'charcoal') + '.svg');
     var label = dark ? (en ? 'Switch to light mode' : 'Vaihda vaaleaan tilaan') : (en ? 'Switch to dark mode' : 'Vaihda tummaan tilaan');
     var mb = $('#fm-mode-btn'); mb.setAttribute('aria-label', label); mb.setAttribute('title', label);
     root.classList.toggle('fm-motion', !state.paused);
@@ -274,9 +274,22 @@
     renderDoc();
     restoreFocus();
   }
+  function visible(el) { return !!(el && document.contains(el) && el.getClientRects().length); }
   function restoreFocus() {
     var o = opener; opener = null;
-    setTimeout(function () { try { if (o && o.focus && document.contains(o)) o.focus(); } catch (e) {} }, 0);
+    setTimeout(function () {
+      try {
+        if (!visible(o)) { var mb = $('.fm-menu-btn'); o = visible(mb) ? mb : $('#content'); }
+        if (o && o.focus) o.focus();
+      } catch (e) {}
+    }, 0);
+  }
+  // After a redraw, put keyboard focus back where the person was working.
+  function focusIn(sel) {
+    var el = $(sel); if (!el) return;
+    if (!el.hasAttribute('tabindex') && !/^(A|BUTTON|INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) el.setAttribute('tabindex', '-1');
+    el.focus({ preventScroll: true });
+    (el.closest('[role="alert"]') || el).scrollIntoView({ block: 'nearest' });   // show the whole message, not just its button
   }
 
   /* ---------- contact dialog ---------- */
@@ -304,14 +317,24 @@
   function errorSummary() {
     return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSummary) + '</div>';
   }
-  function sendErrorBox() {
-    return '<div role="alert" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--accent); padding: 12px 16px; font-size: 14px; line-height: 1.5; color: var(--ink);">' + ICON_ALERT + esc(t().cf.errSend) + '</div>';
+  // The company inbox, or '' while config.js still holds the placeholder.
+  function realEmail() {
+    var e = String(((window.FM_CONFIG || {}).company || {}).email || '').trim();
+    return EMAIL_RE.test(e) && !/example\.(com|org|net)$/i.test(e) ? e : '';
+  }
+  function sendErrorBox(formId, subject, body) {
+    var cf = t().cf, email = realEmail();
+    var mail = email ? '<a class="fm-inline-link" href="mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body) + '">' + esc(cf.errMail) + '</a>' : '';
+    return '<div role="alert" class="fm-send-err">' +
+      '<p>' + ICON_ALERT + '<span>' + esc(cf.errSend) + '</span></p>' +
+      '<div class="fm-send-err-row"><button type="button" class="fm-btn fm-ck-btn" data-action="retrySend" data-form="' + formId + '">' + esc(cf.retry) + '</button>' + mail + '</div></div>';
   }
   // Hidden field that people never see; bots that fill it in are ignored.
   var HONEYPOT = '<input type="text" name="_gotcha" class="fm-hp" tabindex="-1" autocomplete="off" aria-hidden="true">';
   function isBot(form) { var h = form && form.querySelector('[name="_gotcha"]'); return !!(h && h.value); }
   var warned = false;
   function postForm(endpoint, data) {
+    data = JSON.parse(JSON.stringify(data).replace(/\u00ad/g, ''));   // soft hyphens are for layout only
     if (!endpoint) {
       if (!warned) { warned = true; console.warn('formai: form endpoint not set in assets/js/config.js, submission was not sent.'); }
       return Promise.resolve();
@@ -355,7 +378,7 @@
       var hasErr = !!(e.name || e.email || e.message);
       body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-cf-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(cf.title) + '</h2>' +
         '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(cf.intro) + '</p></div>' +
-        (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox() : '') +
+        (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox(c === state.ci ? 'fm-ci-form' : 'fm-cf-form', 'formai: ' + String(c.data.name || '').trim(), String(c.data.message || '') + (c.data.link ? '\n\n' + c.data.link : '')) : '') +
         '<form id="fm-cf-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 20px; margin: 0;">' + HONEYPOT +
         field('fm-cf-name', cf.name, { key: 'name', required: true, ac: 'name', value: c.data.name, err: e.name }) +
         field('fm-cf-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: c.data.email, err: e.email }) +
@@ -364,7 +387,7 @@
         field('fm-cf-message', cf.message, { key: 'message', required: true, textarea: true, hint: cf.messageHint, value: c.data.message, err: e.message }) +
         privacyLine() +
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
-        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
+        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div></form>';
     }
     host.innerHTML = '<div data-overlay="contact" style="' + OVERLAY + ' z-index: 140;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-cf-title" tabindex="-1" style="' + DLG + ' max-width: 600px;">' +
@@ -424,7 +447,7 @@
     var msg = String(c.data.message).trim();
     var PLUS = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6 H11 M6 1 V11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>';
     host.innerHTML =
-      (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox() : '') +
+      (hasErr ? errorSummary() : '') + (c.sendError ? sendErrorBox(c === state.ci ? 'fm-ci-form' : 'fm-cf-form', 'formai: ' + String(c.data.name || '').trim(), String(c.data.message || '') + (c.data.link ? '\n\n' + c.data.link : '')) : '') +
       '<form id="fm-ci-form" class="fm-ci-form" novalidate>' + HONEYPOT +
       field('fm-ci-message', cf.message, { key: 'message', required: true, textarea: true, rows: 3, value: c.data.message, err: e.message }) +
       '<div class="fm-ci-starters" role="group" aria-label="' + esc(C.startersLabel) + '">' +
@@ -439,7 +462,7 @@
       (c.more ? field('fm-ci-link', C.link, { key: 'link', type: 'url', ac: 'url', value: c.data.link })
         : '<button type="button" class="fm-ci-more" data-action="ciMore">' + PLUS + esc(C.addLink) + '</button>') +
       '<div class="fm-ci-foot">' + privacyLine() +
-      '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div>' +
+      '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (c.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(cf.send, c.sending) + '</button></div>' +
       '<span class="fm-ci-meta fm-ci-saved" id="fm-ci-saved"' + (allowPrefs && String(c.data.message || c.data.name || '').trim() ? '' : ' hidden') + '>' + esc(C.saved) + '</span>' +
       '</form>';
   }
@@ -469,15 +492,16 @@
       link: String(d.link || '').trim(),
       source: 'contact section', language: state.lang
     };
-    c.sending = true; c.sendError = false; renderInline();
+    c.sending = true; c.sendError = false; renderInline(); focusIn('#fm-ci-form [type="submit"]');
     postForm((window.FM_CONFIG || {}).contactEndpoint, payload).then(done, function () {
       c.sending = false; c.sendError = true; renderInline();
-      var a = $('#fm-ci-root [role="alert"]'); if (a) a.scrollIntoView({ block: 'nearest' });
+      focusIn('#fm-ci-root [data-action="retrySend"]');
     });
   }
 
-  function openContact() {
+  function openContact(keepInterest) {
     opener = document.activeElement;
+    if (keepInterest !== true) state.cf.interests = [];
     state.contactOpen = true;
     state.cf.sent = false; state.cf.tried = false;
     renderContact();
@@ -512,11 +536,11 @@
       language: state.lang
     };
     state.cf.sending = true; state.cf.sendError = false;
-    renderContact();
+    renderContact(); focusIn('#fm-cf-form [type="submit"]');
     postForm((window.FM_CONFIG || {}).contactEndpoint, payload).then(done, function () {
       state.cf.sending = false; state.cf.sendError = true;
       renderContact();
-      var a = $('#fm-contact-root [role="alert"]'); if (a) a.scrollIntoView({ block: 'nearest' });
+      focusIn('#fm-contact-root [data-action="retrySend"]');
     });
   }
 
@@ -548,7 +572,7 @@
       var e = a.tried ? auErrors() : { url: '', email: '' };
       body = '<div style="display: flex; flex-direction: column; gap: 12px;"><h2 id="fm-au-title" style="margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(A.title) + '</h2>' +
         '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(A.intro) + '</p></div>' +
-        ((e.url || e.email) ? errorSummary() : '') + (a.sendError ? sendErrorBox() : '') +
+        ((e.url || e.email) ? errorSummary() : '') + (a.sendError ? sendErrorBox('fm-au-form', 'formai: audit ' + normUrl(a.data.url), normUrl(a.data.url) + (a.data.note ? '\n\n' + a.data.note : '')) : '') +
         '<form id="fm-au-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 20px; margin: 0;">' + HONEYPOT +
         field('fm-au-url', A.url, { key: 'url', required: true, type: 'url', ac: 'url', hint: A.urlHint, value: a.data.url, err: e.url }) +
         '<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0;"><legend class="fm-legend" style="padding: 0; margin-bottom: 10px;">' + esc(A.kind) + ' <span style="color: var(--muted); font-weight: 300;">(' + esc(cf.optional) + ')</span></legend>' +
@@ -566,7 +590,7 @@
         '</div>' +
         privacyLine() +
         '<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;"><span style="' + LABEL + ' color: var(--muted);">' + esc(cf.required) + '</span>' +
-        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (a.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(A.send, a.sending) + '</button></div></form>';
+        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none;"' + (a.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(A.send, a.sending) + '</button></div></form>';
     }
     host.innerHTML = '<div data-overlay="audit" style="' + OVERLAY + ' z-index: 140;">' +
       '<div class="fm-dlg" role="dialog" aria-modal="true" aria-labelledby="fm-au-title" tabindex="-1" style="' + DLG + ' max-width: 600px;">' +
@@ -608,10 +632,11 @@
       note: String(a.data.note).trim(),
       language: state.lang
     };
-    a.sending = true; a.sendError = false; renderAudit();
+    a.sending = true; a.sendError = false; renderAudit(); focusIn('#fm-au-form [type="submit"]');
     var cfg = window.FM_CONFIG || {};
     postForm(cfg.auditEndpoint || cfg.contactEndpoint, payload).then(done, function () {
       a.sending = false; a.sendError = true; renderAudit();
+      focusIn('#fm-audit-root [data-action="retrySend"]');
     });
   }
 
@@ -877,7 +902,7 @@
       html = '<button type="button" class="fm-link fm-textbtn" data-action="bkBack" style="align-self: flex-start;"><svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true" style="margin-right: 8px;"><path d="M13 7 H2 M6 3 L2 7 L6 11" style="fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: square;"></path></svg>' + esc(B.back) + '</button>' +
         '<div style="display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--line); background: var(--surface);"><span style="' + MONO + ' font-size: 11px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);">' + esc(B.selected) + '</span>' +
         '<span style="font-size: 16px; line-height: 1.4; font-weight: 400;">' + esc(bkSummary(M)) + '</span>' + (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') + '</div>' +
-        (eName || eEmail ? errorSummary() : '') + (b.sendError ? sendErrorBox() : '') +
+        (eName || eEmail ? errorSummary() : '') + (b.sendError ? sendErrorBox('fm-bk-form', 'formai: ' + bkSummary(M), bkSummary(M) + (f.topic ? '\n\n' + f.topic : '')) : '') +
         '<form id="fm-bk-form" novalidate style="position: relative; display: flex; flex-direction: column; gap: 18px; margin: 0;">' + HONEYPOT +
         field('fm-bk-name', cf.name, { key: 'name', required: true, ac: 'name', value: f.name, err: eName ? cf.errName : '' }) +
         field('fm-bk-email', cf.email, { key: 'email', required: true, type: 'email', ac: 'email', value: f.email, err: eEmail ? cf.errEmail : '' }) +
@@ -888,10 +913,10 @@
         }).join('') + '</div></fieldset>' +
         field('fm-bk-topic', cf.message, { key: 'topic', textarea: true, rows: 3, value: f.topic, style: 'min-height: 96px;' }) +
         privacyLine() +
-        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;"' + (b.sending ? ' disabled aria-busy="true"' : '') + '>' + submitLabel(B.confirm, b.sending) + '</button></form>';
+        '<button type="submit" class="fm-btn fm-ck-btn fm-ck-primary" style="flex: none; align-self: flex-start;"' + (b.sending ? ' aria-disabled="true" aria-busy="true"' : '') + '>' + submitLabel(B.confirm, b.sending) + '</button></form>';
     } else {
-      html = '<div role="status" style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">' + EYE_DRAW +
-        '<h3 style="margin: 0; font-size: clamp(32px, 4vw, 44px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(B.doneTitle) + '</h3>' +
+      html = '<div role="status" id="fm-bk-done" style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 20px; min-height: 280px;">' + EYE_DRAW +
+        '<h3 id="fm-bk-done-title" tabindex="-1" style="margin: 0; font-size: clamp(32px, 4vw, 44px); line-height: 1; font-weight: 200; letter-spacing: -0.03em;">' + esc(B.doneTitle) + '</h3>' +
         '<span style="font-size: 18px; line-height: 1.4; font-weight: 400;">' + esc(b.doneSummary) + '</span>' +
         (bkLocalLine(M) ? '<span class="fm-bk-localline">' + esc(bkLocalLine(M)) + '</span>' : '') +
         '<p style="margin: 0; font-size: 15px; line-height: 1.6; font-weight: 300; color: var(--muted);">' + esc(B.doneText) + '</p>' +
@@ -921,6 +946,9 @@
       b.data = { name: '', email: '', company: '', topic: '' };
       b.interests = []; b.topics = [];
       renderPanel();
+      // The form above is replaced by a shorter note: bring the note into view and give it focus.
+      var t1 = $('#fm-bk-done-title'); if (t1) t1.focus({ preventScroll: true });
+      var box = $('#fm-bk-done'); if (box) box.scrollIntoView({ block: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
     };
     if (isBot($('#fm-bk-form'))) { done(); return; }
     var payload = {
@@ -936,7 +964,7 @@
     };
     var date = b.date, time = key24(Number(b.slot)), claim = date + ' ' + time;
     b.sending = true; b.sendError = false;
-    renderPanel();
+    renderPanel(); focusIn('#fm-bk-form [type="submit"]');
     // Reserve first so two visitors cannot book the same time; skip if this visitor already holds it.
     (b.reserved === claim ? Promise.resolve() : reserveSlot(date, time))
       .then(function () { b.reserved = claim; return postForm((window.FM_CONFIG || {}).bookingEndpoint, payload); })
@@ -951,11 +979,12 @@
           markTaken(date, time);
           b.slot = ''; b.step = 'slots'; b.takenNotice = true;
           renderBooking();
-          var n = $('#fm-bk-panel [role="alert"]'); if (n) n.scrollIntoView({ block: 'nearest' });
+          focusIn('#fm-bk-panel [role="alert"]');
           return;
         }
         b.sendError = true;
         renderPanel();
+        focusIn('#fm-bk-panel [data-action="retrySend"]');
       });
   }
 
@@ -1817,7 +1846,7 @@
     openCookies: function () { openDoc('cookies'); },
     openPrivacy: function () { openDoc('privacy'); },
     closeDoc: closeDoc,
-    openContact: openContact,
+    openContact: function () { openContact(false); },
     openAudit: function (el, ev) { if (ev) ev.preventDefault(); if (state.menuOpen) { state.menuOpen = false; applyChrome(); } openAudit(); },
     closeAudit: closeAudit,
     pickAuditKind: function (el) {
@@ -1851,7 +1880,7 @@
       var i = Number(el.getAttribute('data-i'));
       state.cf.interests = [];
       state.cf.interests[i] = true;
-      openContact();
+      openContact(true);
     },
     flipCard: function (el) {
       // Show the service name on orange in place of the animation; click again to flip back.
@@ -1941,13 +1970,23 @@
       var n = $('#fm-bk-name'); if (n) n.focus({ preventScroll: bkNarrow.matches });
       bkReveal();
     },
-    bkBack: function () { state.bk.step = 'slots'; renderPanel(); },
+    bkBack: function () {
+      state.bk.step = 'slots'; renderPanel();
+      focusIn(state.bk.slot ? '#fm-bk-panel [data-slot="' + state.bk.slot + '"]' : '#fm-bk-panel [data-action="pickSlot"]');
+    },
     bkTopic: function (el) {
       var b = state.bk, k = Number(el.getAttribute('data-i'));
       b.topics = b.topics || []; b.topics[k] = !b.topics[k];
       el.classList.toggle('is-on', b.topics[k]); el.setAttribute('aria-pressed', String(b.topics[k]));
     },
-    bkAgain: function () { var b = state.bk; b.step = ''; b.date = ''; b.slot = ''; b.doneSummary = ''; renderBooking(); }
+    bkAgain: function () {
+      var b = state.bk; b.step = ''; b.date = ''; b.slot = ''; b.doneSummary = ''; renderBooking();
+      focusIn($('#fm-bk-quick [data-action]') ? '#fm-bk-quick [data-action]' : '#book [data-action="pickDay"]');
+    },
+    retrySend: function (el) {
+      var f = document.getElementById(el.getAttribute('data-form'));
+      if (f) { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })); }
+    }
   };
 
   document.addEventListener('click', function (ev) {
