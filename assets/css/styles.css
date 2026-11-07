@@ -1556,3 +1556,7 @@ a.fm-social[href]:hover{background:#26221E;color:#C85A20}
    them shoot out sideways as long lines. A limit of 2 keeps the open shape exactly and cuts the
    corner off flat while closing, so the eye never grows wider than itself. */
 .fm-ld-lid,.fm-totop-outline,.fm-nav-eye-line{stroke-miterlimit:2}
+
+/* Method film on phones: the compact canvas is taller, so let its height follow it (a fixed
+   240 px height would shrink it to fit and undo the larger labels). */
+.fm-me-grid .fm-film-svg.is-compact{height:auto}
