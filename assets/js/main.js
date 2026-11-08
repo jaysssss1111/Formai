@@ -1221,7 +1221,9 @@
       if (likes[u] && !reducedMotion) { lk.classList.remove('is-pop'); void lk.offsetWidth; lk.classList.add('is-pop'); }
       return;
     }
+    // The whole row picks its story (picture, source line, title and "For you" text), not only the title.
     var pk = ev.target.closest && ev.target.closest('[data-news-pick]');
+    if (!pk && ev.target.closest) { var nr = ev.target.closest('.fm-news-row'); if (nr && !ev.target.closest('a, button')) pk = nr.querySelector('[data-news-pick]'); }
     if (pk) {
       // A smaller article takes the lead story's place; the one it replaces goes back into the list.
       state.newsPick = pk.getAttribute('data-news-pick'); renderNews();
