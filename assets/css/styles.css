@@ -1442,6 +1442,12 @@ a.fm-social[href]:hover{background:var(--soft-black);color:#C85A20}
   .fm-nav-eye{width:24px;height:24px;margin-left:4px}
   .fm-nav-eye-line{stroke-width:1.13px}
 }
+/* 400 px and under the language switch sits in the menu, so the wordmark and eye can be bigger */
+@media (max-width:400px){
+  header.fm-pad a[href="#top"] img{height:32px !important}
+  header .fm-nav-eye{width:32px;height:32px;margin-left:6px}
+  header .fm-nav-eye-line{stroke-width:1.5px}
+}
 
 /* Footer: the same eye after the wordmark, one colour on the orange (an orange pupil would vanish) */
 .fm-foot-logo .fm-nav-eye-line,.fm-root[data-theme="dark"] .fm-foot-logo .fm-nav-eye-line{stroke:var(--soft-black)}
