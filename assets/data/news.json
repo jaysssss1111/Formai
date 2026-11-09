@@ -70,6 +70,15 @@
     }
   },
   {
+    "title": "Design by numbers: is AI ruining UX or just pouring gasoline on the fire?",
+    "url": "https://uxdesign.cc/design-by-numbers-is-ai-ruining-ux-or-just-pouring-gasoline-on-the-fire-24164d49e422?source=rss----138adf9c44c---4",
+    "source": "UX Collective",
+    "date": "2026-11-05",
+    "summary": "In March 2025, the Computer History Museum and IEEE Spectrum staged a debate on a single question: when a large language model answers you, does it even understand what it’s saying? Does it comprehend what the words…",
+    "topic": "design",
+    "image": "https://cdn-images-1.medium.com/max/1024/1*NxZYfrz8aLvN2VAE-JFQKQ.png"
+  },
+  {
     "title": "Securing the agentic enterprise with data lineage",
     "url": "https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/",
     "source": "MIT Technology Review",
@@ -94,5 +103,14 @@
       "en": "Teams of coding agents working in parallel are becoming normal. A small team can build more, but someone still has to review the work.",
       "fi": "Rinnakkain työskentelevät koodausagentit yleistyvät. Pieni tiimi voi rakentaa enemmän, mutta jonkun on yhä tarkistettava työ."
     }
+  },
+  {
+    "title": "Raising the quality of insights in agentic analytics",
+    "url": "https://www.technologyreview.com/2026/11/02/1147660/raising-the-quality-of-insights-in-agentic-analytics/",
+    "source": "MIT Technology Review",
+    "date": "2026-11-02",
+    "summary": "In just a few years, generative AI has changed the face of enterprise analytics, notably by making analytics accessible to users across the organization. Agentic AI promises to do even more, by automating entire…",
+    "topic": "agents",
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/Snowflake-Social-Card-2026.png?resize=1200,600"
   }
 ]
