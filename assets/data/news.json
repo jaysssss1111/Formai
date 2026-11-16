@@ -70,6 +70,24 @@
     }
   },
   {
+    "title": "AI is the new old design material",
+    "url": "https://uxdesign.cc/ai-is-the-new-old-design-material-0e7f83540c9a?source=rss----138adf9c44c---4",
+    "source": "UX Collective",
+    "date": "2026-11-13",
+    "summary": "The field keeps arguing about whether designers should code, as if that question were new. Art and design have always been taught through materials, going back centuries.",
+    "topic": "design",
+    "image": "https://cdn-images-1.medium.com/max/1024/1*JuPAwnD1n1gK7HhzzrR1Yw.png"
+  },
+  {
+    "title": "ChatGPT’s new Wallet lets AI agents shop and check out for you",
+    "url": "https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you/",
+    "source": "TechCrunch",
+    "date": "2026-11-13",
+    "summary": "ChatGPT Wallet lets AI agents shop and check out on users' behalf, starting with a limited rollout to U.S. Pro subscribers.",
+    "topic": "agents",
+    "image": "https://techcrunch.com/wp-content/uploads/2026/11/chatgpt-wallet.jpg?resize=1200,729"
+  },
+  {
     "title": "Design by numbers: is AI ruining UX or just pouring gasoline on the fire?",
     "url": "https://uxdesign.cc/design-by-numbers-is-ai-ruining-ux-or-just-pouring-gasoline-on-the-fire-24164d49e422?source=rss----138adf9c44c---4",
     "source": "UX Collective",
@@ -90,27 +108,5 @@
       "en": "If an agent can read restricted data, it can repeat it. Check what each agent can see before it answers customers or staff.",
       "fi": "Jos agentti näkee rajattua tietoa, se voi myös toistaa sitä. Tarkista, mitä kukin agentti näkee, ennen kuin se vastaa asiakkaille tai henkilöstölle."
     }
-  },
-  {
-    "title": "Meta acquires AI coding startup Conductor",
-    "url": "https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/",
-    "source": "TechCrunch",
-    "date": "2026-11-04",
-    "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
-    "topic": "code",
-    "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653",
-    "take": {
-      "en": "Teams of coding agents working in parallel are becoming normal. A small team can build more, but someone still has to review the work.",
-      "fi": "Rinnakkain työskentelevät koodausagentit yleistyvät. Pieni tiimi voi rakentaa enemmän, mutta jonkun on yhä tarkistettava työ."
-    }
-  },
-  {
-    "title": "Raising the quality of insights in agentic analytics",
-    "url": "https://www.technologyreview.com/2026/11/02/1147660/raising-the-quality-of-insights-in-agentic-analytics/",
-    "source": "MIT Technology Review",
-    "date": "2026-11-02",
-    "summary": "In just a few years, generative AI has changed the face of enterprise analytics, notably by making analytics accessible to users across the organization. Agentic AI promises to do even more, by automating entire…",
-    "topic": "agents",
-    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/Snowflake-Social-Card-2026.png?resize=1200,600"
   }
 ]

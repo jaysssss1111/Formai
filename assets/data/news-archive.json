@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "title": "Meta acquires AI coding startup Conductor",
+    "url": "https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/",
+    "source": "TechCrunch",
+    "date": "2026-11-04",
+    "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
+    "topic": "code",
+    "image": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-ray-bans.png?resize=1200,653",
+    "take": {
+      "en": "Teams of coding agents working in parallel are becoming normal. A small team can build more, but someone still has to review the work.",
+      "fi": "Rinnakkain työskentelevät koodausagentit yleistyvät. Pieni tiimi voi rakentaa enemmän, mutta jonkun on yhä tarkistettava työ."
+    }
+  },
+  {
+    "title": "Raising the quality of insights in agentic analytics",
+    "url": "https://www.technologyreview.com/2026/11/02/1147660/raising-the-quality-of-insights-in-agentic-analytics/",
+    "source": "MIT Technology Review",
+    "date": "2026-11-02",
+    "summary": "In just a few years, generative AI has changed the face of enterprise analytics, notably by making analytics accessible to users across the organization. Agentic AI promises to do even more, by automating entire…",
+    "topic": "agents",
+    "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/Snowflake-Social-Card-2026.png?resize=1200,600"
+  }
+]
